@@ -1,0 +1,19 @@
+.mod-tile-section {
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    border: 1px solid #e7e7e7;
+    
+    .tab-selection-row {
+        margin-bottom: 20px;
+        label.btn {
+            margin: 10px;
+            margin-left: 0px;
+            border: none;
+            border-radius: 0px;
+        }
+        .grp-comparison {
+            margin-right: 45px;
+        }
+    }
+}
