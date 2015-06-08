@@ -1,0 +1,52 @@
+@import "compass/utilities/sprites";
+$icon: sprite-map("icon/*.png", $layout: horizontal, $spacing: 5px);
+
+i, .i {
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-image: $icon;
+
+    .lt-ie8 & {
+    	display: inline;
+    }
+}
+
+@each $i in sprite_names($icon){
+    .i-#{$i}{
+        @include sprite-dimensions($icon, $i);
+        background-position: sprite-position($icon, $i);
+    }
+}
+
+//******************************************************************************
+//	ICON SPRITE AUTOMATICALLY GENERATED AND ICONS REFERENCED VIA .i-{filename}
+//  Deviations from this pattern are below
+//******************************************************************************
+
+/*
+	ORB ICON SIZES (For reference):
+    Standard orbs:  30 x 30
+    Medium orbs:    45 x 45
+    Large orbs:     60 x 60
+*/
+
+
+/*
+	SELECT PLACEHOLDER ICONS
+	These icons change size below the large breakpoint
+*/
+
+%i-select-placeholder {
+	width: 70px;
+	height: 56px;
+}
+
+@media (max-width: 767px) {
+	%i-select-placeholder {
+		width: 46px;
+		height: 35px;
+	}
+}
+

@@ -14,6 +14,10 @@ body {
   margin-top: 30px;
 }
 
+.navbar-brand{
+  height: auto;
+}
+
 .navbar-top-links {
   margin-right: 0;
   li {
@@ -22,8 +26,11 @@ body {
       margin-right: 15px;
     }
     a {
-      padding: 15px;
+      padding: 26px;
       min-height: 50px;
+      .caret{
+        margin-left: 15px;
+      }
     }
   }
   .dropdown-menu li {
