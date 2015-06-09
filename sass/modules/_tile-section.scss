@@ -1,19 +1,101 @@
 .mod-tile-section {
     padding: 20px;
     margin-bottom: 30px;
-    background-color: #fff;
+    background-color: $color-white;
     border: 1px solid #e7e7e7;
-    
     .tab-selection-row {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         label.btn {
             margin: 10px;
             margin-left: 0px;
             border: none;
             border-radius: 0px;
+            background-color: $color-base;
+            color: $color-tile-text;
+            &.active {
+                background-color: $color-lightblue;
+                box-shadow: none;
+                color: $color-white;
+            }
+            &:active {
+                box-shadow: none;
+            }
         }
         .grp-comparison {
             margin-right: 45px;
+        }
+        .grp-label{
+        	color: $color-lightblue;
+        }
+    }
+    .tile-section-row {
+        .panel {
+            height: 142px;
+            margin-bottom: 0px;
+            border: none;
+            .panel-heading {
+                border: none;
+                background-color: transparent;
+                height: 100%;
+                padding: 0 15px;
+                .row {
+                    height: 100%;
+                    .tile-left-section {
+                        text-align: center;
+                        display: block;
+                        height: 100%;
+                        .tile-type {
+                            margin-top: 20px;
+                            margin-bottom: 20px;
+                        }
+                    }
+                    .tile-right-section {
+                        height: 100%;
+                        .tile-data-count {
+                            font-size: 32px;
+                            text-align: center;
+                            margin-top: 35px;
+                            color: $color-lightblue;
+                        }
+                        .tab-type-text {
+                            color: $color-tile-text;
+                            margin-top: 17px;
+                        }
+                    }
+                }
+            }
+        }
+        .section-opportunity {
+            .tile-left-section {
+                background-color: $color-downy;
+            }
+            .tile-right-section {
+                background-color: $color-gray;
+            }
+        }
+        .section-storeFront {
+            .tile-left-section {
+                background-color: $color-red;
+            }
+            .tile-right-section {
+                background-color: $color-gray;
+            }
+        }
+        .section-dwellTime {
+            .tile-left-section {
+                background-color: $color-lightgreen;
+            }
+            .tile-right-section {
+                background-color: $color-gray;
+            }
+        }
+        .section-customers {
+            .tile-left-section {
+                background-color: $color-darkgreen;
+            }
+            .tile-right-section {
+                background-color: $color-gray;
+            }
         }
     }
 }

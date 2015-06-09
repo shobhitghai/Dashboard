@@ -1,5 +1,5 @@
 body {
-  background-color: #f8f8f8;
+  background-color: $color-base;
 }
 
 #wrapper {
@@ -16,6 +16,10 @@ body {
 
 .navbar-brand{
   height: auto;
+}
+
+.panel{
+  border-radius: 0px
 }
 
 .navbar-top-links {
@@ -157,10 +161,6 @@ table.dataTable thead {
     background-color: #eee !important;
   }
   margin: 15px 0;
-}
-
-.huge {
-  font-size: 40px;
 }
 
 .panel-green {
