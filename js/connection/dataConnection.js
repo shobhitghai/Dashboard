@@ -2,7 +2,7 @@ var express = require("express");
 var mysql = require("mysql");
 var bodyParser = require("body-parser");
 // var md5 = require('MD5');
-var dataController = require("./controllers/dataController.js");
+var dataController = require("../controllers/dataController.js");
 var app = express();
 
 function DataConnectionLayer() {
@@ -14,12 +14,19 @@ DataConnectionLayer.prototype.connectDB = function() {
     var self = this;
     var pool = mysql.createPool({
         // connectionLimit : 100,
-        host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
+        host: 'localhost',
         user: 'root',
-        password: 'billion123!',
-        database: "test"
+        password: 'shobhit',
+        database: 'world'
         // debug    :  false
     });
+
+    // host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
+    // user: 'root', //modify user name
+    // password: 'billion123!', //modify pwd
+    // database: "test" // make sure world table exist on ur db
+
+
     pool.getConnection(function(err, connection) {
         if (err) {
             console.log('error');
@@ -38,7 +45,7 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
     app.use(bodyParser.json());
     var router = express.Router();
     app.use('/api', router);
-    var dataController = new dataController(router, connection);
+    var apiController = new dataController(router, connection);
     self.startServer();
 }
 

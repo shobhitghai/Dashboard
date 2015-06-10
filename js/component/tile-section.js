@@ -6,7 +6,7 @@
 		init: function(context) {
 			//dummy
 			$.ajax({
-				url: 'http://localhost:3000/api/getallcities',
+				url: 'http://localhost:3000/api/getData',
 				success: function(data){
 					console.log(data);
 				},
