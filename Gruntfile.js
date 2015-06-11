@@ -22,10 +22,10 @@ module.exports = function(grunt) {
         watch: {
             js: {
                 files: components,
-                tasks: ['concat', 'uglify', 'cssmin'],
+                tasks: ['concat', 'uglify', 'cssmin', 'handlebars'],
                 dest: 'js/build/app.js'
             },
-            css:{
+            css: {
                 files: 'css/app.css',
                 tasks: ['cssmin']
             }
@@ -47,6 +47,19 @@ module.exports = function(grunt) {
                 dest: 'css/',
                 ext: '.min.css'
             }
+        },
+        handlebars: {
+            options: {
+                namespace: 'App.Template',
+                processName: function(filePath) {
+                    return filePath.replace(/^templates\//, '').replace(/\.handlebars$/, '');
+                }
+            },
+            all: {
+                files: {
+                    "js/build/templates.js": ["templates/**/*.handlebars"]
+                }
+            }
         }
     });
 
@@ -61,6 +74,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
 
     // Register our own custom task alias.
     grunt.registerTask('build', ['concat']);

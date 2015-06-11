@@ -18,18 +18,20 @@ DataConnectionLayer.prototype.connectDB = function() {
         user: 'root',
         password: 'shobhit',
         database: 'world'
-        // debug    :  false
+
+        // host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
+        // user: 'root', //modify user name
+        // password: 'billion123!', //modify pwd
+        // database: "test" // make sure world table exist on ur db
+            // debug    :  false
     });
 
-    // host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
-    // user: 'root', //modify user name
-    // password: 'billion123!', //modify pwd
-    // database: "test" // make sure world table exist on ur db
+
 
 
     pool.getConnection(function(err, connection) {
         if (err) {
-            console.log('error');
+            console.log(err);
             self.stop(err);
         } else {
             self.configureExpress(connection);
@@ -50,7 +52,7 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
 }
 
 DataConnectionLayer.prototype.startServer = function() {
-    app.listen(3000, function() {
+    app.listen(3001, function() {
         console.log("All right ! I am alive at Port 3000.");
     });
 }
