@@ -2,13 +2,20 @@ body {
   background-color: $color-base;
 }
 
+// .highcharts-legend-item {
+//   span{
+//     white-space: normal !important;
+//     display: inline-block;
+//   }
+// }
+
 #wrapper {
   width: 100%;
 }
 
 #page-wrapper {
   /*disable responsiveness*/
-  width: 1140px;
+  width: 1300px;
   max-width: none !important;
   margin: auto;
   margin-top: 30px;

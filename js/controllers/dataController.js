@@ -15,13 +15,14 @@ dataController.prototype.handleRoutes = function(router,connection) {
         // var query = "select Name, Population from city where CountryCode='IND' LIMIT 10;";
         // var table = ["user_login"];
         // query = mysql.format(query,table);
-        console.log(connection);
-        var query = "select * from t_visit";
+        // console.log(connection);
+        
+        var query = "select * from t_transactions";
         connection.query(query,function(err,rows){
             res.header('Access-Control-Allow-Origin', 'http://localhost:8082'); //change to other host and port
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE ');
             // res.header('Access-Control-Allow-Headers', 'Content-Type');
-            console.log(err);
+            // console.log(err);
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {

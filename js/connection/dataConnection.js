@@ -14,15 +14,15 @@ DataConnectionLayer.prototype.connectDB = function() {
     var self = this;
     var pool = mysql.createPool({
         // connectionLimit : 100,
-        host: 'localhost',
-        user: 'root',
-        password: 'shobhit',
-        database: 'world'
+        // host: 'localhost',
+        // user: 'root',
+        // password: 'shobhit',
+        // database: 'world'
 
-        // host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
-        // user: 'root', //modify user name
-        // password: 'billion123!', //modify pwd
-        // database: "test" // make sure world table exist on ur db
+        host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
+        user: 'webapp', //modify user name
+        password: 'billion123!', //modify pwd
+        database: "test" // make sure world table exist on ur db
             // debug    :  false
     });
 

@@ -1,29 +1,32 @@
-(function(){
-	app['tile-section'] = {
-		settings: {
-			target: 'mod-tile-section'
-		},
-		init: function(context) {
-			//dummy handlebar
-			var template = App.Template['tile-opportunity'];
+(function() {
+    app['tile-section'] = {
+        settings: {
+            target: 'mod-tile-section'
+        },
+        init: function(context) {
+            //dummy handlebar
+            var template = App.Template['tile-opportunity'];
 
-			$('.section-opportunity').html(template({
-				'tile-name': 'test',
-				'tile-percent': '+30%',
-				'tile-percent-change': '100%',
-				'tile-period-param': 'vs months'
-			}));
+            //move to separate global wrapper
+            $.ajax({
+                url: 'http://localhost:3001/api/getData',
+                success: function(data) {
+                    app['tile-section'].bindTemplate(data, template);
+                },
+                error: function(err) {
+                    console.log('err');
+                }
+            })
+        },
+        bindTemplate: function(data, template) {
+        	var response = $.parseJSON(data);
 
-			
-			$.ajax({
-				url: 'http://localhost:3000/api/getData',
-				success: function(data){
-					console.log(data);
-				},
-				error: function(err){
-					console.log('err');
-				}
-			})
-		}
-	}
+            $('.section-opportunity').html(template({
+                'tile-name': 'Data count',
+                'tile-percent': response.length,
+                'tile-percent-change': '',
+                'tile-period-param': 'Count of rows'
+            }));
+        }
+    }
 })(app);

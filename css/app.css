@@ -33,151 +33,151 @@ body {
   background-color: #f2f2f2;
 }
 
-/* line 5, ../sass/modules/_base.scss */
+/* line 12, ../sass/modules/_base.scss */
 #wrapper {
   width: 100%;
 }
 
-/* line 9, ../sass/modules/_base.scss */
+/* line 16, ../sass/modules/_base.scss */
 #page-wrapper {
   /*disable responsiveness*/
-  width: 1140px;
+  width: 1300px;
   max-width: none !important;
   margin: auto;
   margin-top: 30px;
 }
 
-/* line 17, ../sass/modules/_base.scss */
+/* line 24, ../sass/modules/_base.scss */
 .navbar-brand {
   height: auto;
 }
 
-/* line 21, ../sass/modules/_base.scss */
+/* line 28, ../sass/modules/_base.scss */
 .panel {
   border-radius: 0px;
 }
 
-/* line 25, ../sass/modules/_base.scss */
+/* line 32, ../sass/modules/_base.scss */
 .navbar-top-links {
   margin-right: 0;
 }
-/* line 27, ../sass/modules/_base.scss */
+/* line 34, ../sass/modules/_base.scss */
 .navbar-top-links li {
   display: inline-block;
 }
-/* line 29, ../sass/modules/_base.scss */
+/* line 36, ../sass/modules/_base.scss */
 .navbar-top-links li:last-child {
   margin-right: 15px;
 }
-/* line 32, ../sass/modules/_base.scss */
+/* line 39, ../sass/modules/_base.scss */
 .navbar-top-links li a {
   padding: 22px;
   min-height: 50px;
 }
-/* line 35, ../sass/modules/_base.scss */
+/* line 42, ../sass/modules/_base.scss */
 .navbar-top-links li a .caret {
   margin-left: 15px;
 }
-/* line 40, ../sass/modules/_base.scss */
+/* line 47, ../sass/modules/_base.scss */
 .navbar-top-links .dropdown-menu li {
   display: block;
 }
-/* line 42, ../sass/modules/_base.scss */
+/* line 49, ../sass/modules/_base.scss */
 .navbar-top-links .dropdown-menu li:last-child {
   margin-right: 0;
 }
-/* line 45, ../sass/modules/_base.scss */
+/* line 52, ../sass/modules/_base.scss */
 .navbar-top-links .dropdown-menu li a {
   padding: 3px 20px;
   min-height: 0;
 }
-/* line 48, ../sass/modules/_base.scss */
+/* line 55, ../sass/modules/_base.scss */
 .navbar-top-links .dropdown-menu li a div {
   white-space: normal;
 }
 
-/* line 55, ../sass/modules/_base.scss */
+/* line 62, ../sass/modules/_base.scss */
 .btn-outline {
   color: inherit;
   background-color: transparent;
   transition: all .5s;
 }
 
-/* line 61, ../sass/modules/_base.scss */
+/* line 68, ../sass/modules/_base.scss */
 .btn-primary.btn-outline {
   color: #428bca;
 }
 
-/* line 65, ../sass/modules/_base.scss */
+/* line 72, ../sass/modules/_base.scss */
 .btn-success.btn-outline {
   color: #5cb85c;
 }
 
-/* line 69, ../sass/modules/_base.scss */
+/* line 76, ../sass/modules/_base.scss */
 .btn-info.btn-outline {
   color: #5bc0de;
 }
 
-/* line 73, ../sass/modules/_base.scss */
+/* line 80, ../sass/modules/_base.scss */
 .btn-warning.btn-outline {
   color: #f0ad4e;
 }
 
-/* line 77, ../sass/modules/_base.scss */
+/* line 84, ../sass/modules/_base.scss */
 .btn-danger.btn-outline {
   color: #d9534f;
 }
 
-/* line 81, ../sass/modules/_base.scss */
+/* line 88, ../sass/modules/_base.scss */
 .btn-primary.btn-outline:hover, .btn-success.btn-outline:hover, .btn-info.btn-outline:hover, .btn-warning.btn-outline:hover, .btn-danger.btn-outline:hover {
   color: #fff;
 }
 
-/* line 85, ../sass/modules/_base.scss */
+/* line 92, ../sass/modules/_base.scss */
 .panel .slidedown .glyphicon, .chat .glyphicon {
   margin-right: 5px;
 }
 
-/* line 89, ../sass/modules/_base.scss */
+/* line 96, ../sass/modules/_base.scss */
 .login-panel {
   margin-top: 25%;
 }
 
-/* line 93, ../sass/modules/_base.scss */
+/* line 100, ../sass/modules/_base.scss */
 .flot-chart {
   display: block;
   height: 400px;
 }
 
-/* line 98, ../sass/modules/_base.scss */
+/* line 105, ../sass/modules/_base.scss */
 .flot-chart-content {
   width: 100%;
   height: 100%;
 }
 
-/* line 103, ../sass/modules/_base.scss */
+/* line 110, ../sass/modules/_base.scss */
 .dataTables_wrapper {
   position: relative;
   clear: both;
 }
 
-/* line 109, ../sass/modules/_base.scss */
+/* line 116, ../sass/modules/_base.scss */
 table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled {
   background: 0 0;
 }
-/* line 112, ../sass/modules/_base.scss */
+/* line 119, ../sass/modules/_base.scss */
 table.dataTable thead .sorting_asc:after {
   content: "\f0de";
   float: right;
   font-family: fontawesome;
 }
-/* line 117, ../sass/modules/_base.scss */
+/* line 124, ../sass/modules/_base.scss */
 table.dataTable thead .sorting_desc:after {
   content: "\f0dd";
   float: right;
   font-family: fontawesome;
 }
-/* line 122, ../sass/modules/_base.scss */
+/* line 129, ../sass/modules/_base.scss */
 table.dataTable thead .sorting:after {
   content: "\f0dc";
   float: right;
@@ -185,7 +185,7 @@ table.dataTable thead .sorting:after {
   color: rgba(50, 50, 50, 0.5);
 }
 
-/* line 130, ../sass/modules/_base.scss */
+/* line 137, ../sass/modules/_base.scss */
 .btn-circle {
   width: 30px;
   height: 30px;
@@ -195,7 +195,7 @@ table.dataTable thead .sorting:after {
   font-size: 12px;
   line-height: 1.428571429;
 }
-/* line 138, ../sass/modules/_base.scss */
+/* line 145, ../sass/modules/_base.scss */
 .btn-circle.btn-lg {
   width: 50px;
   height: 50px;
@@ -204,7 +204,7 @@ table.dataTable thead .sorting:after {
   font-size: 18px;
   line-height: 1.33;
 }
-/* line 146, ../sass/modules/_base.scss */
+/* line 153, ../sass/modules/_base.scss */
 .btn-circle.btn-xl {
   width: 70px;
   height: 70px;
@@ -214,11 +214,11 @@ table.dataTable thead .sorting:after {
   line-height: 1.33;
 }
 
-/* line 156, ../sass/modules/_base.scss */
+/* line 163, ../sass/modules/_base.scss */
 .show-grid {
   margin: 15px 0;
 }
-/* line 157, ../sass/modules/_base.scss */
+/* line 164, ../sass/modules/_base.scss */
 .show-grid [class^=col-] {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -226,59 +226,59 @@ table.dataTable thead .sorting:after {
   background-color: #eee !important;
 }
 
-/* line 166, ../sass/modules/_base.scss */
+/* line 173, ../sass/modules/_base.scss */
 .panel-green {
   border-color: #5cb85c;
 }
-/* line 168, ../sass/modules/_base.scss */
+/* line 175, ../sass/modules/_base.scss */
 .panel-green .panel-heading {
   border-color: #5cb85c;
   color: #fff;
   background-color: #5cb85c;
 }
-/* line 173, ../sass/modules/_base.scss */
+/* line 180, ../sass/modules/_base.scss */
 .panel-green a {
   color: #5cb85c;
 }
-/* line 175, ../sass/modules/_base.scss */
+/* line 182, ../sass/modules/_base.scss */
 .panel-green a:hover {
   color: #3d8b3d;
 }
 
-/* line 181, ../sass/modules/_base.scss */
+/* line 188, ../sass/modules/_base.scss */
 .panel-red {
   border-color: #d9534f;
 }
-/* line 183, ../sass/modules/_base.scss */
+/* line 190, ../sass/modules/_base.scss */
 .panel-red .panel-heading {
   border-color: #d9534f;
   color: #fff;
   background-color: #d9534f;
 }
-/* line 188, ../sass/modules/_base.scss */
+/* line 195, ../sass/modules/_base.scss */
 .panel-red a {
   color: #d9534f;
 }
-/* line 190, ../sass/modules/_base.scss */
+/* line 197, ../sass/modules/_base.scss */
 .panel-red a:hover {
   color: #b52b27;
 }
 
-/* line 196, ../sass/modules/_base.scss */
+/* line 203, ../sass/modules/_base.scss */
 .panel-yellow {
   border-color: #f0ad4e;
 }
-/* line 198, ../sass/modules/_base.scss */
+/* line 205, ../sass/modules/_base.scss */
 .panel-yellow .panel-heading {
   border-color: #f0ad4e;
   color: #fff;
   background-color: #f0ad4e;
 }
-/* line 203, ../sass/modules/_base.scss */
+/* line 210, ../sass/modules/_base.scss */
 .panel-yellow a {
   color: #f0ad4e;
 }
-/* line 205, ../sass/modules/_base.scss */
+/* line 212, ../sass/modules/_base.scss */
 .panel-yellow a:hover {
   color: #df8a13;
 }
@@ -353,60 +353,61 @@ table.dataTable thead .sorting:after {
 .mod-tile-section .tile-section-row .panel .panel-heading .row .tile-left-section .tile-type {
   margin-top: 20px;
   margin-bottom: 20px;
+  display: block;
 }
-/* line 52, ../sass/modules/_tile-section.scss */
+/* line 53, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .panel .panel-heading .row .tile-right-section {
   height: 100%;
 }
-/* line 54, ../sass/modules/_tile-section.scss */
+/* line 55, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .panel .panel-heading .row .tile-right-section .tile-data-count {
   font-size: 32px;
   text-align: center;
   margin-top: 35px;
   color: #55c6f2;
 }
-/* line 60, ../sass/modules/_tile-section.scss */
+/* line 61, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .panel .panel-heading .row .tile-right-section .tab-type-text {
   color: #a77f93;
   margin-top: 17px;
 }
-/* line 69, ../sass/modules/_tile-section.scss */
+/* line 70, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-opportunity .tile-left-section {
   background-color: #6ecac9;
 }
-/* line 72, ../sass/modules/_tile-section.scss */
+/* line 73, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-opportunity .tile-right-section {
   background-color: #f2f2f2;
 }
-/* line 77, ../sass/modules/_tile-section.scss */
+/* line 78, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-storeFront .tile-left-section {
   background-color: #ff6d60;
 }
-/* line 80, ../sass/modules/_tile-section.scss */
+/* line 81, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-storeFront .tile-right-section {
   background-color: #f2f2f2;
 }
-/* line 85, ../sass/modules/_tile-section.scss */
+/* line 86, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-dwellTime .tile-left-section {
   background-color: #FFCC33;
 }
-/* line 88, ../sass/modules/_tile-section.scss */
+/* line 89, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-dwellTime .tile-right-section {
   background-color: #f2f2f2;
 }
-/* line 93, ../sass/modules/_tile-section.scss */
+/* line 94, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-left-section {
   background-color: #a9d18e;
 }
-/* line 95, ../sass/modules/_tile-section.scss */
+/* line 96, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-left-section .tile-type {
   position: relative;
 }
-/* line 98, ../sass/modules/_tile-section.scss */
+/* line 99, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-left-section .customer-count {
   position: absolute;
-  top: 20%;
-  left: 30%;
+  top: 21%;
+  left: 34%;
   color: #a9d18e;
   font-size: 25px;
   text-align: center;
@@ -414,7 +415,7 @@ table.dataTable thead .sorting:after {
   height: 40px;
   width: 40px;
 }
-/* line 110, ../sass/modules/_tile-section.scss */
+/* line 111, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-right-section {
   background-color: #f2f2f2;
 }

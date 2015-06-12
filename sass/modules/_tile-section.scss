@@ -47,6 +47,7 @@
                         .tile-type {
                             margin-top: 20px;
                             margin-bottom: 20px;
+                            display: block;
                         }
                     }
                     .tile-right-section {
@@ -97,8 +98,8 @@
                 }
                 .customer-count {
                     position: absolute;
-                    top: 20%;
-                    left: 30%;
+                    top: 21%;
+                    left: 34%;
                     color: $color-darkgreen;
                     font-size: 25px;
                     text-align: center;

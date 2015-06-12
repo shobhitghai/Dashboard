@@ -1,7 +1,10 @@
 module.exports = function(grunt) {
     var components = [
         'js/component/base.js',
-        'js/component/tile-section.js'
+        'js/component/tile-section.js',
+        'js/component/shopper-engagement.js',
+        'js/component/shopper-profile.js',
+        'js/component/revisit-frequency.js'
     ];
 
     // Project configuration.

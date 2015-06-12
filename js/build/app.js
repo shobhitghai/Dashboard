@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-11 */
+/*! Fashion_Dashboard 1.0.0 2015-06-12 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -145,32 +145,273 @@ $(function() {
 
 
 //####js/component/tile-section.js
-(function(){
-	app['tile-section'] = {
-		settings: {
-			target: 'mod-tile-section'
-		},
-		init: function(context) {
-			//dummy handlebar
-			var template = App.Template['tile-opportunity'];
+(function() {
+    app['tile-section'] = {
+        settings: {
+            target: 'mod-tile-section'
+        },
+        init: function(context) {
+            //dummy handlebar
+            var template = App.Template['tile-opportunity'];
 
-			$('.section-opportunity').html(template({
-				'tile-name': 'test',
-				'tile-percent': '+30%',
-				'tile-percent-change': '100%',
-				'tile-period-param': 'vs months'
-			}));
+            //move to separate global wrapper
+            $.ajax({
+                url: 'http://localhost:3001/api/getData',
+                success: function(data) {
+                    app['tile-section'].bindTemplate(data, template);
+                },
+                error: function(err) {
+                    console.log('err');
+                }
+            })
+        },
+        bindTemplate: function(data, template) {
+        	var response = $.parseJSON(data);
 
-			
-			$.ajax({
-				url: 'http://localhost:3000/api/getData',
-				success: function(data){
-					console.log(data);
-				},
-				error: function(err){
-					console.log('err');
-				}
-			})
-		}
-	}
+            $('.section-opportunity').html(template({
+                'tile-name': 'Data count',
+                'tile-percent': response.length,
+                'tile-percent-change': '',
+                'tile-period-param': 'Count of rows'
+            }));
+        }
+    }
+})(app);
+
+//####js/component/shopper-engagement.js
+(function() {
+    app['shopper-engagement'] = {
+        settings: {
+            target: '.mod-shopper-engagement'
+        },
+        init: function(context) {
+            var s = this.settings;
+            var chartContainer = $(s.target).find('#shopper-engagement-chart');
+
+            app['shopper-engagement'].renderChart(chartContainer);
+
+
+        },
+        renderChart: function(chartContainer) {
+            chartContainer.highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Shopper Engagement'
+                },
+                xAxis: {
+                    categories: ['>10 mins', '5-20 mins', '2-5 mins', 'bounced'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Population (millions)',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ' millions'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 100,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Last Month',
+                    data: [107, 31, 635, 203]
+                }, {
+                    name: 'This Month',
+                    data: [133, 156, 947, 408]
+                }]
+            });
+        }
+    }
+})(app);
+
+//####js/component/shopper-profile.js
+(function() {
+    app['shopper-profile'] = {
+        settings: {
+            target: '.mod-shopper-profile'
+        },
+        init: function(context) {
+            var s = this.settings;
+            var chartContainer = $(s.target).find('#shopper-profile-chart');
+
+            app['shopper-profile'].renderChart(chartContainer);
+
+
+        },
+        renderChart: function(chartContainer) {
+            chartContainer.highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: "Shopper's profile"
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    },
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return this.y;
+                            },
+                            distance: -30,
+                            color: 'white'
+                        }
+                    }
+                },
+                // legend: {
+                //     enabled: true,
+                //     layout: 'vertical',
+                //     align: 'right',
+                //     width: 100,
+                //     verticalAlign: 'middle',
+                //     useHTML: true,
+                //     labelFormatter: function() {
+                //         return '<div style="text-align: left;font-size: 10px; width:50px;float:right;">' + this.name + '</div>';
+                //     }
+                // },
+                series: [{
+                    type: 'pie',
+                    name: 'Browser share',
+                    data: [{
+                            name: 'Discount Sensitive',
+                            y: 45.8,
+                            sliced: true,
+                            selected: true
+                        },
+                        ['Fast fashion conscious', 26.8],
+                        ['Utility buyer', 8.5],
+                        ['Premium brand savy', 6.2]
+                    ]
+                }],
+                credits: {
+                    enabled: false
+                },
+            });
+        }
+    }
+})(app);
+
+//####js/component/revisit-frequency.js
+(function() {
+    app['revisit-frequency'] = {
+        settings: {
+            target: '.mod-revisit-frequency'
+        },
+        init: function(context) {
+            var s = this.settings;
+            var chartContainer = $(s.target).find('#revisit-frequency-chart');
+
+            app['revisit-frequency'].renderChart(chartContainer);
+
+
+        },
+        renderChart: function(chartContainer) {
+
+            chartContainer.highcharts({
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Revisit frequency'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total percent market share'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        shadow: false
+                    },
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return 'test';
+                            },
+                            distance: -30,
+                            color: 'white'
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function() {
+                        return '<b>' + this.point.name + '</b>: ' + this.y + ' %';
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    layout: 'vertical',
+                    align: 'right',
+                    width: 200,
+                    verticalAlign: 'middle',
+                    useHTML: true,
+                    labelFormatter: function() {
+                        return '<div style="text-align: left; width:50px;float:right;">' + this.name + '</div>';
+                    }
+                },
+                series: [{
+                    name: 'Browsers',
+                    data: [
+                        ["0-2 weeks", 10],
+                        ["2-4 weeks", 15],
+                        ["1-3 months", 10],
+                        ["3-6 months", 35],
+                        ["6-1 months", 10],
+                        ["> 1 year", 20]
+                    ],
+                    size: '100%',
+                    innerSize: '60%',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false
+                    }
+                }],
+                credits: {
+                    enabled: false
+                },
+            });
+        }
+    }
 })(app);
