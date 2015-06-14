@@ -15,6 +15,7 @@ dataController.prototype.handleRoutes = function(router,connection) {
         // var query = "select Name, Population from city where CountryCode='IND' LIMIT 10;";
         // var table = ["user_login"];
         // query = mysql.format(query,table);
+        
         // console.log(connection);
         
         var query = "select * from t_transactions";

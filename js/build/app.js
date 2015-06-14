@@ -567,16 +567,36 @@ $(function() {
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({
                 chart: {
-                    type: 'bar'
+                    type: 'bar',
+                    height: 100,
+                    // width: 190
                 },
                 title: {
                     text: ''
                 },
                 xAxis: {
-                    enabled: false
+                    lineWidth: 0,
+                    minorGridLineWidth: 0,
+                    lineColor: 'transparent',
+                    labels: {
+                        enabled: false
+                    },
+                    minorTickLength: 0,
+                    tickLength: 0
                 },
                 yAxis: {
-                    enabled: false
+                    lineWidth: 0,
+                    minorGridLineWidth: 0,
+                    lineColor: 'transparent',
+                    gridLineColor: 'transparent',
+                    labels: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    minorTickLength: 0,
+                    tickLength: 0
                 },
                 legend: {
                     reversed: true,
@@ -584,7 +604,8 @@ $(function() {
                 },
                 plotOptions: {
                     series: {
-                        stacking: 'normal'
+                        stacking: 'normal',
+                        pointWidth: 50
                     }
                 },
                 series: series,

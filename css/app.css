@@ -439,8 +439,17 @@ table.dataTable thead .sorting:after {
 .mod-right-now .people-count {
   font-size: 25px;
   color: #55c6f2;
+  margin-top: 10px;
 }
-/* line 6, ../sass/modules/_3g-section.scss */
+/* line 7, ../sass/modules/_3g-section.scss */
+.mod-right-now .right-now-data {
+  margin-top: 40px;
+}
+/* line 11, ../sass/modules/_3g-section.scss */
+.mod-right-now .people-text {
+  font-size: 15px;
+}
+/* line 14, ../sass/modules/_3g-section.scss */
 .mod-right-now .mod-current-shoppers {
   margin-top: 40px;
 }
