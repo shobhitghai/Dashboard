@@ -1,0 +1,16 @@
+.btn.btn-metric {
+    margin: 10px;
+    margin-left: 0px;
+    border: none;
+    border-radius: 0px;
+    background-color: $color-base;
+    color: $color-tile-text;
+    &.active {
+        background-color: $color-lightblue;
+        box-shadow: none;
+        color: $color-white;
+    }
+    &:active {
+        box-shadow: none;
+    }
+}

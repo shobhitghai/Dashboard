@@ -17,7 +17,7 @@
                     type: 'column'
                 },
                 title: {
-                    text: 'Cross Store visit'
+                    text: ''
                 },
                 xAxis: {
                     categories: [

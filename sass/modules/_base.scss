@@ -2,15 +2,19 @@ body {
   background-color: $color-base;
 }
 
-// .highcharts-legend-item {
-//   span{
-//     white-space: normal !important;
-//     display: inline-block;
-//   }
-// }
 
 #wrapper {
   width: 100%;
+}
+
+.section-heading{
+  margin-top: 0px;
+  color: $color-lightblue;
+  font-weight: normal;
+}
+
+.section-desc{
+  font-size: 15px;
 }
 
 #page-wrapper {
@@ -18,7 +22,7 @@ body {
   width: 1300px;
   max-width: none !important;
   margin: auto;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .navbar-brand{
@@ -27,36 +31,6 @@ body {
 
 .panel{
   border-radius: 0px
-}
-
-.navbar-top-links {
-  margin-right: 0;
-  li {
-    display: inline-block;
-    &:last-child {
-      margin-right: 15px;
-    }
-    a {
-      padding: 22px;
-      min-height: 50px;
-      .caret{
-        margin-left: 15px;
-      }
-    }
-  }
-  .dropdown-menu li {
-    display: block;
-    &:last-child {
-      margin-right: 0;
-    }
-    a {
-      padding: 3px 20px;
-      min-height: 0;
-      div {
-        white-space: normal;
-      }
-    }
-  }
 }
 
 .btn-outline {

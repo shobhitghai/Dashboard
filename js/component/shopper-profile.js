@@ -19,7 +19,7 @@
                     plotShadow: false
                 },
                 title: {
-                    text: "Shopper's profile"
+                    text: ""
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

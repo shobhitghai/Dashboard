@@ -17,7 +17,7 @@
                     type: 'bar'
                 },
                 title: {
-                    text: 'Shopper Engagement'
+                    text: ''
                 },
                 xAxis: {
                     categories: ['>10 mins', '5-20 mins', '2-5 mins', 'bounced'],
@@ -28,8 +28,7 @@
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Population (millions)',
-                        align: 'high'
+                        text: ''
                     },
                     labels: {
                         overflow: 'justify'

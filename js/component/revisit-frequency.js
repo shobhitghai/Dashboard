@@ -18,7 +18,7 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'Revisit frequency'
+                    text: ''
                 },
                 yAxis: {
                     title: {

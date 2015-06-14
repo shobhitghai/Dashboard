@@ -1,0 +1,21 @@
+.mod-impact {
+    .panel-body {
+        min-height: 340px;
+        .row {
+            margin: 15px;
+            .impact-label, .impact-desc {
+                font-size: 15px;
+            }
+            .impact-change {
+                font-size: 18px;
+                text-align: right;
+                &.impact-pos {
+                    color: $color-darkgreen;
+                }
+                &.impact-neg {
+                    color: $color-red;
+                }
+            }
+        }
+    }
+}

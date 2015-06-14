@@ -1,3 +1,35 @@
 .navbar-default {
-	background-color: #ffffff;
+    background-color: #ffffff;
+    .navbar-brand {
+        padding: 10px 15px;
+    }
+    .navbar-top-links {
+        margin-right: 0;
+        li {
+            display: inline-block;
+            &:last-child {
+                margin-right: 15px;
+            }
+            a {
+                padding: 17px;
+                min-height: 50px;
+                .caret {
+                    margin-left: 15px;
+                }
+            }
+        }
+        .dropdown-menu li {
+            display: block;
+            &:last-child {
+                margin-right: 0;
+            }
+            a {
+                padding: 3px 20px;
+                min-height: 0;
+                div {
+                    white-space: normal;
+                }
+            }
+        }
+    }
 }

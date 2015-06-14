@@ -1,26 +1,9 @@
 .mod-tile-section {
     padding: 20px;
-    margin-bottom: 30px;
     background-color: $color-white;
     border: 1px solid #e7e7e7;
     .tab-selection-row {
         margin-bottom: 10px;
-        label.btn {
-            margin: 10px;
-            margin-left: 0px;
-            border: none;
-            border-radius: 0px;
-            background-color: $color-base;
-            color: $color-tile-text;
-            &.active {
-                background-color: $color-lightblue;
-                box-shadow: none;
-                color: $color-white;
-            }
-            &:active {
-                box-shadow: none;
-            }
-        }
         .grp-comparison {
             margin-right: 45px;
         }

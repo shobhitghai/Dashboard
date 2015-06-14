@@ -5,7 +5,10 @@ module.exports = function(grunt) {
         'js/component/shopper-engagement.js',
         'js/component/shopper-profile.js',
         'js/component/revisit-frequency.js',
-        'js/component/cross-store.js'
+        'js/component/cross-store.js',
+        'js/component/time-trend.js',
+        'js/component/right-now.js',
+
     ];
 
     // Project configuration.

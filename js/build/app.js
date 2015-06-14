@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-13 */
+/*! Fashion_Dashboard 1.0.0 2015-06-14 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -198,7 +198,7 @@ $(function() {
                     type: 'bar'
                 },
                 title: {
-                    text: 'Shopper Engagement'
+                    text: ''
                 },
                 xAxis: {
                     categories: ['>10 mins', '5-20 mins', '2-5 mins', 'bounced'],
@@ -209,8 +209,7 @@ $(function() {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Population (millions)',
-                        align: 'high'
+                        text: ''
                     },
                     labels: {
                         overflow: 'justify'
@@ -274,7 +273,7 @@ $(function() {
                     plotShadow: false
                 },
                 title: {
-                    text: "Shopper's profile"
+                    text: ""
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -353,7 +352,7 @@ $(function() {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Revisit frequency'
+                    text: ''
                 },
                 yAxis: {
                     title: {
@@ -436,7 +435,7 @@ $(function() {
                     type: 'column'
                 },
                 title: {
-                    text: 'Cross Store visit'
+                    text: ''
                 },
                 xAxis: {
                     categories: [
@@ -463,6 +462,132 @@ $(function() {
                     data: [49.9, 71.5]
 
                 }],
+                credits: {
+                    enabled: false
+                }
+            });
+        }
+    }
+})(app);
+//####js/component/time-trend.js
+(function() {
+    app['time-trend'] = {
+        settings: {
+            target: '.mod-time-trend'
+        },
+        init: function(context) {
+            var s = this.settings;
+            var chartContainer = $(s.target).find('#time-trend-chart');
+
+            app['time-trend'].renderChart(chartContainer);
+
+
+        },
+        renderChart: function(chartContainer) {
+            chartContainer.highcharts({
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Walk-ins'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Tokyo',
+                    data: [7.0, 6.9, 9.5, 14.5, 22, 11, 21.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                }, {
+                    name: 'New York',
+                    data: [-0.2, 0.8, 8, 21, 17.0, 20.0, 8, 11.1, 29.1, 14.1, 8.6, 2.5]
+                }],
+                credits: {
+                    enabled: false
+                }
+            });
+        }
+    }
+})(app);
+//####js/component/right-now.js
+(function() {
+    app['right-now'] = {
+        settings: {
+            target: '.mod-right-now'
+        },
+        init: function(context) {
+            var s = this.settings;
+            var shoppersMall = $(s.target).find('#shoppers-mall-chart');
+            var shoppersStore = $(s.target).find('#shoppers-store-chart');
+
+            var shoppersMall_series = [{
+                name: 'Discount Sensitive',
+                data: [5]
+            }, {
+                name: 'Utility Buyer',
+                data: [2]
+            }, {
+                name: 'Fashion',
+                data: [3]
+            }];
+
+            var shoppersStore_series = [{
+                name: 'Discount Sensitive',
+                data: [2]
+            }, {
+                name: 'Utility Buyer',
+                data: [5]
+            }, {
+                name: 'Fashion',
+                data: [3]
+            }]
+
+            app['right-now'].renderChart(shoppersMall, shoppersMall_series);
+            app['right-now'].renderChart(shoppersStore, shoppersStore_series);
+
+
+        },
+        renderChart: function(chartContainer, series) {
+            chartContainer.highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    enabled: false
+                },
+                yAxis: {
+                    enabled: false
+                },
+                legend: {
+                    reversed: true,
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal'
+                    }
+                },
+                series: series,
                 credits: {
                     enabled: false
                 }
