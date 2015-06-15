@@ -48,7 +48,7 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
     }));
     app.use(bodyParser.json());
     var router = express.Router();
-    app.use('/', express.static(application_root + '/views/index.html'));
+    app.use('/', express.static(application_root + '/views/'));
     app.use('/api', router);
     var apiController = new dataController(router, connection);
     self.startServer();
