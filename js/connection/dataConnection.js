@@ -50,9 +50,11 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
     var router = express.Router();
     // app.use('/', express.static(application_root + '/views/'));
 
+    app.use(express.static(__dirname));
+
     app.use('/', function(req, res) {
         console.log('test');
-        res.sendFile('../../views/index.html');
+        res.sendFile('./views/index.html');
     });
 
     app.use('/api', router);
