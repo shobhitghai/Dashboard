@@ -3,6 +3,7 @@ var application_root = __dirname,
     mysql = require("mysql"),
     bodyParser = require("body-parser"),
     dataController = require("../controllers/dataController.js");
+    path = require('path');
 port = process.env.PORT || 3000;
 
 var app = express();
@@ -53,9 +54,7 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
     // app.use(express.static(__dirname));
 
     app.use('/', function(req, res) {
-        console.log('test');
-        console.log(__dirname);
-        res.sendFile('app/views/index.html');
+        res.sendFile(path.join(__dirname, '../../views', 'index.html'));
     });
 
     app.use('/api', router);
