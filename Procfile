@@ -1,1 +1,1 @@
-web: nodemon js\connection\dataConnection.js
+web: cd js && cd connection && nodemon dataConnection.js
