@@ -52,7 +52,7 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
 
     app.use('/', function(req, res) {
         console.log('test');
-        res.sendfile('../../views/index.html');
+        res.sendFile('../../views/index.html');
     });
 
     app.use('/api', router);
