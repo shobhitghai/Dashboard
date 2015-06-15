@@ -1,8 +1,10 @@
-var express = require("express");
-var mysql = require("mysql");
-var bodyParser = require("body-parser");
-// var md5 = require('MD5');
-var dataController = require("../controllers/dataController.js");
+var application_root = __dirname,
+    express = require("express"),
+    mysql = require("mysql"),
+    bodyParser = require("body-parser"),
+    dataController = require("../controllers/dataController.js");
+    port = process.env.PORT || 3000;
+
 var app = express();
 
 function DataConnectionLayer() {
@@ -52,8 +54,8 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
 }
 
 DataConnectionLayer.prototype.startServer = function() {
-    app.listen(3001, function() {
-        console.log("All right ! I am alive at Port 3000.");
+    app.listen(port, function() {
+        console.log("All right ! I am alive at Port." + port);
     });
 }
 

@@ -20,7 +20,8 @@ dataController.prototype.handleRoutes = function(router,connection) {
         
         var query = "select * from t_transactions";
         connection.query(query,function(err,rows){
-            res.header('Access-Control-Allow-Origin', 'http://localhost:8082'); //change to other host and port
+            res.header('Access-Control-Allow-Origin', '*'); //change to other host and port
+            // res.header('Access-Control-Allow-Origin', 'https://dashboard-poc-app.herokuapp.com');
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE ');
             // res.header('Access-Control-Allow-Headers', 'Content-Type');
             // console.log(err);

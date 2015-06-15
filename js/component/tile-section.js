@@ -1,7 +1,7 @@
 (function() {
     app['tile-section'] = {
         settings: {
-            target: 'mod-tile-section'
+            target: '.mod-tile-section'
         },
         init: function(context) {
             //dummy handlebar
@@ -9,7 +9,7 @@
 
             //move to separate global wrapper
             $.ajax({
-                url: 'http://localhost:3001/api/getData',
+                url: '/api/getData',
                 success: function(data) {
                     app['tile-section'].bindTemplate(data, template);
                 },
