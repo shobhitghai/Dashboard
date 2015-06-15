@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-15 */
+/*! Fashion_Dashboard 1.0.0 2015-06-16 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -156,7 +156,7 @@ $(function() {
 
             //move to separate global wrapper
             $.ajax({
-                url: '/api/getData',
+                url: 'http://localhost:3000/api/getData',
                 success: function(data) {
                     app['tile-section'].bindTemplate(data, template);
                 },

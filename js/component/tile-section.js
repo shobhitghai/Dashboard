@@ -9,7 +9,7 @@
 
             //move to separate global wrapper
             $.ajax({
-                url: '/api/getData',
+                url: 'http://localhost:3000/api/getData',
                 success: function(data) {
                     app['tile-section'].bindTemplate(data, template);
                 },

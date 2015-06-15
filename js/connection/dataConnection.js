@@ -3,7 +3,6 @@ var application_root = __dirname,
     mysql = require("mysql"),
     bodyParser = require("body-parser"),
     dataController = require("../controllers/dataController.js");
-    path = require('path');
 port = process.env.PORT || 3000;
 
 var app = express();
@@ -49,13 +48,6 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
     }));
     app.use(bodyParser.json());
     var router = express.Router();
-    // app.use('/', express.static(application_root + '/views/'));
-
-    // app.use(express.static(__dirname));
-
-    app.use('/', function(req, res) {
-        res.sendFile(path.join(__dirname, '../../views', 'index.html'));
-    });
 
     app.use('/api', router);
     var apiController = new dataController(router, connection);
