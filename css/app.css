@@ -465,30 +465,59 @@ table.dataTable thead .sorting:after {
   white-space: normal;
 }
 
-/* line 2, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body {
+/* line 3, ../sass/modules/_impact-section.scss */
+.mod-impact .panel-body,
+.impact-edit .panel-body {
   min-height: 340px;
 }
-/* line 4, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row {
-  margin: 15px;
-}
 /* line 6, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-label, .mod-impact .panel-body .row .impact-desc {
-  font-size: 15px;
+.mod-impact .panel-body .panel-top .section-heading,
+.impact-edit .panel-body .panel-top .section-heading {
+  display: inline-block;
 }
 /* line 9, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-change {
+.mod-impact .panel-body .panel-top .edit-btn,
+.impact-edit .panel-body .panel-top .edit-btn {
+  float: right;
+  display: inline-block;
+}
+/* line 14, ../sass/modules/_impact-section.scss */
+.mod-impact .panel-body .row,
+.impact-edit .panel-body .row {
+  margin: 15px;
+}
+/* line 16, ../sass/modules/_impact-section.scss */
+.mod-impact .panel-body .row .impact-label, .mod-impact .panel-body .row .impact-desc,
+.impact-edit .panel-body .row .impact-label,
+.impact-edit .panel-body .row .impact-desc {
+  font-size: 15px;
+}
+/* line 19, ../sass/modules/_impact-section.scss */
+.mod-impact .panel-body .row .impact-change,
+.impact-edit .panel-body .row .impact-change {
   font-size: 18px;
   text-align: right;
 }
-/* line 12, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-change.impact-pos {
+/* line 22, ../sass/modules/_impact-section.scss */
+.mod-impact .panel-body .row .impact-change.impact-pos,
+.impact-edit .panel-body .row .impact-change.impact-pos {
   color: #a9d18e;
 }
-/* line 15, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-change.impact-neg {
+/* line 25, ../sass/modules/_impact-section.scss */
+.mod-impact .panel-body .row .impact-change.impact-neg,
+.impact-edit .panel-body .row .impact-change.impact-neg {
   color: #ff6d60;
+}
+
+/* line 33, ../sass/modules/_impact-section.scss */
+.impact-edit {
+  position: absolute;
+  top: 0;
+  width: 95.5%;
+  visibility: hidden;
+  min-height: 342px;
+  background-color: #7f7f7f;
+  color: #ffffff;
 }
 
 /* line 2, ../sass/modules/_benchmark-section.scss */
