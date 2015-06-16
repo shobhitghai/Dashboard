@@ -11,12 +11,16 @@
             var panel_btn = target.find('.config-save, .config-cancel');
 
             edit_btn.on('click', function() {
-                configure_panel.css('visibility', 'visible');
+                configure_panel.toggleClass('edit-active');
             });
 
             panel_btn.on('click', function() {
-                configure_panel.css('visibility', 'hidden');
+                configure_panel.toggleClass('edit-active');
             })
+
+
+            $('.storefront-start-date').datepicker({});
+            
 
         }
     }

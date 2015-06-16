@@ -36,6 +36,30 @@
     width: 95.5%;
     visibility: hidden;
     min-height: 342px;
-    background-color: #7f7f7f;
-    color: #ffffff;
+    background-color: $color-darkgray;
+    color: $color-white;
+    opacity: 0;
+    &.edit-active {
+        visibility: visible;
+        transition: opacity 0.3s linear;
+        opacity: 1;
+    }
+    .edit-dropdown {
+        .btn {
+            border-radius: 0px;
+        }
+        .dropdown-menu {
+            border-radius: 0px;
+        }
+    }
+    .form-control {
+        border-radius: 0px;
+    }
+    .input-group-addon {
+        background-color: $color-white;
+        border-radius: 0px;
+    }
+    .edit-mode-btns {
+        float: right;
+    }
 }

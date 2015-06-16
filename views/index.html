@@ -10,6 +10,7 @@
     <title>Dashboard</title>
     <!-- Bootstrap Core CSS -->
     <link href="../css/lib/bootstrap.css" rel="stylesheet">
+    <link href="../css/lib/bootstrap-datepicker.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/app.css" rel="stylesheet">
     <!-- Custom Fonts -->
@@ -308,38 +309,59 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="impact-desc">
-                                            dropdown
+                                            <div class="edit-dropdown dropdown">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    Choose campaign
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                    <li><a href="#">Action</a></li>
+                                                    <li><a href="#">Another action</a></li>
+                                                    <li><a href="#">Something else here</a></li>
+                                                    <li><a href="#">Separated link</a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <div class="impact-label">
-                                            Campaign Name
+                                            Start Date
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="impact-desc">
-                                            dropdown
+                                            <div class="campaign-start-date input-group date">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <div class="impact-label">
-                                            Campaign Name
+                                            End Date
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="impact-desc">
-                                            dropdown
+                                            <div class="campaign-end-date input-group date">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-addon">
+                                                   <i class="fa fa-calendar"></i>
+                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-8">
-                                        <button class="btn btn-default config-save" type="submit">Save</button>
-                                        <button class="btn btn-default config-cancel" type="submit">Cancel</button>
+                                    <div class="col-xs-8 edit-mode-btns">
+                                        <button class="btn btn-metric btn-solid config-save" type="submit">Save</button>
+                                        <button class="btn btn-metric btn-solid config-cancel" type="submit">Cancel</button>
                                     </div>
                                 </div>
                             </div>
@@ -431,19 +453,23 @@
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <div class="impact-label">
-                                            Storefront change
+                                            Store front changed on
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="impact-desc">
-                                            dropdown
+                                            <div class="storefront-start-date input-group date">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-8">
-                                        <button class="btn btn-default config-save" type="submit">Save</button>
-                                        <button class="btn btn-default config-cancel" type="submit">Cancel</button>
+                                    <div class="col-xs-8 edit-mode-btns">
+                                        <button class="btn btn-metric btn-solid config-save" type="submit">Save</button>
                                     </div>
                                 </div>
                             </div>
@@ -525,6 +551,7 @@
     </div>
     <script src="../js/lib/jquery.js"></script>
     <script src="../js/lib/bootstrap.js"></script>
+    <script src="../js/lib/bootstrap-datepicker.js"></script>
     <script src="../js/lib/highcharts.js"></script>
     <script src="../js/lib/handlebars.runtime.js"></script>
     <script src="../js/build/sb-admin-2.js"></script>

@@ -47,6 +47,13 @@ i, .i {
 .btn.btn-metric:active {
   box-shadow: none;
 }
+/* line 16, ../sass/global/_buttons.scss */
+.btn.btn-metric.btn-solid {
+  background-color: #55c6f2;
+  border-radius: 0px;
+  border: none;
+  color: #ffffff;
+}
 
 /* line 1, ../sass/modules/_base.scss */
 body {
@@ -518,6 +525,34 @@ table.dataTable thead .sorting:after {
   min-height: 342px;
   background-color: #7f7f7f;
   color: #ffffff;
+  opacity: 0;
+}
+/* line 42, ../sass/modules/_impact-section.scss */
+.impact-edit.edit-active {
+  visibility: visible;
+  transition: opacity 0.3s linear;
+  opacity: 1;
+}
+/* line 48, ../sass/modules/_impact-section.scss */
+.impact-edit .edit-dropdown .btn {
+  border-radius: 0px;
+}
+/* line 51, ../sass/modules/_impact-section.scss */
+.impact-edit .edit-dropdown .dropdown-menu {
+  border-radius: 0px;
+}
+/* line 55, ../sass/modules/_impact-section.scss */
+.impact-edit .form-control {
+  border-radius: 0px;
+}
+/* line 58, ../sass/modules/_impact-section.scss */
+.impact-edit .input-group-addon {
+  background-color: #ffffff;
+  border-radius: 0px;
+}
+/* line 62, ../sass/modules/_impact-section.scss */
+.impact-edit .edit-mode-btns {
+  float: right;
 }
 
 /* line 2, ../sass/modules/_benchmark-section.scss */

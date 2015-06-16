@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-16 */
+/*! Fashion_Dashboard 1.0.0 2015-06-17 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -766,12 +766,16 @@ $(function() {
             var panel_btn = target.find('.config-save, .config-cancel');
 
             edit_btn.on('click', function() {
-                configure_panel.css('visibility', 'visible');
+                configure_panel.toggleClass('edit-active');
             });
 
             panel_btn.on('click', function() {
-                configure_panel.css('visibility', 'hidden');
+                configure_panel.toggleClass('edit-active');
             })
+
+            $('.campaign-start-date').datepicker({});
+            $('.campaign-end-date').datepicker({});
+
 
         }
     }
@@ -788,7 +792,6 @@ $(function() {
 //         'tile-period-param': 'Count of rows'
 //     }));
 // }
-
 //####js/component/storefront-impact.js
 (function() {
     app['modification-impact'] = {
@@ -803,12 +806,16 @@ $(function() {
             var panel_btn = target.find('.config-save, .config-cancel');
 
             edit_btn.on('click', function() {
-                configure_panel.css('visibility', 'visible');
+                configure_panel.toggleClass('edit-active');
             });
 
             panel_btn.on('click', function() {
-                configure_panel.css('visibility', 'hidden');
+                configure_panel.toggleClass('edit-active');
             })
+
+
+            $('.storefront-start-date').datepicker({});
+            
 
         }
     }

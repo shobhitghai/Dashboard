@@ -13,4 +13,10 @@
     &:active {
         box-shadow: none;
     }
+    &.btn-solid {
+        background-color: $color-lightblue;
+        border-radius: 0px;
+        border: none;
+        color: $color-white;
+    }
 }
