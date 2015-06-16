@@ -3,7 +3,6 @@ var application_root = __dirname,
     mysql = require("mysql"),
     bodyParser = require("body-parser"),
     dataController = require("../controllers/dataController.js");
-    path = require('path');
 port = process.env.PORT || 3000;
 
 var app = express();

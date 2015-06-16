@@ -490,3 +490,14 @@ table.dataTable thead .sorting:after {
 .mod-impact .panel-body .row .impact-change.impact-neg {
   color: #ff6d60;
 }
+
+/* line 2, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .x-label {
+  margin-top: 20px;
+}
+/* line 4, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .x-label .benchmark-x-label {
+  margin-top: 18px;
+  padding-bottom: 50px;
+  font-size: 15px;
+}

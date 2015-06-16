@@ -11,8 +11,6 @@ module.exports = function(grunt) {
         'js/component/internal-benchmarking.js',
         'js/component/campaign-impact.js',
         'js/component/storefront-impact.js',
-
-
     ];
 
     // Project configuration.
