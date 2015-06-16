@@ -8,6 +8,10 @@ module.exports = function(grunt) {
         'js/component/cross-store.js',
         'js/component/time-trend.js',
         'js/component/right-now.js',
+        'js/component/internal-benchmarking.js',
+        'js/component/campaign-impact.js',
+        'js/component/storefront-impact.js',
+
 
     ];
 
