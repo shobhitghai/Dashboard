@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-17 */
+/*! Fashion_Dashboard 1.0.0 2015-06-18 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -144,6 +144,15 @@ $(function() {
 
 
 
+//####js/component/highcharts-options.js
+// $(function() {
+// 	var highCharts = Highcharts || {};
+	
+//     highCharts.setOptions({
+//         colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9']
+//     });
+// });
+
 //####js/component/tile-section.js
 (function() {
     app['tile-section'] = {
@@ -195,8 +204,12 @@ $(function() {
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {
-                    type: 'bar'
+                    type: 'bar',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
+                colors: ['#a6a6a6', '#55c6f2'],
                 title: {
                     text: ''
                 },
@@ -270,8 +283,12 @@ $(function() {
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
-                    plotShadow: false
+                    plotShadow: false,
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
+                colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9'],
                 title: {
                     text: ""
                 },
@@ -298,17 +315,9 @@ $(function() {
                         }
                     }
                 },
-                // legend: {
-                //     enabled: true,
-                //     layout: 'vertical',
-                //     align: 'right',
-                //     width: 100,
-                //     verticalAlign: 'middle',
-                //     useHTML: true,
-                //     labelFormatter: function() {
-                //         return '<div style="text-align: left;font-size: 10px; width:50px;float:right;">' + this.name + '</div>';
-                //     }
-                // },
+                legend: {
+                    itemMarginBottom: 10
+                },
                 series: [{
                     type: 'pie',
                     name: 'Browser share',
@@ -346,11 +355,17 @@ $(function() {
 
         },
         renderChart: function(chartContainer) {
-
+// Highcharts.setOptions({
+//         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
+//     });
             chartContainer.highcharts({
                 chart: {
-                    type: 'pie'
+                    type: 'pie',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
+                colors: ['#b4c7e7', '#0070c0', '#55c6f2', '#a9d18e', '#f7d348', '#767171'],
                 title: {
                     text: ''
                 },
@@ -386,6 +401,8 @@ $(function() {
                     width: 200,
                     verticalAlign: 'middle',
                     useHTML: true,
+                    itemMarginTop: 10,
+                    itemMarginBottom: 10,
                     labelFormatter: function() {
                         return '<div style="text-align: left; width:50px;float:right;">' + this.name + '</div>';
                     }
@@ -432,7 +449,10 @@ $(function() {
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {
-                    type: 'column'
+                    type: 'column',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
                 title: {
                     text: ''
@@ -459,7 +479,15 @@ $(function() {
                 },
                 series: [{
                     name: 'Cross-store',
-                    data: [49.9, 71.5]
+                    data: [{
+                            y: 49.9,
+                            color: '#a9d18e'
+                        },
+                        {
+                            y: 71.5,
+                            color: '#55c6f2'
+                        }
+                    ]
 
                 }],
                 credits: {
@@ -469,6 +497,7 @@ $(function() {
         }
     }
 })(app);
+
 //####js/component/time-trend.js
 (function() {
     app['time-trend'] = {
@@ -486,7 +515,10 @@ $(function() {
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 title: {
-                    text: ''
+                    text: '',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
                 xAxis: {
                     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -569,8 +601,8 @@ $(function() {
                 chart: {
                     type: 'bar',
                     height: 100,
-                    // width: 190
                 },
+                colors: ['#f7d348','#55c6f2', '#a9d18e'],
                 title: {
                     text: ''
                 },
@@ -624,6 +656,11 @@ $(function() {
         },
         init: function(context) {
             var s = this.settings;
+
+            $('.benchmark-start-date').datepicker({});
+            $('.benchmark-end-date').datepicker({});
+
+
             var walkins_chart = $(s.target).find('#walkins-chart');
             storeFront_chart = $(s.target).find('#storeFront-chart');
             engagement_chart = $(s.target).find('#engagement-chart');
@@ -635,56 +672,68 @@ $(function() {
 
             var chartObj = {
                 labelName: 'Walk-ins',
+                chartbaseMargin: 20,
                 containerName: walkins_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#00b0f0']
             }
 
             var chartObj1 = {
                 labelName: 'Storefront conversion',
+                chartbaseMargin: 5,
                 containerName: storeFront_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [17, 341, 211, 343]
-                }]
+                }],
+                colors: ['#f7d348']
             }
 
             var chartObj2 = {
                 labelName: 'Engagement levels',
+                chartbaseMargin: 5,
                 containerName: engagement_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [99, 77, 665, 63]
-                }]
+                }],
+                colors: ['#92d050']
             }
 
             var chartObj3 = {
                 labelName: 'Dwell time',
+                chartbaseMargin: 20,
                 containerName: dwell_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#0070c0']
             }
 
             var chartObj4 = {
                 labelName: 'Repeat customers',
+                chartbaseMargin: 5,
                 containerName: repeatCustomers_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#ff6d60']
             }
 
             var chartObj5 = {
                 labelName: 'Top customers',
+                chartbaseMargin: 5,
                 containerName: topCustomers_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#7030a0']
             }
 
 
@@ -702,10 +751,20 @@ $(function() {
 
             chartContainer.highcharts({
                 chart: {
-                    type: 'bar'
+                    type: 'bar',
+                    style: {
+                        fontFamily: 'Arial',
+                        fontSize: '12px'
+                    }
                 },
+                colors: chartObj.colors,
                 title: {
-                    text: ''
+                    text: chartObj.labelName,
+                    // floating: true,
+                    align: 'left',
+                    x: 0,
+                    y: 10,
+                    margin: chartObj.chartbaseMargin
                 },
                 xAxis: {
                     categories: categoriesArr,
@@ -727,7 +786,8 @@ $(function() {
                         enabled: false
                     },
                     title: {
-                        text: chartObj.labelName                    },
+                        text: '',
+                    },
                     minorTickLength: 0,
                     tickLength: 0
                 },
@@ -752,6 +812,7 @@ $(function() {
         }
     }
 })(app);
+
 //####js/component/campaign-impact.js
 (function() {
     app['campaign-impact'] = {

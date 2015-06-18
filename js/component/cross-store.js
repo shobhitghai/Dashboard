@@ -14,7 +14,10 @@
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {
-                    type: 'column'
+                    type: 'column',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
                 title: {
                     text: ''
@@ -41,7 +44,15 @@
                 },
                 series: [{
                     name: 'Cross-store',
-                    data: [49.9, 71.5]
+                    data: [{
+                            y: 49.9,
+                            color: '#a9d18e'
+                        },
+                        {
+                            y: 71.5,
+                            color: '#55c6f2'
+                        }
+                    ]
 
                 }],
                 credits: {

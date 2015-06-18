@@ -14,7 +14,10 @@
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 title: {
-                    text: ''
+                    text: '',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
                 xAxis: {
                     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',

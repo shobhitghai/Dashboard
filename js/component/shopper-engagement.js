@@ -14,8 +14,12 @@
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {
-                    type: 'bar'
+                    type: 'bar',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
+                colors: ['#a6a6a6', '#55c6f2'],
                 title: {
                     text: ''
                 },

@@ -12,11 +12,17 @@
 
         },
         renderChart: function(chartContainer) {
-
+// Highcharts.setOptions({
+//         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
+//     });
             chartContainer.highcharts({
                 chart: {
-                    type: 'pie'
+                    type: 'pie',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
+                colors: ['#b4c7e7', '#0070c0', '#55c6f2', '#a9d18e', '#f7d348', '#767171'],
                 title: {
                     text: ''
                 },
@@ -52,6 +58,8 @@
                     width: 200,
                     verticalAlign: 'middle',
                     useHTML: true,
+                    itemMarginTop: 10,
+                    itemMarginBottom: 10,
                     labelFormatter: function() {
                         return '<div style="text-align: left; width:50px;float:right;">' + this.name + '</div>';
                     }

@@ -16,8 +16,12 @@
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
-                    plotShadow: false
+                    plotShadow: false,
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
+                colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9'],
                 title: {
                     text: ""
                 },
@@ -44,17 +48,9 @@
                         }
                     }
                 },
-                // legend: {
-                //     enabled: true,
-                //     layout: 'vertical',
-                //     align: 'right',
-                //     width: 100,
-                //     verticalAlign: 'middle',
-                //     useHTML: true,
-                //     labelFormatter: function() {
-                //         return '<div style="text-align: left;font-size: 10px; width:50px;float:right;">' + this.name + '</div>';
-                //     }
-                // },
+                legend: {
+                    itemMarginBottom: 10
+                },
                 series: [{
                     type: 'pie',
                     name: 'Browser share',

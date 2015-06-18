@@ -556,12 +556,50 @@ table.dataTable thead .sorting:after {
 }
 
 /* line 2, ../sass/modules/_benchmark-section.scss */
-.mod-internal-benchmarking .x-label {
-  margin-top: 20px;
+.mod-internal-benchmarking .benchmark-top-panel {
+  display: inline-block;
+  margin-bottom: 30px;
 }
-/* line 4, ../sass/modules/_benchmark-section.scss */
+/* line 5, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .benchmark-top-panel .section-heading {
+  float: left;
+}
+/* line 8, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .benchmark-top-panel .col-xs-2 {
+  width: 13%;
+}
+/* line 10, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .benchmark-top-panel .col-xs-2 .benchmark-start-date, .mod-internal-benchmarking .benchmark-top-panel .col-xs-2 .benchmark-end-date {
+  margin-top: -7px;
+}
+/* line 12, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .benchmark-top-panel .col-xs-2 .benchmark-start-date .input-group-addon, .mod-internal-benchmarking .benchmark-top-panel .col-xs-2 .benchmark-end-date .input-group-addon {
+  background-color: #ffffff;
+  border-radius: 0px;
+  border: none;
+}
+/* line 17, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .benchmark-top-panel .col-xs-2 .benchmark-start-date .form-control, .mod-internal-benchmarking .benchmark-top-panel .col-xs-2 .benchmark-end-date .form-control {
+  border-radius: 0px;
+  box-shadow: none;
+  border: none;
+}
+/* line 24, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .benchmark-top-panel .benchmark-range-text {
+  float: left;
+}
+/* line 28, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .x-label {
+  margin-top: 50px;
+}
+/* line 30, ../sass/modules/_benchmark-section.scss */
 .mod-internal-benchmarking .x-label .benchmark-x-label {
-  margin-top: 18px;
-  padding-bottom: 50px;
+  margin-top: 20px;
+  padding-bottom: 40px;
   font-size: 15px;
+}
+/* line 36, ../sass/modules/_benchmark-section.scss */
+.mod-internal-benchmarking .highcharts-title {
+  font-size: 15px !important;
+  text-align: left !important;
 }

@@ -40,8 +40,8 @@
                 chart: {
                     type: 'bar',
                     height: 100,
-                    // width: 190
                 },
+                colors: ['#f7d348','#55c6f2', '#a9d18e'],
                 title: {
                     text: ''
                 },

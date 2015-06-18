@@ -1,10 +1,40 @@
 .mod-internal-benchmarking {
+    .benchmark-top-panel {
+        display: inline-block;
+        margin-bottom: 30px;
+        .section-heading {
+            float: left;
+        }
+        .col-xs-2 {
+            width: 13%;
+            .benchmark-start-date, .benchmark-end-date {
+            	margin-top: -7px;
+                .input-group-addon {
+                    background-color: $color-white;
+                    border-radius: 0px;
+                    border: none;
+                }
+                .form-control {
+                    border-radius: 0px;
+                    box-shadow: none;
+                    border: none;
+                }
+            }
+        }
+        .benchmark-range-text{
+        	float: left;
+        }
+    }
     .x-label {
-    	margin-top: 20px;
+        margin-top: 50px;
         .benchmark-x-label {
-            margin-top: 18px;
-            padding-bottom: 50px;
+            margin-top: 20px;
+            padding-bottom: 40px;
             font-size: 15px;
         }
+    }
+    .highcharts-title{
+        font-size: 15px !important;
+        text-align: left !important;
     }
 }

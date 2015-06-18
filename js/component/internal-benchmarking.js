@@ -5,6 +5,11 @@
         },
         init: function(context) {
             var s = this.settings;
+
+            $('.benchmark-start-date').datepicker({});
+            $('.benchmark-end-date').datepicker({});
+
+
             var walkins_chart = $(s.target).find('#walkins-chart');
             storeFront_chart = $(s.target).find('#storeFront-chart');
             engagement_chart = $(s.target).find('#engagement-chart');
@@ -16,56 +21,68 @@
 
             var chartObj = {
                 labelName: 'Walk-ins',
+                chartbaseMargin: 20,
                 containerName: walkins_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#00b0f0']
             }
 
             var chartObj1 = {
                 labelName: 'Storefront conversion',
+                chartbaseMargin: 5,
                 containerName: storeFront_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [17, 341, 211, 343]
-                }]
+                }],
+                colors: ['#f7d348']
             }
 
             var chartObj2 = {
                 labelName: 'Engagement levels',
+                chartbaseMargin: 5,
                 containerName: engagement_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [99, 77, 665, 63]
-                }]
+                }],
+                colors: ['#92d050']
             }
 
             var chartObj3 = {
                 labelName: 'Dwell time',
+                chartbaseMargin: 20,
                 containerName: dwell_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#0070c0']
             }
 
             var chartObj4 = {
                 labelName: 'Repeat customers',
+                chartbaseMargin: 5,
                 containerName: repeatCustomers_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#ff6d60']
             }
 
             var chartObj5 = {
                 labelName: 'Top customers',
+                chartbaseMargin: 5,
                 containerName: topCustomers_chart,
                 dataArr: [{
                     name: 'Last Month',
                     data: [107, 31, 635, 203]
-                }]
+                }],
+                colors: ['#7030a0']
             }
 
 
@@ -83,10 +100,20 @@
 
             chartContainer.highcharts({
                 chart: {
-                    type: 'bar'
+                    type: 'bar',
+                    style: {
+                        fontFamily: 'Arial',
+                        fontSize: '12px'
+                    }
                 },
+                colors: chartObj.colors,
                 title: {
-                    text: ''
+                    text: chartObj.labelName,
+                    // floating: true,
+                    align: 'left',
+                    x: 0,
+                    y: 10,
+                    margin: chartObj.chartbaseMargin
                 },
                 xAxis: {
                     categories: categoriesArr,
@@ -108,7 +135,8 @@
                         enabled: false
                     },
                     title: {
-                        text: chartObj.labelName                    },
+                        text: '',
+                    },
                     minorTickLength: 0,
                     tickLength: 0
                 },
