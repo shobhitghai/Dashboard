@@ -23,7 +23,7 @@ dataController.prototype.handleRoutes = function(router,connection) {
             res.header('Access-Control-Allow-Origin', 'http://localhost:8082'); //change to other host and port
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE ');
             // res.header('Access-Control-Allow-Headers', 'Content-Type');
-            // console.log(err);
+            console.log(err);
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
