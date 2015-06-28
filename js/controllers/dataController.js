@@ -15,7 +15,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
         });
     });
 
-    /* Get Outside Opportunity Data */
+    /* Get Tile data for Opportunity, Storefront, Dwell time */
 
     router.get("/getTilesData", function(req, res) {
         self._setResponseHeader(res);
@@ -34,28 +34,10 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     });
 
-    /* Get Storefront conversion Data */
-
-    // router.get("/getStorefrontData", function(req, res) {
-    //     self._setResponseHeader(res);
-
-    //     var repository = new tileDataRepository(connection, req.query);
-
-    //     function sendResponse(response) {
-    //         if (response.isError) {
-    //             self._sendErrorResponse(res);
-    //         } else {
-    //             res.end(JSON.stringify(response));
-    //         }
-    //     }
-
-    //     repository.getOpportunityData(sendResponse, isStoreFront);
-
-    // });
 }
 
 dataController.prototype._setResponseHeader = function(res) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8082');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE ');
 }
 
