@@ -30,6 +30,11 @@ function getDeviceState() {
 
 }
 
+//sets host url for ajax call
+window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
+
+
+
 // FOR DEBUG
 // Cancel out errors in browsers that don't recognise various console functions
 (function() {
@@ -139,5 +144,3 @@ $(function() {
         },
     }
 })(app);
-
-

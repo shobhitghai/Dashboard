@@ -46,7 +46,7 @@
         },
         fetchData: function(url, template, metric) {
             $.ajax({
-                url: 'http://localhost:3000/api/' + url,
+                url: hostUrl + url,
                 data: metric || {},
                 success: function(data) {
                     app['tile-section'].bindTemplate(data, template, metric);

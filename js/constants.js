@@ -1,5 +1,14 @@
 var constants = function() {
     this.obj = {
+
+        //db details
+        db_host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
+        db_user: 'webapp', 
+        db_password: 'billion123!',
+        db_database: "customer_tracker",
+
+
+        //sql queries params
         current_Consecutive_Day: 'DATE(first_seen) = DATE(NOW())',
         current_Consecutive_Week: 'DATE(first_seen) <= DATE(NOW()) and WEEK(first_seen) = WEEK(NOW()) and YEAR(first_seen) = YEAR(NOW())',
         current_Consecutive_Month: 'DATE(first_seen) <= DATE(NOW()) and MONTH(first_seen) = MONTH(NOW()) and YEAR(first_seen) = YEAR(NOW())',

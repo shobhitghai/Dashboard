@@ -2,8 +2,11 @@ var application_root = __dirname,
     express = require("express"),
     mysql = require("mysql"),
     bodyParser = require("body-parser"),
-    dataController = require("../controllers/dataController.js");
-port = process.env.PORT || 3000;
+    dataController = require("../controllers/dataController.js"),
+    constants = require("../constants.js"),
+    port = 3000;
+
+// port = process.env.PORT || 3000;
 
 var app = express();
 
@@ -15,11 +18,10 @@ function DataConnectionLayer() {
 DataConnectionLayer.prototype.connectDB = function() {
     var self = this
     var pool = mysql.createPool({
-        host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
-        user: 'webapp', //modify user name
-        password: 'billion123!', //modify pwd
-        database: "customer_tracker" // make sure world table exist on ur db
-            // debug    :  false
+        host: constants.getValue('db_host'),
+        user: constants.getValue('db_user'),
+        password: constants.getValue('db_password'),
+        database: constants.getValue('db_database')
     });
 
     pool.getConnection(function(err, connection) {

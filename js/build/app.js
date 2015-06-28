@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-28 */
+/*! Fashion_Dashboard 1.0.0 2015-06-29 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -31,6 +31,11 @@ function getDeviceState() {
     return state; //need to replace quotes to support mozilla - which returns a string with quotes inside.
 
 }
+
+//sets host url for ajax call
+window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
+
+
 
 // FOR DEBUG
 // Cancel out errors in browsers that don't recognise various console functions
@@ -141,9 +146,6 @@ $(function() {
         },
     }
 })(app);
-
-
-
 //####js/component/highcharts-options.js
 // $(function() {
 // 	var highCharts = Highcharts || {};
@@ -202,7 +204,7 @@ $(function() {
         },
         fetchData: function(url, template, metric) {
             $.ajax({
-                url: 'http://localhost:3000/api/' + url,
+                url: hostUrl + url,
                 data: metric || {},
                 success: function(data) {
                     app['tile-section'].bindTemplate(data, template, metric);
