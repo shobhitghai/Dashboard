@@ -392,40 +392,53 @@ table.dataTable thead .sorting:after {
 .mod-tile-section .tile-section-row .panel .panel-heading .row .tile-right-section .tab-type-text {
   color: #a77f93;
   margin-top: 17px;
+  text-align: center;
 }
-/* line 53, ../sass/modules/_tile-section.scss */
+/* line 54, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-opportunity .tile-left-section {
   background-color: #6ecac9;
 }
 /* line 56, ../sass/modules/_tile-section.scss */
+.mod-tile-section .tile-section-row .section-opportunity .tile-left-section .tile-type:before {
+  content: "\f086";
+}
+/* line 60, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-opportunity .tile-right-section {
   background-color: #f2f2f2;
 }
-/* line 61, ../sass/modules/_tile-section.scss */
+/* line 65, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-storeFront .tile-left-section {
   background-color: #ff6d60;
 }
-/* line 64, ../sass/modules/_tile-section.scss */
+/* line 67, ../sass/modules/_tile-section.scss */
+.mod-tile-section .tile-section-row .section-storeFront .tile-left-section .tile-type:before {
+  content: "\f192";
+}
+/* line 71, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-storeFront .tile-right-section {
   background-color: #f2f2f2;
 }
-/* line 69, ../sass/modules/_tile-section.scss */
+/* line 76, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-dwellTime .tile-left-section {
   background-color: #FFCC33;
 }
-/* line 72, ../sass/modules/_tile-section.scss */
+/* line 78, ../sass/modules/_tile-section.scss */
+.mod-tile-section .tile-section-row .section-dwellTime .tile-left-section .tile-type:before {
+  content: "\f017";
+}
+/* line 82, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-dwellTime .tile-right-section {
   background-color: #f2f2f2;
 }
-/* line 77, ../sass/modules/_tile-section.scss */
+/* line 87, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-left-section {
   background-color: #a9d18e;
 }
-/* line 79, ../sass/modules/_tile-section.scss */
+/* line 89, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-left-section .tile-type {
   position: relative;
 }
-/* line 82, ../sass/modules/_tile-section.scss */
+/* line 92, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-left-section .customer-count {
   position: absolute;
   top: 21%;
@@ -437,7 +450,7 @@ table.dataTable thead .sorting:after {
   height: 40px;
   width: 40px;
 }
-/* line 94, ../sass/modules/_tile-section.scss */
+/* line 104, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-customers .tile-right-section {
   background-color: #f2f2f2;
 }

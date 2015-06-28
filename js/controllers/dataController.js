@@ -1,36 +1,68 @@
-var mysql   = require("mysql");
+var mysql = require("mysql");
+tileDataRepository = require("../repository/tileDataRepository");
 
-function dataController(router,connection) {
+function dataController(router, connection) {
     var self = this;
-    self.handleRoutes(router,connection);
+    self.handleRoutes(router, connection);
+    var tileDataRepository
 }
 
-dataController.prototype.handleRoutes = function(router,connection) {
+dataController.prototype.handleRoutes = function(router, connection) {
     var self = this;
-    router.get("/",function(req,res){
-        res.json({"Message" : "Hello World !"});
+    router.get("/", function(req, res) {
+        res.json({
+            "Message": "Hello World !"
+        });
     });
 
-    router.get("/getData",function(req,res){
-        // var query = "select Name, Population from city where CountryCode='IND' LIMIT 10;";
-        // var table = ["user_login"];
-        // query = mysql.format(query,table);
-        
-        // console.log(connection);
-        
-        var query = "select * from t_transactions";
-        connection.query(query,function(err,rows){
-            res.header('Access-Control-Allow-Origin', 'http://localhost:8082'); //change to other host and port
-            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE ');
-            // res.header('Access-Control-Allow-Headers', 'Content-Type');
-            // console.log(err);
-            if(err) {
-                res.json({"Error" : true, "Message" : "Error executing MySQL query"});
+    /* Get Outside Opportunity Data */
+
+    router.get("/getTilesData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
             } else {
-                // res.json({"Error" : false, "Message" : "Success", "Users" : rows});
-                res.end(JSON.stringify(rows));
+                res.end(JSON.stringify(response));
             }
-        });
+        }
+
+        var repository = new tileDataRepository(connection, sendResponse, req.query);
+
+        repository.getTilesData();
+
+    });
+
+    /* Get Storefront conversion Data */
+
+    // router.get("/getStorefrontData", function(req, res) {
+    //     self._setResponseHeader(res);
+
+    //     var repository = new tileDataRepository(connection, req.query);
+
+    //     function sendResponse(response) {
+    //         if (response.isError) {
+    //             self._sendErrorResponse(res);
+    //         } else {
+    //             res.end(JSON.stringify(response));
+    //         }
+    //     }
+
+    //     repository.getOpportunityData(sendResponse, isStoreFront);
+
+    // });
+}
+
+dataController.prototype._setResponseHeader = function(res) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8082');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE ');
+}
+
+dataController.prototype._sendErrorResponse = function(res) {
+    res.json({
+        "Error": true,
+        "Message": "Error executing MySQL query"
     });
 }
 

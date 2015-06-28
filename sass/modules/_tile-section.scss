@@ -44,6 +44,7 @@
                         .tab-type-text {
                             color: $color-tile-text;
                             margin-top: 17px;
+                            text-align: center;
                         }
                     }
                 }
@@ -52,6 +53,9 @@
         .section-opportunity {
             .tile-left-section {
                 background-color: $color-downy;
+                .tile-type:before {
+                    content: "\f086";
+                }
             }
             .tile-right-section {
                 background-color: $color-gray;
@@ -60,6 +64,9 @@
         .section-storeFront {
             .tile-left-section {
                 background-color: $color-red;
+                .tile-type:before {
+                    content: "\f192";
+                }
             }
             .tile-right-section {
                 background-color: $color-gray;
@@ -68,6 +75,9 @@
         .section-dwellTime {
             .tile-left-section {
                 background-color: $color-lightgreen;
+                .tile-type:before {
+                    content: "\f017";
+                }
             }
             .tile-right-section {
                 background-color: $color-gray;
