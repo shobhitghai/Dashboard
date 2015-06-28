@@ -400,7 +400,7 @@ table.dataTable thead .sorting:after {
 }
 /* line 56, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-opportunity .tile-left-section .tile-type:before {
-  content: "\f086";
+  content: "\f13d";
 }
 /* line 60, ../sass/modules/_tile-section.scss */
 .mod-tile-section .tile-section-row .section-opportunity .tile-right-section {
