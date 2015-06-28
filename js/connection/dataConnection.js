@@ -18,7 +18,7 @@ DataConnectionLayer.prototype.connectDB = function() {
         host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
         user: 'webapp', //modify user name
         password: 'billion123!', //modify pwd
-        database: "test" // make sure world table exist on ur db
+        database: "customer_tracker" // make sure world table exist on ur db
             // debug    :  false
     });
 
