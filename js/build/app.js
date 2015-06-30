@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-06-29 */
+/*! Fashion_Dashboard 1.0.0 2015-07-01 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -163,22 +163,64 @@ $(function() {
         }
     }
 })(app);
+//####js/component/navbar.js
+(function() {
+    app['navbar'] = {
+        settings: {
+            target: '.mod-navbar'
+        },
+        init: function(context) {
+            var s = this.settings;
+
+            var storeDropdown = $(s.target).find('.store-dropdown');
+
+            app['navbar'].fetchData('getStoreDetails', storeDropdown);
+
+        },
+        fetchData: function(url, storeDropdown) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                var dropdownMenu = storeDropdown.find('.dropdown-menu');
+                var storeSelected = storeDropdown.find('.store-selected .selected-value');
+
+                $.each(res, function(i, v) {
+                    dropdownMenu.append('<li><a href="#">' + this.name + '</a></li>')
+                });
+
+                storeSelected.text(res[0].name);
+                dropdownMenu.find('li a').on('click', function(e) {
+                    e.preventDefault;
+                    storeSelected.text($(this).text());
+                })
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+
+        }
+    }
+})(app);
 //####js/component/tile-section.js
 (function() {
     app['tile-section'] = {
         settings: {
-            target: '.mod-tile-section'
+            target: '.mod-tile-section',
+            metric: {
+                comparison: 'Consecutive',
+                period: 'Day'
+            },
+            c: 0
         },
         init: function(context) {
             this.tile_template = App.Template['tile-opportunity'];
 
             var s = this.settings;
-            var initMetric = {
-                comparison: 'Consecutive',
-                period: 'Day'
-            }
 
-            app['tile-section'].fetchData('getTilesData', initMetric);
+
+            app['tile-section'].fetchData('getTilesData', s.metric);
 
             $(s.target).find('.btn-metric[data-metric-comparison]').on('click', function() {
                 if ($(this).attr('data-metric-comparison') == 'Like') {
@@ -191,28 +233,36 @@ $(function() {
 
 
             $(s.target).find('.btn-metric').on('click', function() {
-                if ($(this).attr('data-metric-comparison')) {
-                    var metric = {
-                        comparison: $(this).data('metric-comparison').trim(),
-                        period: $('.grp-timeline .active').data('metric-period').trim()
+                if (!$(this).hasClass('active')) {
+                    if ($(this).attr('data-metric-comparison')) {
+                        s.metric = {
+                            comparison: $(this).data('metric-comparison').trim(),
+                            period: $('.grp-timeline .active').data('metric-period').trim()
+                        }
+                    } else {
+                        s.metric = {
+                            comparison: $('.grp-comparison .active').data('metric-comparison').trim(),
+                            period: $(this).data('metric-period').trim(),
+                        }
                     }
-                } else {
-                    var metric = {
-                        comparison: $('.grp-comparison .active').data('metric-comparison').trim(),
-                        period: $(this).data('metric-period').trim(),
-                    }
+
+                    app['tile-section'].fetchData('getTilesData', s.metric);
+
                 }
-
-                console.log(metric);
-
-                app['tile-section'].fetchData('getTilesData', metric);
 
             })
 
+            setInterval(function() {
+                app['tile-section'].fetchData('getTilesData', s.metric || initMetric);
+            }, 5000);
+
         },
         fetchData: function(url, metric) {
+            var s = this.settings;
+
             function successCallback(data) {
                 app['tile-section'].bindTemplate(data, metric);
+                console.log(s.c++ + ' ' + metric.period)
             }
 
             function errorCallback(err) {
@@ -244,7 +294,7 @@ $(function() {
 
             $('.section-dwellTime').html(this.tile_template({
                 'tile-name': 'Dwell Time',
-                'tile-percent': dwellTimeData['current'] ? dwellTimeData['current'].toFixed(1) : 'NA',
+                'tile-percent': dwellTimeData['current'] ? (dwellTimeData['current'] / 60).toFixed(1) + ' min' : 'NA',
                 'tile-percent-change': (dwellTimeData['comparison'] ? dwellTimeData['comparison'].toFixed(1) : 'NA') + '%',
                 'tile-period-param': 'vs last ' + metric.period
             }));

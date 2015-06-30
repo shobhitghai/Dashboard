@@ -15,6 +15,21 @@ dataController.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+
+    router.get("/getStoreDetails", function(req, res) {
+        self._setResponseHeader(res);
+        var query = "select name, city from customer_tracker.t_store_details;"
+        connection.query(query, function(err, data) {
+
+            if (err) {
+                self._sendErrorResponse(err);
+            } else {
+                res.end(JSON.stringify(data));
+            }
+        })
+
+    });
+
     /* Get Tile data for Opportunity, Storefront, Dwell time */
 
     router.get("/getTilesData", function(req, res) {
