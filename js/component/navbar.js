@@ -18,7 +18,7 @@
                 var storeSelected = storeDropdown.find('.store-selected .selected-value');
 
                 $.each(res, function(i, v) {
-                    dropdownMenu.append('<li><a href="#">' + this.name + '</a></li>')
+                    dropdownMenu.append('<li><a href="javascript:void(0)">' + this.name + '</a></li>')
                 });
 
                 storeSelected.text(res[0].name);

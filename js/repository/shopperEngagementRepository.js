@@ -26,7 +26,6 @@ repo._getCurrentMonthData = function() {
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
-            console.log(data);
 
             self._pushDataInMonthArray(data, 'gt10', self.responseObject.currentMonthArray);
             self._pushDataInMonthArray(data, 'gt5', self.responseObject.currentMonthArray);
@@ -48,7 +47,6 @@ repo._getLastMonthData = function() {
         if (err) {
             self.responseObject.isError = true;
         } else {
-            console.log(data);
 
             self._pushDataInMonthArray(data, 'gt10', self.responseObject.lastMonthMArray);
             self._pushDataInMonthArray(data, 'gt5', self.responseObject.lastMonthMArray);

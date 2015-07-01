@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-01 */
+/*! Fashion_Dashboard 1.0.0 2015-07-02 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -184,7 +184,7 @@ $(function() {
                 var storeSelected = storeDropdown.find('.store-selected .selected-value');
 
                 $.each(res, function(i, v) {
-                    dropdownMenu.append('<li><a href="#">' + this.name + '</a></li>')
+                    dropdownMenu.append('<li><a href="javascript:void(0)">' + this.name + '</a></li>')
                 });
 
                 storeSelected.text(res[0].name);
@@ -720,6 +720,14 @@ $(function() {
             var shoppersMall = $(s.target).find('#shoppers-mall-chart');
             var shoppersStore = $(s.target).find('#shoppers-store-chart');
 
+            app['right-now'].fetchData('getRightNowData');
+
+            setInterval(function() {
+                app['right-now'].fetchData('getRightNowData');
+            }, 5000);
+
+
+
             var shoppersMall_series = [{
                 name: 'Discount Sensitive',
                 data: [5]
@@ -747,13 +755,34 @@ $(function() {
 
 
         },
+        fetchData: function(url) {
+            var self = this;
+
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                var dataObj = {};
+
+                dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
+                dataObj.peopleStore = res[1]['cnt'];
+
+                $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+
+            }
+
+            function errorCallback(err) {
+                console.log('right-now' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+        },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({
                 chart: {
                     type: 'bar',
                     height: 100,
                 },
-                colors: ['#f7d348','#55c6f2', '#a9d18e'],
+                colors: ['#f7d348', '#55c6f2', '#a9d18e'],
                 title: {
                     text: ''
                 },
@@ -971,11 +1000,34 @@ $(function() {
             target: '.mod-campaign-impact'
         },
         init: function(context) {
+            var self = this;
             var s = this.settings;
             var target = $(s.target);
             var edit_btn = target.find('.edit-btn');
             var configure_panel = target.find('.impact-edit');
             var panel_btn = target.find('.config-save, .config-cancel');
+            var startDate = target.find('.campaign-start-date input');
+            var endDate = target.find('.campaign-end-date input');
+
+            var reqObj = {
+
+            }
+
+            $('.campaign-start-date').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+            $('.campaign-end-date').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+
+            $(s.target).find('.config-save').on('click', function() {
+                if (startDate.val() && endDate.val()) {
+                    reqObj.sDate = "'" + startDate.val() + "'";
+                    reqObj.eDate = "'" + endDate.val() + "'";
+
+                    app['campaign-impact'].fetchData('getCampaignImpact', reqObj);
+                }
+            })
 
             edit_btn.on('click', function() {
                 configure_panel.toggleClass('edit-active');
@@ -984,10 +1036,36 @@ $(function() {
             panel_btn.on('click', function() {
                 configure_panel.toggleClass('edit-active');
             })
+        },
+        saveForm: function() {
 
-            $('.campaign-start-date').datepicker({});
-            $('.campaign-end-date').datepicker({});
+        },
+        fetchData: function(url, reqObj) {
+            function successCallback(data) {
+                var response = $.parseJSON(data);
 
+                var avgCampaignPeriod = response['campaignData'].cnt / response['campaignData'].DiffDate;
+                var avgLastMonth = response['lastMonthData'].cnt / response['lastMonthData'].DiffDate;
+                var walk_in = Math.round((avgCampaignPeriod - avgLastMonth) / avgLastMonth * 100);
+
+                var dwtCampaignPeriod = response['campaignData'].dwt;
+                var dwtLastMonth = response['lastMonthData'].dwt;
+                var dwell_time = Math.round((dwtCampaignPeriod - dwtLastMonth) / dwtLastMonth * 100);
+
+                $('#campaign-walkin span').text(walk_in + '%');
+                $('#campaign-dwt span').text(dwell_time + '%');
+
+
+                console.log(walk_in)
+                console.log(dwell_time)
+
+            }
+
+            function errorCallback(err) {
+                console.log(err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, reqObj, successCallback, errorCallback)
 
         }
     }

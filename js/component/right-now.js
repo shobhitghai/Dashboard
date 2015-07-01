@@ -8,6 +8,14 @@
             var shoppersMall = $(s.target).find('#shoppers-mall-chart');
             var shoppersStore = $(s.target).find('#shoppers-store-chart');
 
+            app['right-now'].fetchData('getRightNowData');
+
+            setInterval(function() {
+                app['right-now'].fetchData('getRightNowData');
+            }, 5000);
+
+
+
             var shoppersMall_series = [{
                 name: 'Discount Sensitive',
                 data: [5]
@@ -35,13 +43,34 @@
 
 
         },
+        fetchData: function(url) {
+            var self = this;
+
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                var dataObj = {};
+
+                dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
+                dataObj.peopleStore = res[1]['cnt'];
+
+                $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+
+            }
+
+            function errorCallback(err) {
+                console.log('right-now' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+        },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({
                 chart: {
                     type: 'bar',
                     height: 100,
                 },
-                colors: ['#f7d348','#55c6f2', '#a9d18e'],
+                colors: ['#f7d348', '#55c6f2', '#a9d18e'],
                 title: {
                     text: ''
                 },

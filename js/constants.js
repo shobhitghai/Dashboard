@@ -27,8 +27,11 @@ var constants = function() {
         right_now_people: 'select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 1000 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) group by walk_in_flag',
 
         //campaign impact
-        campaign_impact_query1: 'select count(mac_address) as cnt, DATEDIFF(day,start_date_var,end_date_var) + 1 AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) <= end_date_var and DATE(first_seen) >= start_date_var and walk_in_flag = 1',
-        campaign_impact_query2: 'select count(mac_address) as cnt, DATEDIFF(day,DATE_SUB(start_date_var, INTERVAL 1 MONTH),start_date_var) AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(start_date_var, INTERVAL 1 MONTH) and DATE(first_seen) < start_date_var and walk_in_flag = 1',
+        // campaign_impact_query1: 'select count(mac_address) as cnt, DATEDIFF(day,start_date_var,end_date_var) + 1 AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) <= end_date_var and DATE(first_seen) >= start_date_var and walk_in_flag = 1',
+        campaign_impact_query1: "select count(mac_address) as cnt, DATEDIFF('2015-07-20','2015-07-30') + 1 AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) <= '2015-07-30' and DATE(first_seen) >= '2015-07-20' and walk_in_flag = 1",
+
+        // campaign_impact_query2: 'select count(mac_address) as cnt, DATEDIFF(day,DATE_SUB(start_date_var, INTERVAL 1 MONTH),start_date_var) AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(start_date_var, INTERVAL 1 MONTH) and DATE(first_seen) < start_date_var and walk_in_flag = 1',
+        campaign_impact_query2: "select count(mac_address) as cnt, DATEDIFF(DATE_SUB('2015-07-20', INTERVAL 1 MONTH),'2015-07-20') AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB('2015-07-20', INTERVAL 1 MONTH) and DATE(first_seen) < '2015-07-20' and walk_in_flag = 1",
 
 
     };
