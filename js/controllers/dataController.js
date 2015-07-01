@@ -1,5 +1,7 @@
 var mysql = require("mysql");
+constants = require('../constants.js');
 tileDataRepository = require("../repository/tileDataRepository");
+shopperEngagementRepository = require("../repository/shopperEngagementRepository");
 
 function dataController(router, connection) {
     var self = this;
@@ -15,6 +17,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /* Get store name - city list for dropdown */
 
     router.get("/getStoreDetails", function(req, res) {
         self._setResponseHeader(res);
@@ -46,6 +49,25 @@ dataController.prototype.handleRoutes = function(router, connection) {
         var repository = new tileDataRepository(connection, sendResponse, req.query);
 
         repository.getTilesData();
+
+    });
+
+    /* Get shopper engagement for current and past month */
+
+    router.get("/getShopperEngagement", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new shopperEngagementRepository(connection, sendResponse, req.query);
+
+        repository.getData();
 
     });
 

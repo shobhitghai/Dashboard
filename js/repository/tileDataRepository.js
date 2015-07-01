@@ -16,13 +16,14 @@ repo.getTilesData = function() {
 repo._getCurrentOpportunityCount = function() {
     var self = this;
     var query = "select count(mac_address) from customer_tracker.t_visit where " + constants.getValue("current_" + this.filterParam.comparison + "_" + this.filterParam.period); // and store_selection = x";
-
+    // console.log(query);
     this.connection.query(query, function(err, data) {
 
         if (err) {
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
+            // console.log(data[0]['count(mac_address)'])
             self.responseObject.opportunityData = {};
             self.responseObject.opportunityData.current = data[0]['count(mac_address)'];
 
@@ -39,12 +40,12 @@ repo._getOpportunityComparison = function() {
     this.connection.query(query, function(err, data) {
 
         if (err) {
-            console.log('err2');
+            // console.log('err2');
 
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
-            console.log('succ2');
+            // console.log('succ2');
 
             var percent = ((self.responseObject.opportunityData.current - data[0]['count(mac_address)']) / data[0]['count(mac_address)']) * 100;
             self.responseObject.opportunityData.comparison = percent;
@@ -104,7 +105,7 @@ repo._getDwellTimeCount = function() {
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
-        	console.log(data[0]['avg(dwell_time)'])
+            // console.log(data[0]['avg(dwell_time)'])
             self.responseObject.dwellTimeData = {};
             self.responseObject.dwellTimeData.current = data[0]['avg(dwell_time)'];
 

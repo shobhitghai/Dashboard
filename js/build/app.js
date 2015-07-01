@@ -321,11 +321,39 @@ $(function() {
             var s = this.settings;
             var chartContainer = $(s.target).find('#shopper-engagement-chart');
 
-            app['shopper-engagement'].renderChart(chartContainer);
+            app['shopper-engagement'].fetchData('getShopperEngagement', chartContainer);
 
 
         },
-        renderChart: function(chartContainer) {
+        fetchData: function(url, chartContainer) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                var dataObj = {};
+
+                dataObj.currentData = app['shopper-engagement'].reformatData(res.currentMonthArray);
+                dataObj.pastData = app['shopper-engagement'].reformatData(res.lastMonthMArray);
+
+                app['shopper-engagement'].renderChart(chartContainer, dataObj);
+
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+        },
+        reformatData: function(data) {
+            var total = data[0] + data[1] + data[2] + data[3];
+            var res = [];
+
+            $.each(data, function(i, value) {
+                res.push(Math.round((value / total) * 100));
+            });
+
+            return res;
+        },
+        renderChart: function(chartContainer, dataObj) {
             chartContainer.highcharts({
                 chart: {
                     type: 'bar',
@@ -353,7 +381,7 @@ $(function() {
                     }
                 },
                 tooltip: {
-                    valueSuffix: ' millions'
+                    valueSuffix: ' %'
                 },
                 plotOptions: {
                     bar: {
@@ -378,16 +406,15 @@ $(function() {
                 },
                 series: [{
                     name: 'Last Month',
-                    data: [107, 31, 635, 203]
+                    data: dataObj.pastData
                 }, {
                     name: 'This Month',
-                    data: [133, 156, 947, 408]
+                    data: dataObj.currentData
                 }]
             });
         }
     }
 })(app);
-
 //####js/component/shopper-profile.js
 (function() {
     app['shopper-profile'] = {
