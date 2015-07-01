@@ -14,7 +14,7 @@
             var s = this.settings;
 
 
-            app['tile-section'].fetchData('getTilesData', s.metric);
+            app['tile-section']._fetchData('getTilesData', s.metric);
 
             $(s.target).find('.btn-metric[data-metric-comparison]').on('click', function() {
                 if ($(this).attr('data-metric-comparison') == 'Like') {
@@ -40,22 +40,22 @@
                         }
                     }
 
-                    app['tile-section'].fetchData('getTilesData', s.metric);
+                    app['tile-section']._fetchData('getTilesData', s.metric);
 
                 }
 
             })
 
             setInterval(function() {
-                app['tile-section'].fetchData('getTilesData', s.metric || initMetric);
+                app['tile-section']._fetchData('getTilesData', s.metric || initMetric);
             }, 5000);
 
         },
-        fetchData: function(url, metric) {
+        _fetchData: function(url, metric) {
             var s = this.settings;
 
             function successCallback(data) {
-                app['tile-section'].bindTemplate(data, metric);
+                app['tile-section']._bindTemplate(data, metric);
                 console.log(s.c++ + ' ' + metric.period)
             }
 
@@ -66,7 +66,7 @@
             app['ajax-wrapper'].sendAjax(url, metric, successCallback, errorCallback)
 
         },
-        bindTemplate: function(data, metric) {
+        _bindTemplate: function(data, metric) {
             var response = $.parseJSON(data);
             var opportunityData = response.opportunityData;
             var storefrontData = response.storefrontData;
@@ -87,11 +87,20 @@
             }));
 
             $('.section-dwellTime').html(this.tile_template({
-                'tile-name': 'Dwell Time',
-                'tile-percent': dwellTimeData['current'] ? (dwellTimeData['current'] / 60).toFixed(1) + ' min' : 'NA',
+                'tile-name': 'Dwell Time (hh:mm)',
+                // 'tile-percent': dwellTimeData['current'] ? (dwellTimeData['current'] / 60).toFixed(1) + ' min' : 'NA',
+                'tile-percent': dwellTimeData['current'] ? app['tile-section']._formatDwellTime(dwellTimeData['current'].toFixed(0)) : 'NA',
                 'tile-percent-change': (dwellTimeData['comparison'] ? dwellTimeData['comparison'].toFixed(1) : 'NA') + '%',
                 'tile-period-param': 'vs last ' + metric.period
             }));
+        },
+        _formatDwellTime: function(seconds) {
+            // var totalSec = new Date().getTime() / 1000;
+            var hours = parseInt(seconds / 3600) % 24;
+            var minutes = parseInt(seconds / 60) % 60;
+            // var seconds = totalSec % 60;
+
+            return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) ;
         }
     }
 })(app);
