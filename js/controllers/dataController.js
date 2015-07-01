@@ -71,6 +71,26 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     });
 
+    /* Get right now section people data */
+
+    router.get("/getRightNowPeopleData", function(req, res) {
+        self._setResponseHeader(res);
+        
+        var query = constants.getValue('right_now_people');
+        // var query = constants.getValue('campaign_impact_query2');
+
+        connection.query(query, function(err, data) {
+            console.log(err);
+            if (err) {
+                self._sendErrorResponse(err);
+            } else {
+                res.end(JSON.stringify(data));
+            }
+        })
+
+    });
+
+
 }
 
 dataController.prototype._setResponseHeader = function(res) {
