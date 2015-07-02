@@ -857,7 +857,7 @@ function getStoreListData(initModules) {
                 console.log('right-now' + err || 'err');
             }
 
-            // app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
         },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({
