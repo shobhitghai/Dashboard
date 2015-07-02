@@ -11,10 +11,14 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['revisit-frequency'].init();
+        },
         renderChart: function(chartContainer) {
-// Highcharts.setOptions({
-//         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
-//     });
+            // Highcharts.setOptions({
+            //         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
+            //     });
             chartContainer.highcharts({
                 chart: {
                     type: 'pie',

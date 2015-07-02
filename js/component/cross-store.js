@@ -11,6 +11,10 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['cross-store'].init();
+        },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {
@@ -45,14 +49,12 @@
                 series: [{
                     name: 'Cross-store',
                     data: [{
-                            y: 49.9,
-                            color: '#a9d18e'
-                        },
-                        {
-                            y: 71.5,
-                            color: '#55c6f2'
-                        }
-                    ]
+                        y: 49.9,
+                        color: '#a9d18e'
+                    }, {
+                        y: 71.5,
+                        color: '#55c6f2'
+                    }]
 
                 }],
                 credits: {

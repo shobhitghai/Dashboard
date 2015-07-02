@@ -41,6 +41,10 @@
                 configure_panel.toggleClass('edit-active');
             })
         },
+        refreshData: function() {
+            var self = this;
+            app['campaign-impact'].init();
+        },
         saveForm: function() {
 
         },

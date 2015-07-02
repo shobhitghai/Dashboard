@@ -43,13 +43,17 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['right-now'].init();
+        },
         fetchData: function(url) {
             var self = this;
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
                 var dataObj = {};
-
+                
                 dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
                 dataObj.peopleStore = res[1]['cnt'];
 
@@ -62,7 +66,7 @@
                 console.log('right-now' + err || 'err');
             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            // app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
         },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({

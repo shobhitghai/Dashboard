@@ -11,6 +11,10 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['shopper-profile'].init();
+        },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {

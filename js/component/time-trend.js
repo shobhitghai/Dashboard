@@ -11,6 +11,10 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['time-trend'].init();
+        },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 title: {

@@ -11,6 +11,10 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['shopper-engagement'].init();
+        },
         fetchData: function(url, chartContainer) {
             function successCallback(res) {
                 var res = $.parseJSON(res);
@@ -27,7 +31,9 @@
                 console.log('navbar' + err || 'err');
             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
         },
         reformatData: function(data) {
             var total = data[0] + data[1] + data[2] + data[3];

@@ -58,9 +58,58 @@ window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
 
 
 $(function() {
-    app.util.initModules();
+    getStoreListData(app.util.initModules);
 });
 
+function getStoreListData(initModules) {
+    var storeDropdown = $('.mod-navbar').find('.store-dropdown');
+    window.storeDetail = {
+        name: ''
+    };
+
+    function successCallback(res) {
+        var res = $.parseJSON(res);
+        var dropdownMenu = storeDropdown.find('.dropdown-menu');
+        var storeSelected = storeDropdown.find('.store-selected .selected-value');
+
+        $.each(res, function(i, v) {
+            var id = '10000' + (i+1);
+            dropdownMenu.append('<li><a data-id=' + id + ' href="javascript:void(0)">' + this.name + '</span></a></li>')
+        });
+
+        window.storeDetail.name = "100001";
+        storeSelected.text(res[0].name);
+        dropdownMenu.find('li a').on('click', function(e) {
+            e.preventDefault;
+            storeSelected.text($(this).text());
+
+            window.storeDetail.name = $(this).data('id');
+
+            $.each(app, function(module, v) {
+                if (app[module].refreshData) {
+                    app[module].refreshData();
+                }
+            })
+        })
+
+        initModules();
+    }
+
+    function errorCallback(err) {
+        console.log('navbar' + err || 'err');
+    }
+
+    $.ajax({
+        url: hostUrl + 'getStoreDetails',
+        success: function(res) {
+            successCallback(res);
+        },
+        error: function(err) {
+            errorCallback(err);
+        }
+    })
+
+}
 
 (function() {
     app.util = {

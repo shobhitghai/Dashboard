@@ -28,6 +28,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
             if (err) {
                 self._sendErrorResponse(err);
             } else {
+                console.log(data)
                 res.end(JSON.stringify(data));
             }
         })

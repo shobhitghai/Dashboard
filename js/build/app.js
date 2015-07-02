@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-02 */
+/*! Fashion_Dashboard 1.0.0 2015-07-03 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -60,9 +60,58 @@ window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
 
 
 $(function() {
-    app.util.initModules();
+    getStoreListData(app.util.initModules);
 });
 
+function getStoreListData(initModules) {
+    var storeDropdown = $('.mod-navbar').find('.store-dropdown');
+    window.storeDetail = {
+        name: ''
+    };
+
+    function successCallback(res) {
+        var res = $.parseJSON(res);
+        var dropdownMenu = storeDropdown.find('.dropdown-menu');
+        var storeSelected = storeDropdown.find('.store-selected .selected-value');
+
+        $.each(res, function(i, v) {
+            var id = '10000' + (i+1);
+            dropdownMenu.append('<li><a data-id=' + id + ' href="javascript:void(0)">' + this.name + '</span></a></li>')
+        });
+
+        window.storeDetail.name = "100001";
+        storeSelected.text(res[0].name);
+        dropdownMenu.find('li a').on('click', function(e) {
+            e.preventDefault;
+            storeSelected.text($(this).text());
+
+            window.storeDetail.name = $(this).data('id');
+
+            $.each(app, function(module, v) {
+                if (app[module].refreshData) {
+                    app[module].refreshData();
+                }
+            })
+        })
+
+        initModules();
+    }
+
+    function errorCallback(err) {
+        console.log('navbar' + err || 'err');
+    }
+
+    $.ajax({
+        url: hostUrl + 'getStoreDetails',
+        success: function(res) {
+            successCallback(res);
+        },
+        error: function(err) {
+            errorCallback(err);
+        }
+    })
+
+}
 
 (function() {
     app.util = {
@@ -164,45 +213,45 @@ $(function() {
     }
 })(app);
 //####js/component/navbar.js
-(function() {
-    app['navbar'] = {
-        settings: {
-            target: '.mod-navbar'
-        },
-        init: function(context) {
-            var s = this.settings;
+// (function() {
+//     app['navbar'] = {
+//         settings: {
+//             target: '.mod-navbar'
+//         },
+//         init: function(context) {
+//             var s = this.settings;
 
-            var storeDropdown = $(s.target).find('.store-dropdown');
+//             var storeDropdown = $(s.target).find('.store-dropdown');
 
-            app['navbar'].fetchData('getStoreDetails', storeDropdown);
+//             app['navbar'].fetchData('getStoreDetails', storeDropdown);
 
-        },
-        fetchData: function(url, storeDropdown) {
-            function successCallback(res) {
-                var res = $.parseJSON(res);
-                var dropdownMenu = storeDropdown.find('.dropdown-menu');
-                var storeSelected = storeDropdown.find('.store-selected .selected-value');
+//         },
+//         fetchData: function(url, storeDropdown) {
+//             function successCallback(res) {
+//                 var res = $.parseJSON(res);
+//                 var dropdownMenu = storeDropdown.find('.dropdown-menu');
+//                 var storeSelected = storeDropdown.find('.store-selected .selected-value');
 
-                $.each(res, function(i, v) {
-                    dropdownMenu.append('<li><a href="javascript:void(0)">' + this.name + '</a></li>')
-                });
+//                 $.each(res, function(i, v) {
+//                     dropdownMenu.append('<li><a href="javascript:void(0)">' + this.name + '</a></li>')
+//                 });
 
-                storeSelected.text(res[0].name);
-                dropdownMenu.find('li a').on('click', function(e) {
-                    e.preventDefault;
-                    storeSelected.text($(this).text());
-                })
-            }
+//                 storeSelected.text(res[0].name);
+//                 dropdownMenu.find('li a').on('click', function(e) {
+//                     e.preventDefault;
+//                     storeSelected.text($(this).text());
+//                 })
+//             }
 
-            function errorCallback(err) {
-                console.log('navbar' + err || 'err');
-            }
+//             function errorCallback(err) {
+//                 console.log('navbar' + err || 'err');
+//             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+//             app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
 
-        }
-    }
-})(app);
+//         }
+//     }
+// })(app);
 //####js/component/tile-section.js
 (function() {
     app['tile-section'] = {
@@ -219,7 +268,7 @@ $(function() {
 
             var s = this.settings;
 
-
+            s.metric.storeName = window.storeDetail.name;
             app['tile-section']._fetchData('getTilesData', s.metric);
 
             $(s.target).find('.btn-metric[data-metric-comparison]').on('click', function() {
@@ -237,12 +286,14 @@ $(function() {
                     if ($(this).attr('data-metric-comparison')) {
                         s.metric = {
                             comparison: $(this).data('metric-comparison').trim(),
-                            period: $('.grp-timeline .active').data('metric-period').trim()
+                            period: $('.grp-timeline .active').data('metric-period').trim(),
+                            storeName: window.storeDetail.name
                         }
                     } else {
                         s.metric = {
                             comparison: $('.grp-comparison .active').data('metric-comparison').trim(),
                             period: $(this).data('metric-period').trim(),
+                            storeName: window.storeDetail.name
                         }
                     }
 
@@ -252,21 +303,30 @@ $(function() {
 
             })
 
-            setInterval(function() {
-                app['tile-section']._fetchData('getTilesData', s.metric || initMetric);
+            this.ajaxInterval = setInterval(function() {
+                s.metric.storeName = window.storeDetail.name;
+                app['tile-section']._fetchData('getTilesData', s.metric);
             }, 5000);
 
         },
+        refreshData: function(){
+            var self = this;
+            clearInterval(self.ajaxInterval);
+            app['tile-section'].init();
+
+        },
         _fetchData: function(url, metric) {
+            var self = this;
             var s = this.settings;
 
             function successCallback(data) {
                 app['tile-section']._bindTemplate(data, metric);
-                console.log(s.c++ + ' ' + metric.period)
+                // console.log(s.c++ + ' ' + metric.period)
             }
 
             function errorCallback(err) {
-                console.log(err || 'err');
+                // console.log(err || 'err');
+                clearInterval(self.ajaxInterval);
             }
 
             app['ajax-wrapper'].sendAjax(url, metric, successCallback, errorCallback)
@@ -299,6 +359,8 @@ $(function() {
                 'tile-percent-change': (dwellTimeData['comparison'] ? dwellTimeData['comparison'].toFixed(1) : 'NA') + '%',
                 'tile-period-param': 'vs last ' + metric.period
             }));
+
+            $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 5) + 22) + '%');
         },
         _formatDwellTime: function(seconds) {
             // var totalSec = new Date().getTime() / 1000;
@@ -306,11 +368,10 @@ $(function() {
             var minutes = parseInt(seconds / 60) % 60;
             // var seconds = totalSec % 60;
 
-            return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) ;
+            return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes);
         }
     }
 })(app);
-
 //####js/component/shopper-engagement.js
 (function() {
     app['shopper-engagement'] = {
@@ -324,6 +385,10 @@ $(function() {
             app['shopper-engagement'].fetchData('getShopperEngagement', chartContainer);
 
 
+        },
+        refreshData: function() {
+            var self = this;
+            app['shopper-engagement'].init();
         },
         fetchData: function(url, chartContainer) {
             function successCallback(res) {
@@ -341,7 +406,9 @@ $(function() {
                 console.log('navbar' + err || 'err');
             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
         },
         reformatData: function(data) {
             var total = data[0] + data[1] + data[2] + data[3];
@@ -429,6 +496,10 @@ $(function() {
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['shopper-profile'].init();
+        },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
                 chart: {
@@ -505,10 +576,14 @@ $(function() {
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['revisit-frequency'].init();
+        },
         renderChart: function(chartContainer) {
-// Highcharts.setOptions({
-//         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
-//     });
+            // Highcharts.setOptions({
+            //         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
+            //     });
             chartContainer.highcharts({
                 chart: {
                     type: 'pie',
@@ -582,7 +657,6 @@ $(function() {
         }
     }
 })(app);
-
 //####js/component/cross-store.js
 (function() {
     app['cross-store'] = {
@@ -596,6 +670,10 @@ $(function() {
             app['cross-store'].renderChart(chartContainer);
 
 
+        },
+        refreshData: function() {
+            var self = this;
+            app['cross-store'].init();
         },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
@@ -631,14 +709,12 @@ $(function() {
                 series: [{
                     name: 'Cross-store',
                     data: [{
-                            y: 49.9,
-                            color: '#a9d18e'
-                        },
-                        {
-                            y: 71.5,
-                            color: '#55c6f2'
-                        }
-                    ]
+                        y: 49.9,
+                        color: '#a9d18e'
+                    }, {
+                        y: 71.5,
+                        color: '#55c6f2'
+                    }]
 
                 }],
                 credits: {
@@ -648,7 +724,6 @@ $(function() {
         }
     }
 })(app);
-
 //####js/component/time-trend.js
 (function() {
     app['time-trend'] = {
@@ -662,6 +737,10 @@ $(function() {
             app['time-trend'].renderChart(chartContainer);
 
 
+        },
+        refreshData: function() {
+            var self = this;
+            app['time-trend'].init();
         },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
@@ -755,13 +834,17 @@ $(function() {
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['right-now'].init();
+        },
         fetchData: function(url) {
             var self = this;
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
                 var dataObj = {};
-
+                
                 dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
                 dataObj.peopleStore = res[1]['cnt'];
 
@@ -774,7 +857,7 @@ $(function() {
                 console.log('right-now' + err || 'err');
             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            // app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
         },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({
@@ -926,6 +1009,10 @@ $(function() {
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['internal-benchmarking'].init();
+        },
         renderChart: function(chartObj) {
             var chartContainer = chartObj.containerName;
 
@@ -992,7 +1079,6 @@ $(function() {
         }
     }
 })(app);
-
 //####js/component/campaign-impact.js
 (function() {
     app['campaign-impact'] = {
@@ -1036,6 +1122,10 @@ $(function() {
             panel_btn.on('click', function() {
                 configure_panel.toggleClass('edit-active');
             })
+        },
+        refreshData: function() {
+            var self = this;
+            app['campaign-impact'].init();
         },
         saveForm: function() {
 
@@ -1107,6 +1197,11 @@ $(function() {
             $('.storefront-start-date').datepicker({});
             
 
+        },
+        refreshData: function() {
+            var self = this;
+            app['modification-impact'].init();
         }
+
     }
 })(app);

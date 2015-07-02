@@ -95,6 +95,10 @@
 
 
         },
+        refreshData: function() {
+            var self = this;
+            app['internal-benchmarking'].init();
+        },
         renderChart: function(chartObj) {
             var chartContainer = chartObj.containerName;
 

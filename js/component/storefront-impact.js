@@ -22,6 +22,11 @@
             $('.storefront-start-date').datepicker({});
             
 
+        },
+        refreshData: function() {
+            var self = this;
+            app['modification-impact'].init();
         }
+
     }
 })(app);

@@ -19,7 +19,7 @@ repo.getData = function() {
 
 repo._getCurrentMonthData = function() {
     var self = this;
-    var query = constants.getValue('shopper_engagement_curr_month');
+    var query = constants.getValue('shopper_engagement_curr_month1') + self.filterParam.storeName + constants.getValue('shopper_engagement_curr_month2');
 
     this.connection.query(query, function(err, data) {
         if (err) {
@@ -40,7 +40,7 @@ repo._getCurrentMonthData = function() {
 
 repo._getLastMonthData = function() {
     var self = this;
-    var query = constants.getValue('shopper_engagement_last_month')
+    var query = constants.getValue('shopper_engagement_last_month1') + self.filterParam.storeName + constants.getValue('shopper_engagement_last_month2');
 
     this.connection.query(query, function(err, data) {
 

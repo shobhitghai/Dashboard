@@ -13,7 +13,7 @@
 
             var s = this.settings;
 
-
+            s.metric.storeName = window.storeDetail.name;
             app['tile-section']._fetchData('getTilesData', s.metric);
 
             $(s.target).find('.btn-metric[data-metric-comparison]').on('click', function() {
@@ -31,12 +31,14 @@
                     if ($(this).attr('data-metric-comparison')) {
                         s.metric = {
                             comparison: $(this).data('metric-comparison').trim(),
-                            period: $('.grp-timeline .active').data('metric-period').trim()
+                            period: $('.grp-timeline .active').data('metric-period').trim(),
+                            storeName: window.storeDetail.name
                         }
                     } else {
                         s.metric = {
                             comparison: $('.grp-comparison .active').data('metric-comparison').trim(),
                             period: $(this).data('metric-period').trim(),
+                            storeName: window.storeDetail.name
                         }
                     }
 
@@ -46,21 +48,30 @@
 
             })
 
-            setInterval(function() {
-                app['tile-section']._fetchData('getTilesData', s.metric || initMetric);
+            this.ajaxInterval = setInterval(function() {
+                s.metric.storeName = window.storeDetail.name;
+                app['tile-section']._fetchData('getTilesData', s.metric);
             }, 5000);
 
         },
+        refreshData: function(){
+            var self = this;
+            clearInterval(self.ajaxInterval);
+            app['tile-section'].init();
+
+        },
         _fetchData: function(url, metric) {
+            var self = this;
             var s = this.settings;
 
             function successCallback(data) {
                 app['tile-section']._bindTemplate(data, metric);
-                console.log(s.c++ + ' ' + metric.period)
+                // console.log(s.c++ + ' ' + metric.period)
             }
 
             function errorCallback(err) {
-                console.log(err || 'err');
+                // console.log(err || 'err');
+                clearInterval(self.ajaxInterval);
             }
 
             app['ajax-wrapper'].sendAjax(url, metric, successCallback, errorCallback)
@@ -93,6 +104,8 @@
                 'tile-percent-change': (dwellTimeData['comparison'] ? dwellTimeData['comparison'].toFixed(1) : 'NA') + '%',
                 'tile-period-param': 'vs last ' + metric.period
             }));
+
+            $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 5) + 22) + '%');
         },
         _formatDwellTime: function(seconds) {
             // var totalSec = new Date().getTime() / 1000;
@@ -100,7 +113,7 @@
             var minutes = parseInt(seconds / 60) % 60;
             // var seconds = totalSec % 60;
 
-            return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) ;
+            return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes);
         }
     }
 })(app);
