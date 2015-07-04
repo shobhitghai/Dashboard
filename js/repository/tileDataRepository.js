@@ -52,12 +52,14 @@ repo._getOpportunityComparison = function() {
             self.sendResponseCallback(self.responseObject);
         } else {
             // console.log('succ2');
-            // console.log(data);            
-            // console.log(data[0]);            
-            // console.log(data[0]['count(mac_address)']);            
+            // console.log(data);
+            // console.log(data[0]);
+            // console.log(data[0]['count(mac_address)']);
 
             var percent = ((self.responseObject.opportunityData.current - data[0]['count(mac_address)']) / data[0]['count(mac_address)']) * 100;
             self.responseObject.opportunityData.comparison = percent;
+            // harshal edit 03/07
+            self.responseObject.opportunityData.comparisonNumber = data[0]['count(mac_address)'];
 
             self._getCurrentStoreFrontCount();
         }
@@ -102,7 +104,9 @@ repo._getStoreFrontComparison = function() {
 
         } else {
             // console.log(data[0]['count(mac_address)'])
-            var percent = ((self.responseObject.storefrontData.current - (data[0]['count(mac_address)'] / self.responseObject.opportunityData.comparison)) / (data[0]['count(mac_address)'] / self.responseObject.opportunityData.comparison)) * 100;
+            // var percent = ((self.responseObject.storefrontData.current - (data[0]['count(mac_address)'] / self.responseObject.opportunityData.comparison)) / (data[0]['count(mac_address)'] / self.responseObject.opportunityData.comparison)) * 100;
+            // harshal edit 03/07
+            var percent = ((self.responseObject.storefrontData.current - (data[0]['count(mac_address)'] * 100/ self.responseObject.opportunityData.comparisonNumber)) / (data[0]['count(mac_address)'] * 100 / self.responseObject.opportunityData.comparisonNumber)) * 100;
             self.responseObject.storefrontData.comparison = percent;
             self._getDwellTimeCount();
         }
@@ -140,7 +144,9 @@ repo._getDwellTimeComparison = function() {
         if (err) {
             self.responseObject.isError = true;
         } else {
-            var percent = ((self.responseObject.dwellTimeData.current - data[0]['avg(dwell_time)']) / self.responseObject.dwellTimeData.current) * 100;
+            // var percent = ((self.responseObject.dwellTimeData.current - data[0]['avg(dwell_time)']) / self.responseObject.dwellTimeData.current) * 100;
+            // harshal edit 03/07
+            var percent = ((self.responseObject.dwellTimeData.current - data[0]['avg(dwell_time)']) / data[0]['avg(dwell_time)']) * 100;
             self.responseObject.dwellTimeData.comparison = percent;
         }
         self.sendResponseCallback(self.responseObject);

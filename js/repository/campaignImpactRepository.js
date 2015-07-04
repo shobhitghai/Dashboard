@@ -35,7 +35,8 @@ repo._getCampaignPeriodData = function() {
 
 repo._getLastMonthData = function() {
     var self = this;
-    var query = "select count(mac_address) as cnt, DATEDIFF(DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 MONTH)," + this.filterParam.sDate + ") AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 MONTH) and DATE(first_seen) < " + this.filterParam.sDate + " and walk_in_flag = 1";
+    // harshal edit - changed interval time of 1 month to 1 day temporarily. need to change this back later.
+	var query = "select count(mac_address) as cnt, DATEDIFF(DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY)," + this.filterParam.sDate + ") AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY) and DATE(first_seen) < " + this.filterParam.sDate + " and walk_in_flag = 1";
 
     this.connection.query(query, function(err, data) {
 

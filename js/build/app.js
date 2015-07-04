@@ -360,7 +360,7 @@ function getStoreListData(initModules) {
                 'tile-period-param': 'vs last ' + metric.period
             }));
 
-            $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 5) + 22) + '%');
+            $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 1) + 5) + '%');
         },
         _formatDwellTime: function(seconds) {
             // var totalSec = new Date().getTime() / 1000;
