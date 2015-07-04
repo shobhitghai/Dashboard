@@ -309,7 +309,7 @@ function getStoreListData(initModules) {
             }, 5000);
 
         },
-        refreshData: function(){
+        refreshData: function() {
             var self = this;
             clearInterval(self.ajaxInterval);
             app['tile-section'].init();
@@ -341,32 +341,45 @@ function getStoreListData(initModules) {
             $('.section-opportunity').html(this.tile_template({
                 'tile-name': 'Outside Opportunity',
                 'tile-percent': opportunityData['current'] || 'NA',
-                'tile-percent-change': (opportunityData['comparison'] ? opportunityData['comparison'].toFixed(1) : 'NA') + '%',
-                'tile-period-param': 'vs last ' + metric.period
+                'tile-percent-change': (opportunityData['comparison'] ?
+                    app['tile-section']._formatComparisonPercent(opportunityData['comparison'].toFixed(1)) : 'NA') + '%',
+                'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
             }));
 
             $('.section-storeFront').html(this.tile_template({
                 'tile-name': 'Storefront Conversion',
                 'tile-percent': (storefrontData['current'] ? storefrontData['current'].toFixed(1) : 'NA') + '%',
-                'tile-percent-change': (storefrontData['comparison'] ? storefrontData['comparison'].toFixed(1) : 'NA') + '%',
-                'tile-period-param': 'vs last ' + metric.period
+                'tile-percent-change': (storefrontData['comparison'] ?
+                    app['tile-section']._formatComparisonPercent(storefrontData['comparison'].toFixed(1)) : 'NA') + '%',
+                'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
             }));
 
             $('.section-dwellTime').html(this.tile_template({
                 'tile-name': 'Dwell Time (hh:mm)',
-                // 'tile-percent': dwellTimeData['current'] ? (dwellTimeData['current'] / 60).toFixed(1) + ' min' : 'NA',
                 'tile-percent': dwellTimeData['current'] ? app['tile-section']._formatDwellTime(dwellTimeData['current'].toFixed(0)) : 'NA',
-                'tile-percent-change': (dwellTimeData['comparison'] ? dwellTimeData['comparison'].toFixed(1) : 'NA') + '%',
-                'tile-period-param': 'vs last ' + metric.period
+                'tile-percent-change': (dwellTimeData['comparison'] ?
+                    app['tile-section']._formatComparisonPercent(dwellTimeData['comparison'].toFixed(1)) : 'NA') + '%',
+                'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
             }));
 
             $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 1) + 5) + '%');
         },
+        _formatPeriodParam: function(metric) {
+            if (metric.comparison == 'Like') {
+                return Date().split(' ')[0];
+            } else {
+                return metric.period;
+            }
+        },
+        _formatComparisonPercent: function(data) {
+            if (data.indexOf('-') == -1) {
+                data = '+' + data;
+            }
+            return data;
+        },
         _formatDwellTime: function(seconds) {
-            // var totalSec = new Date().getTime() / 1000;
             var hours = parseInt(seconds / 3600) % 24;
             var minutes = parseInt(seconds / 60) % 60;
-            // var seconds = totalSec % 60;
 
             return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes);
         }
@@ -426,7 +439,8 @@ function getStoreListData(initModules) {
                     type: 'bar',
                     style: {
                         fontFamily: 'Arial'
-                    }
+                    },
+                    height: 400
                 },
                 colors: ['#a6a6a6', '#55c6f2'],
                 title: {
@@ -443,8 +457,12 @@ function getStoreListData(initModules) {
                     title: {
                         text: ''
                     },
+                    lineWidth: 0,
+                    minorGridLineWidth: 0,
+                    lineColor: 'transparent',
+                    gridLineColor: 'transparent',
                     labels: {
-                        overflow: 'justify'
+                        enabled: false
                     }
                 },
                 tooltip: {
@@ -453,20 +471,16 @@ function getStoreListData(initModules) {
                 plotOptions: {
                     bar: {
                         dataLabels: {
-                            enabled: true
+                            enabled: true,
+                            format: '{y}%'
                         }
                     }
                 },
                 legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: -40,
-                    y: 100,
-                    floating: true,
-                    borderWidth: 1,
-                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                    shadow: true
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    margin: 30,
                 },
                 credits: {
                     enabled: false
@@ -801,7 +815,7 @@ function getStoreListData(initModules) {
 
             app['right-now'].fetchData('getRightNowData');
 
-            setInterval(function() {
+            this.refreshInterval = setInterval(function() {
                 app['right-now'].fetchData('getRightNowData');
             }, 5000);
 
@@ -836,6 +850,7 @@ function getStoreListData(initModules) {
         },
         refreshData: function() {
             var self = this;
+            clearInterval(self.refreshInterval);
             app['right-now'].init();
         },
         fetchData: function(url) {
@@ -844,20 +859,23 @@ function getStoreListData(initModules) {
             function successCallback(res) {
                 var res = $.parseJSON(res);
                 var dataObj = {};
-                
-                dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
-                dataObj.peopleStore = res[1]['cnt'];
 
-                $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
-                $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                if (res.length) {
+                    dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
+                    dataObj.peopleStore = res[1]['cnt'];
 
+                    $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                    $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                }
             }
 
             function errorCallback(err) {
                 console.log('right-now' + err || 'err');
             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({
@@ -1131,6 +1149,8 @@ function getStoreListData(initModules) {
 
         },
         fetchData: function(url, reqObj) {
+            var self = this;
+
             function successCallback(data) {
                 var response = $.parseJSON(data);
 
@@ -1142,13 +1162,10 @@ function getStoreListData(initModules) {
                 var dwtLastMonth = response['lastMonthData'].dwt;
                 var dwell_time = Math.round((dwtCampaignPeriod - dwtLastMonth) / dwtLastMonth * 100);
 
-                $('#campaign-walkin span').text(walk_in + '%');
-                $('#campaign-dwt span').text(dwell_time + '%');
+                $('#campaign-walkin span').text(self.formatConversionData(walk_in) + '%');
+                $('#campaign-dwt span').text(self.formatConversionData(dwell_time) + '%');
 
-
-                console.log(walk_in)
-                console.log(dwell_time)
-
+                self.formatImpactChangeColor();
             }
 
             function errorCallback(err) {
@@ -1157,6 +1174,23 @@ function getStoreListData(initModules) {
 
             app['ajax-wrapper'].sendAjax(url, reqObj, successCallback, errorCallback)
 
+        },
+        formatConversionData: function(value) {
+            if (parseInt(value) >= 0) {
+                return '+' + value;
+            } else {
+                return value || 'NA';
+            }
+        },
+        formatImpactChangeColor: function() {
+            var valueLabels = $('.mod-campaign-impact .impact-change');
+            $.each(valueLabels, function(i, v) {
+                if (parseFloat($(this).find('span').text()) >= 0) {
+                    $(this).addClass('impact-pos');
+                } else {
+                    $(this).addClass('impact-neg');
+                }
+            });
         }
     }
 })(app);
@@ -1184,6 +1218,17 @@ function getStoreListData(initModules) {
             var edit_btn = target.find('.edit-btn');
             var configure_panel = target.find('.impact-edit');
             var panel_btn = target.find('.config-save, .config-cancel');
+            var startDate = target.find('.storefront-start-date input');
+            var reqObj = {};
+
+            configure_panel.addClass('edit-active');
+
+            $(s.target).find('.config-save').on('click', function() {
+                if (startDate.val()) {
+                    reqObj.sDate = "'" + startDate.val() + "'";
+                    app['modification-impact'].fetchData('getStoreFrontChange', reqObj);
+                }
+            })
 
             edit_btn.on('click', function() {
                 configure_panel.toggleClass('edit-active');
@@ -1193,14 +1238,53 @@ function getStoreListData(initModules) {
                 configure_panel.toggleClass('edit-active');
             })
 
-
-            $('.storefront-start-date').datepicker({});
-            
+            $('.storefront-start-date').datepicker({
+                format: 'yyyy-mm-dd'
+            });
 
         },
         refreshData: function() {
             var self = this;
             app['modification-impact'].init();
+        },
+        fetchData: function(url, reqObj) {
+            var self = this;
+
+            function successCallback(data) {
+                var response = $.parseJSON(data);
+                console.log(response);
+
+                $('#sf-conversion-change span').text(self.formatConversionData(response.conversionChange) + '%');
+                $('#sf-walk-in span').text(self.formatConversionData(response.walkIn) + '%');
+                $('#sf-dwell-time span').text(self.formatConversionData(response.dwellTime) + '%');
+
+                self.formatImpactChangeColor();
+
+            }
+
+            function errorCallback(err) {
+                console.log(err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, reqObj, successCallback, errorCallback)
+
+        },
+        formatConversionData: function(value) {
+            if (parseFloat(value) >= 0) {
+                return '+' + value;
+            } else {
+                return value || 'NA';
+            }
+        },
+        formatImpactChangeColor: function() {
+            var valueLabels = $('.mod-modification-impact .impact-change');
+            $.each(valueLabels, function(i, v) {
+                if (parseFloat($(this).find('span').text()) >= 0) {
+                    $(this).addClass('impact-pos');
+                } else {
+                    $(this).addClass('impact-neg');
+                }
+            });
         }
 
     }

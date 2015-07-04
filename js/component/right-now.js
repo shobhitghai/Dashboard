@@ -10,7 +10,7 @@
 
             app['right-now'].fetchData('getRightNowData');
 
-            setInterval(function() {
+            this.refreshInterval = setInterval(function() {
                 app['right-now'].fetchData('getRightNowData');
             }, 5000);
 
@@ -45,6 +45,7 @@
         },
         refreshData: function() {
             var self = this;
+            clearInterval(self.refreshInterval);
             app['right-now'].init();
         },
         fetchData: function(url) {
@@ -53,20 +54,23 @@
             function successCallback(res) {
                 var res = $.parseJSON(res);
                 var dataObj = {};
-                
-                dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
-                dataObj.peopleStore = res[1]['cnt'];
 
-                $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
-                $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                if (res.length) {
+                    dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
+                    dataObj.peopleStore = res[1]['cnt'];
 
+                    $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                    $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                }
             }
 
             function errorCallback(err) {
                 console.log('right-now' + err || 'err');
             }
 
-            app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, series) {
             chartContainer.highcharts({

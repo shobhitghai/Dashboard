@@ -51,7 +51,8 @@
                     type: 'bar',
                     style: {
                         fontFamily: 'Arial'
-                    }
+                    },
+                    height: 400
                 },
                 colors: ['#a6a6a6', '#55c6f2'],
                 title: {
@@ -68,8 +69,12 @@
                     title: {
                         text: ''
                     },
+                    lineWidth: 0,
+                    minorGridLineWidth: 0,
+                    lineColor: 'transparent',
+                    gridLineColor: 'transparent',
                     labels: {
-                        overflow: 'justify'
+                        enabled: false
                     }
                 },
                 tooltip: {
@@ -78,20 +83,16 @@
                 plotOptions: {
                     bar: {
                         dataLabels: {
-                            enabled: true
+                            enabled: true,
+                            format: '{y}%'
                         }
                     }
                 },
                 legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: -40,
-                    y: 100,
-                    floating: true,
-                    borderWidth: 1,
-                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                    shadow: true
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    margin: 30,
                 },
                 credits: {
                     enabled: false

@@ -49,6 +49,8 @@
 
         },
         fetchData: function(url, reqObj) {
+            var self = this;
+
             function successCallback(data) {
                 var response = $.parseJSON(data);
 
@@ -60,13 +62,10 @@
                 var dwtLastMonth = response['lastMonthData'].dwt;
                 var dwell_time = Math.round((dwtCampaignPeriod - dwtLastMonth) / dwtLastMonth * 100);
 
-                $('#campaign-walkin span').text(walk_in + '%');
-                $('#campaign-dwt span').text(dwell_time + '%');
+                $('#campaign-walkin span').text(self.formatConversionData(walk_in) + '%');
+                $('#campaign-dwt span').text(self.formatConversionData(dwell_time) + '%');
 
-
-                console.log(walk_in)
-                console.log(dwell_time)
-
+                self.formatImpactChangeColor();
             }
 
             function errorCallback(err) {
@@ -75,6 +74,23 @@
 
             app['ajax-wrapper'].sendAjax(url, reqObj, successCallback, errorCallback)
 
+        },
+        formatConversionData: function(value) {
+            if (parseInt(value) >= 0) {
+                return '+' + value;
+            } else {
+                return value || 'NA';
+            }
+        },
+        formatImpactChangeColor: function() {
+            var valueLabels = $('.mod-campaign-impact .impact-change');
+            $.each(valueLabels, function(i, v) {
+                if (parseFloat($(this).find('span').text()) >= 0) {
+                    $(this).addClass('impact-pos');
+                } else {
+                    $(this).addClass('impact-neg');
+                }
+            });
         }
     }
 })(app);
