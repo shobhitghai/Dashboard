@@ -27,7 +27,6 @@ var constants = function() {
         shopper_engagement_last_month1: 'select count(mac_address), case when dwell_time >= 10*60 then "gt10" when dwell_time >= 5*60 and dwell_time < 10*60 then "gt5" when dwell_time >= 2*60 and dwell_time < 5*60 then "gt2" else "bounce" end as DT from customer_tracker.t_visit where MONTH(first_seen) = MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and YEAR(first_seen) = YEAR(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and store_id = ',
         shopper_engagement_last_month2: ' and walk_in_flag =1 and dwell_time < 60*60 and dwell_time > 0 group by DT',
 
-        //righ now // edit by harshal - changed the time from 15 minutes to 5 minutes
         right_now_people: 'select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) group by walk_in_flag',
 
         //campaign impact
