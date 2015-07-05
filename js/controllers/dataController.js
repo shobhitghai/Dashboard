@@ -8,7 +8,6 @@ storeFrontRepository = require("../repository/storeFrontRepository");
 function dataController(router, connection) {
     var self = this;
     self.handleRoutes(router, connection);
-    var tileDataRepository
 }
 
 dataController.prototype.handleRoutes = function(router, connection) {
@@ -27,7 +26,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
         connection.query(query, function(err, data) {
 
             if (err) {
-                self._sendErrorResponse(err);
+                self._sendErrorResponse(res);
             } else {
                 console.log(data)
                 res.end(JSON.stringify(data));
@@ -78,15 +77,15 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     router.get("/getRightNowData", function(req, res) {
         self._setResponseHeader(res);
-        
+
         // var query = constants.getValue('right_now_people');
-        var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and store_id = "+ req.query.storeName +" group by walk_in_flag";
+        var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and store_id = " + req.query.storeName + " group by walk_in_flag";
         // var query = constants.getValue('campaign_impact_query2');
 
         connection.query(query, function(err, data) {
             // console.log(data)
             if (err) {
-                self._sendErrorResponse(err);
+                self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));
             }
@@ -129,6 +128,22 @@ dataController.prototype.handleRoutes = function(router, connection) {
         var repository = new storeFrontRepository(connection, sendResponse, req.query);
 
         repository.getData();
+
+    });
+
+    /* Get Hour optimization data */
+
+    router.get("/getHourOptimizationData", function(req, res) {
+        self._setResponseHeader(res);
+        var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit where date(first_seen) < date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) and store_id = " + req.query.storeName + " group by visit_date, hour) as ty where hour > 2 and hour < 18 group by hour "
+        connection.query(query, function(err, data) {
+            if (err) {
+                self._sendErrorResponse(res);
+            } else {
+                console.log(data)
+                res.end(JSON.stringify(data));
+            }
+        })
 
     });
 
