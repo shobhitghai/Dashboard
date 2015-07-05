@@ -517,7 +517,7 @@ function getStoreListData(initModules) {
             var s = this.settings;
             var chartContainer = $(s.target).find('#shopper-profile-chart');
 
-            app['shopper-profile'].renderChart(chartContainer);
+            app['shopper-profile'].fetchData('getShopperProfile', chartContainer);
 
 
         },
@@ -525,7 +525,42 @@ function getStoreListData(initModules) {
             var self = this;
             app['shopper-profile'].init();
         },
-        renderChart: function(chartContainer) {
+        fetchData: function(url, chartContainer) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                var dataObj = new Array();
+                var otherObj = ['Others', 0];
+
+                console.log(res);
+
+                $.each(res, function(i, v) {
+                    if (i < 5) {
+                        var itemObj = new Array();
+                        itemObj.push(this['s_profile']);
+                        itemObj.push(Math.round(this['count(distinct(tv.mac_address))']));
+                        dataObj.push(itemObj);
+                    } else {
+                        otherObj[1] = otherObj[1] + Math.round(this['count(distinct(tv.mac_address))']);
+                        if (i == res.length - 1) {
+                            dataObj.push(otherObj);
+                        }
+                    }
+
+                });
+
+                app['shopper-profile'].renderChart(chartContainer, dataObj);
+
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
+        },
+        renderChart: function(chartContainer, dataObj) {
             chartContainer.highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -535,12 +570,12 @@ function getStoreListData(initModules) {
                         fontFamily: 'Arial'
                     }
                 },
-                colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9'],
+                colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9', '#b4c7e7', '#767171'],
                 title: {
                     text: ""
                 },
                 tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    pointFormat: '<b>{point.percentage:.1f}%</b>'
                 },
                 plotOptions: {
                     pie: {
@@ -555,7 +590,7 @@ function getStoreListData(initModules) {
                         dataLabels: {
                             enabled: true,
                             formatter: function() {
-                                return this.y;
+                                return Math.round(this.percentage) + '%';
                             },
                             distance: -30,
                             color: 'white'
@@ -567,17 +602,7 @@ function getStoreListData(initModules) {
                 },
                 series: [{
                     type: 'pie',
-                    name: 'Browser share',
-                    data: [{
-                            name: 'Discount Sensitive',
-                            y: 45.8,
-                            sliced: true,
-                            selected: true
-                        },
-                        ['Fast fashion conscious', 26.8],
-                        ['Utility buyer', 8.5],
-                        ['Premium brand savy', 6.2]
-                    ]
+                    data: dataObj
                 }],
                 credits: {
                     enabled: false
@@ -586,7 +611,6 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-
 //####js/component/revisit-frequency.js
 (function() {
     app['revisit-frequency'] = {
@@ -1328,7 +1352,6 @@ function getStoreListData(initModules) {
             function successCallback(res) {
                 var res = $.parseJSON(res);
                 var dataObj = new Array();
-                console.log(res);
 
                 $.each(res, function(i, v) {
                     dataObj.push(Math.round(this.avg_walk_by));

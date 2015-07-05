@@ -22,10 +22,12 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     router.get("/getStoreDetails", function(req, res) {
         self._setResponseHeader(res);
+
         var query = "select name, city from customer_tracker.t_store_details;"
         connection.query(query, function(err, data) {
 
             if (err) {
+                console.log(err)
                 self._sendErrorResponse(res);
             } else {
                 console.log(data)
@@ -78,10 +80,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRightNowData", function(req, res) {
         self._setResponseHeader(res);
 
-        // var query = constants.getValue('right_now_people');
         var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and store_id = " + req.query.storeName + " group by walk_in_flag";
-        // var query = constants.getValue('campaign_impact_query2');
-
         connection.query(query, function(err, data) {
             // console.log(data)
             if (err) {
@@ -136,6 +135,23 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getHourOptimizationData", function(req, res) {
         self._setResponseHeader(res);
         var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit where date(first_seen) < date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) and store_id = " + req.query.storeName + " group by visit_date, hour) as ty where hour > 2 and hour < 18 group by hour "
+        connection.query(query, function(err, data) {
+            if (err) {
+                self._sendErrorResponse(res);
+            } else {
+                console.log(data)
+                res.end(JSON.stringify(data));
+            }
+        })
+
+    });
+
+    /* Get Shopper profile data */
+
+    router.get("/getShopperProfile", function(req, res) {
+        self._setResponseHeader(res);
+        var query = "select ts.s_profile, count(distinct(tv.mac_address)) from customer_tracker.t_visit tv JOIN customer_tracker.t_shopper_profile ts ON (tv.mac_address = ts.mac_address) where visit_date >= date(date_sub(NOW(), interval 30 day)) and store_id = " + req.query.storeName + " and walk_in_flag =1 and dwell_time < 60*60 and dwell_time > 0 group by ts.s_profile order by count(distinct(tv.mac_address)) desc;"
+
         connection.query(query, function(err, data) {
             if (err) {
                 self._sendErrorResponse(res);

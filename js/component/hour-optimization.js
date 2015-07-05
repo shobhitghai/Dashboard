@@ -19,7 +19,6 @@
             function successCallback(res) {
                 var res = $.parseJSON(res);
                 var dataObj = new Array();
-                console.log(res);
 
                 $.each(res, function(i, v) {
                     dataObj.push(Math.round(this.avg_walk_by));

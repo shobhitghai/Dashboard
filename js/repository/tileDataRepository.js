@@ -136,7 +136,6 @@ repo._getDwellTimeComparison = function() {
 repo._getRepeatCustomerCount = function() {
     var self = this;
     var query = "select count(mac_address) from customer_tracker.t_store_visit where " + constants.getValue("repeat_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and store_id = " + this.filterParam.storeName + " and new_customer_flag = 0";
-    console.log(query)
     this.connection.query(query, function(err, data) {
 
         if (err) {
