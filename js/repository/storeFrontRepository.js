@@ -20,7 +20,7 @@ repo.getData = function() {
 
 repo._getstoreFrontData = function() {
     var self = this;
-    var query = "select count(mac_address) as cnt, avg(dwell_time) as dt, walk_in_flag from customer_tracker.t_visit where DATE(first_seen) >= " + this.filterParam.sDate + " and DATE(first_seen) < DATE_ADD(" + this.filterParam.sDate + " , INTERVAL 7 DAY) group by walk_in_flag"; //and store_selection = x
+    var query = "select count(mac_address) as cnt, avg(dwell_time) as dt, walk_in_flag from customer_tracker.t_visit where DATE(first_seen) >= " + this.filterParam.sDate + " and DATE(first_seen) < DATE_ADD(" + this.filterParam.sDate + " , INTERVAL 7 DAY) and store_id = " + this.filterParam.storeName + " group by walk_in_flag"; 
     // console.log(query)
     this.connection.query(query, function(err, data) {
         // console.log(data)
@@ -37,7 +37,7 @@ repo._getstoreFrontData = function() {
 
 repo._getstoreFrontComparisonData = function() {
     var self = this;
-    var query = "select count(mac_address) as cnt, avg(dwell_time) as dt, walk_in_flag from customer_tracker.t_visit where DATE(first_seen) < " + this.filterParam.sDate + " and DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + " , INTERVAL 7 DAY) group by walk_in_flag"; //and store_selection = x
+    var query = "select count(mac_address) as cnt, avg(dwell_time) as dt, walk_in_flag from customer_tracker.t_visit where DATE(first_seen) < " + this.filterParam.sDate + " and DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + " , INTERVAL 7 DAY) and store_id = " + this.filterParam.storeName + " group by walk_in_flag"; 
     // console.log(query)
     this.connection.query(query, function(err, data) {
         // console.log(data)

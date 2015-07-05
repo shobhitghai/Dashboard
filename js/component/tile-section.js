@@ -10,6 +10,7 @@
         },
         init: function(context) {
             this.tile_template = App.Template['tile-opportunity'];
+            this.tile_repeat_cust = App.Template['tile-repeat-cust'];
 
             var s = this.settings;
 
@@ -65,12 +66,14 @@
             var s = this.settings;
 
             function successCallback(data) {
-                app['tile-section']._bindTemplate(data, metric);
-                // console.log(s.c++ + ' ' + metric.period)
+                if (data.Error) {
+                    clearInterval(self.ajaxInterval);
+                } else {
+                    app['tile-section']._bindTemplate(data, metric);
+                }
             }
 
             function errorCallback(err) {
-                // console.log(err || 'err');
                 clearInterval(self.ajaxInterval);
             }
 
@@ -82,6 +85,7 @@
             var opportunityData = response.opportunityData;
             var storefrontData = response.storefrontData;
             var dwellTimeData = response.dwellTimeData;
+            var repeatCustomer = response.repeatCustomer;
 
             $('.section-opportunity').html(this.tile_template({
                 'tile-name': 'Outside Opportunity',
@@ -107,7 +111,14 @@
                 'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
             }));
 
-            $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 1) + 5) + '%');
+            $('.section-customers').html(this.tile_repeat_cust({
+                'tile-name': 'Repeat Customers',
+                'tile-percent': repeatCustomer['current'] || 'NA',
+                'tile-percent-change': (repeatCustomer['comparison'] ?
+                    app['tile-section']._formatComparisonPercent(repeatCustomer['comparison'].toFixed(1)) : 'NA') + '%',
+                'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
+            }));
+
         },
         _formatPeriodParam: function(metric) {
             if (metric.comparison == 'Like') {

@@ -9,35 +9,38 @@
             var target = $(s.target);
             var edit_btn = target.find('.edit-btn');
             var configure_panel = target.find('.impact-edit');
-            var panel_btn = target.find('.config-save, .config-cancel');
             var startDate = target.find('.campaign-start-date input');
             var endDate = target.find('.campaign-end-date input');
-
             var reqObj = {
 
             }
 
+            configure_panel.addClass('edit-active');
+
             $('.campaign-start-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
+            
             $('.campaign-end-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
 
-            $(s.target).find('.config-save').on('click', function() {
+            $(s.target).find('.config-save').off('click').on('click', function() {
                 if (startDate.val() && endDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
                     reqObj.eDate = "'" + endDate.val() + "'";
+                    reqObj.storeName = window.storeDetail.name;
 
                     app['campaign-impact'].fetchData('getCampaignImpact', reqObj);
+                    configure_panel.toggleClass('edit-active');
                 }
             })
 
-            edit_btn.on('click', function() {
+            edit_btn.off('click').on('click', function() {
                 configure_panel.toggleClass('edit-active');
             });
 
-            panel_btn.on('click', function() {
+            $(s.target).find('.config-cancel').off('click').on('click', function() {
                 configure_panel.toggleClass('edit-active');
             })
         },

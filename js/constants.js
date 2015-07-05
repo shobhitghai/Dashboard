@@ -18,6 +18,16 @@ var constants = function() {
         current_Like_Day: 'DATE(first_seen) = DATE(NOW())',
         compare_Like_Day: 'first_seen <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(first_seen) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
 
+        repeat_current_Consecutive_Day: 'DATE(left_store) = DATE(NOW())',
+        repeat_current_Consecutive_Week: 'DATE(left_store) <= DATE(NOW()) and WEEK(left_store) = WEEK(NOW()) and YEAR(left_store) = YEAR(NOW())',
+        repeat_current_Consecutive_Month: 'DATE(left_store) <= DATE(NOW()) and MONTH(left_store) = MONTH(NOW()) and YEAR(left_store) = YEAR(NOW())',
+        repeat_compare_Consecutive_Day: 'left_store <= DATE_SUB(NOW(),INTERVAL 1 DAY) and DATE(left_store) = DATE(DATE_SUB(NOW(),INTERVAL 1 DAY))',
+        repeat_compare_Consecutive_Week: 'left_store <= DATE_SUB(NOW(),INTERVAL 1 WEEK) and WEEK(left_store) = WEEK(DATE_SUB(NOW(),INTERVAL 1 WEEK)) and YEAR(left_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK))',
+        repeat_compare_Consecutive_Month: 'left_store <= DATE_SUB(NOW(),INTERVAL 1 MONTH) and MONTH(left_store) = MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and YEAR(left_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 MONTH))',
+        repeat_current_Like_Day: 'DATE(left_store) = DATE(NOW())',
+        repeat_compare_Like_Day: 'left_store <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(left_store) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
+
+
 
         //shopper engagement
         // shopper_engagement_curr_month: 'select count(mac_address), case when dwell_time >= 10*60 then "gt10" when dwell_time >= 5*60 and dwell_time < 10*60 then "gt5" when dwell_time >= 2*60 and dwell_time < 5*60 then "gt2" else "bounce" end as DT from customer_tracker.t_visit where DATE(first_seen) <= DATE(NOW()) and MONTH(first_seen) =MONTH(NOW()) and YEAR(first_seen) =YEAR(NOW()) and walk_in_flag =1 group by DT',

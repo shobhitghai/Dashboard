@@ -8,26 +8,24 @@
             var target = $(s.target);
             var edit_btn = target.find('.edit-btn');
             var configure_panel = target.find('.impact-edit');
-            var panel_btn = target.find('.config-save, .config-cancel');
             var startDate = target.find('.storefront-start-date input');
             var reqObj = {};
 
             configure_panel.addClass('edit-active');
 
-            $(s.target).find('.config-save').on('click', function() {
+            $(s.target).find('.config-save').off('click').on('click', function() {
                 if (startDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
+                    reqObj.storeName = window.storeDetail.name;
                     app['modification-impact'].fetchData('getStoreFrontChange', reqObj);
+                    configure_panel.toggleClass('edit-active');
+
                 }
             })
 
-            edit_btn.on('click', function() {
+            edit_btn.off('click').on('click', function() {
                 configure_panel.toggleClass('edit-active');
             });
-
-            panel_btn.on('click', function() {
-                configure_panel.toggleClass('edit-active');
-            })
 
             $('.storefront-start-date').datepicker({
                 format: 'yyyy-mm-dd'

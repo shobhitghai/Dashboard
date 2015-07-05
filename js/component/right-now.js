@@ -52,16 +52,21 @@
             var self = this;
 
             function successCallback(res) {
-                var res = $.parseJSON(res);
-                var dataObj = {};
+                if (res.Error) {
+                    clearInterval(self.refreshInterval);
+                } else {
+                    var res = $.parseJSON(res);
+                    var dataObj = {};
 
-                if (res.length) {
-                    dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
-                    dataObj.peopleStore = res[1]['cnt'];
+                    if (res.length) {
+                        dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
+                        dataObj.peopleStore = res[1]['cnt'];
 
-                    $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
-                    $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                        $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                    }
                 }
+
             }
 
             function errorCallback(err) {

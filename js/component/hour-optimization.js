@@ -22,9 +22,7 @@
                 console.log(res);
 
                 $.each(res, function(i, v) {
-                    if (i <= 12) {
-                        dataObj.push(this.avg_walk_by)
-                    }
+                    dataObj.push(Math.round(this.avg_walk_by));
                 });
 
                 app['hour-optimization'].renderChart(chartContainer, dataObj);
@@ -52,19 +50,21 @@
                 },
                 xAxis: {
                     categories: [
-                        '10 a.m',
-                        '11 a.m',
-                        '12 p.m',
-                        '1 p.m',
-                        '2 p.m',
-                        '3 p.m',
-                        '4 p.m',
-                        '5 p.m',
-                        '6 p.m',
-                        '7 p.m',
-                        '8 p.m',
-                        '9 p.m',
-                        '10 p.m'
+                        '8.30 a.m',
+                        '9.30 a.m',
+                        '10.30 a.m',
+                        '11.30 a.m',
+                        '12.30 p.m',
+                        '1.30 p.m',
+                        '2.30 p.m',
+                        '3.30 p.m',
+                        '4.30 p.m',
+                        '5.30 p.m',
+                        '6.30 p.m',
+                        '7.30 p.m',
+                        '8.30 p.m',
+                        '9.30 p.m',
+                        '10.30 p.m'
                     ],
                     crosshair: true,
                     title: {
@@ -94,7 +94,7 @@
                     }
                 },
                 series: [{
-                    name: 'Average Walk By',
+                    name: 'Outside opportunity',
                     data: dataObj
 
                 }],

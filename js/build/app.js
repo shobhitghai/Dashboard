@@ -265,6 +265,7 @@ function getStoreListData(initModules) {
         },
         init: function(context) {
             this.tile_template = App.Template['tile-opportunity'];
+            this.tile_repeat_cust = App.Template['tile-repeat-cust'];
 
             var s = this.settings;
 
@@ -320,12 +321,14 @@ function getStoreListData(initModules) {
             var s = this.settings;
 
             function successCallback(data) {
-                app['tile-section']._bindTemplate(data, metric);
-                // console.log(s.c++ + ' ' + metric.period)
+                if (data.Error) {
+                    clearInterval(self.ajaxInterval);
+                } else {
+                    app['tile-section']._bindTemplate(data, metric);
+                }
             }
 
             function errorCallback(err) {
-                // console.log(err || 'err');
                 clearInterval(self.ajaxInterval);
             }
 
@@ -337,6 +340,7 @@ function getStoreListData(initModules) {
             var opportunityData = response.opportunityData;
             var storefrontData = response.storefrontData;
             var dwellTimeData = response.dwellTimeData;
+            var repeatCustomer = response.repeatCustomer;
 
             $('.section-opportunity').html(this.tile_template({
                 'tile-name': 'Outside Opportunity',
@@ -362,7 +366,14 @@ function getStoreListData(initModules) {
                 'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
             }));
 
-            $('.section-customers .tile-data-count').text(Math.floor((Math.random() * 1) + 5) + '%');
+            $('.section-customers').html(this.tile_repeat_cust({
+                'tile-name': 'Repeat Customers',
+                'tile-percent': repeatCustomer['current'] || 'NA',
+                'tile-percent-change': (repeatCustomer['comparison'] ?
+                    app['tile-section']._formatComparisonPercent(repeatCustomer['comparison'].toFixed(1)) : 'NA') + '%',
+                'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
+            }));
+
         },
         _formatPeriodParam: function(metric) {
             if (metric.comparison == 'Like') {
@@ -857,16 +868,21 @@ function getStoreListData(initModules) {
             var self = this;
 
             function successCallback(res) {
-                var res = $.parseJSON(res);
-                var dataObj = {};
+                if (res.Error) {
+                    clearInterval(self.refreshInterval);
+                } else {
+                    var res = $.parseJSON(res);
+                    var dataObj = {};
 
-                if (res.length) {
-                    dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
-                    dataObj.peopleStore = res[1]['cnt'];
+                    if (res.length) {
+                        dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
+                        dataObj.peopleStore = res[1]['cnt'];
 
-                    $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
-                    $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                        $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                    }
                 }
+
             }
 
             function errorCallback(err) {
@@ -1109,35 +1125,38 @@ function getStoreListData(initModules) {
             var target = $(s.target);
             var edit_btn = target.find('.edit-btn');
             var configure_panel = target.find('.impact-edit');
-            var panel_btn = target.find('.config-save, .config-cancel');
             var startDate = target.find('.campaign-start-date input');
             var endDate = target.find('.campaign-end-date input');
-
             var reqObj = {
 
             }
 
+            configure_panel.addClass('edit-active');
+
             $('.campaign-start-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
+            
             $('.campaign-end-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
 
-            $(s.target).find('.config-save').on('click', function() {
+            $(s.target).find('.config-save').off('click').on('click', function() {
                 if (startDate.val() && endDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
                     reqObj.eDate = "'" + endDate.val() + "'";
+                    reqObj.storeName = window.storeDetail.name;
 
                     app['campaign-impact'].fetchData('getCampaignImpact', reqObj);
+                    configure_panel.toggleClass('edit-active');
                 }
             })
 
-            edit_btn.on('click', function() {
+            edit_btn.off('click').on('click', function() {
                 configure_panel.toggleClass('edit-active');
             });
 
-            panel_btn.on('click', function() {
+            $(s.target).find('.config-cancel').off('click').on('click', function() {
                 configure_panel.toggleClass('edit-active');
             })
         },
@@ -1217,26 +1236,24 @@ function getStoreListData(initModules) {
             var target = $(s.target);
             var edit_btn = target.find('.edit-btn');
             var configure_panel = target.find('.impact-edit');
-            var panel_btn = target.find('.config-save, .config-cancel');
             var startDate = target.find('.storefront-start-date input');
             var reqObj = {};
 
             configure_panel.addClass('edit-active');
 
-            $(s.target).find('.config-save').on('click', function() {
+            $(s.target).find('.config-save').off('click').on('click', function() {
                 if (startDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
+                    reqObj.storeName = window.storeDetail.name;
                     app['modification-impact'].fetchData('getStoreFrontChange', reqObj);
+                    configure_panel.toggleClass('edit-active');
+
                 }
             })
 
-            edit_btn.on('click', function() {
+            edit_btn.off('click').on('click', function() {
                 configure_panel.toggleClass('edit-active');
             });
-
-            panel_btn.on('click', function() {
-                configure_panel.toggleClass('edit-active');
-            })
 
             $('.storefront-start-date').datepicker({
                 format: 'yyyy-mm-dd'
@@ -1314,9 +1331,7 @@ function getStoreListData(initModules) {
                 console.log(res);
 
                 $.each(res, function(i, v) {
-                    if (i <= 12) {
-                        dataObj.push(this.avg_walk_by)
-                    }
+                    dataObj.push(Math.round(this.avg_walk_by));
                 });
 
                 app['hour-optimization'].renderChart(chartContainer, dataObj);
@@ -1344,19 +1359,21 @@ function getStoreListData(initModules) {
                 },
                 xAxis: {
                     categories: [
-                        '10 a.m',
-                        '11 a.m',
-                        '12 p.m',
-                        '1 p.m',
-                        '2 p.m',
-                        '3 p.m',
-                        '4 p.m',
-                        '5 p.m',
-                        '6 p.m',
-                        '7 p.m',
-                        '8 p.m',
-                        '9 p.m',
-                        '10 p.m'
+                        '8.30 a.m',
+                        '9.30 a.m',
+                        '10.30 a.m',
+                        '11.30 a.m',
+                        '12.30 p.m',
+                        '1.30 p.m',
+                        '2.30 p.m',
+                        '3.30 p.m',
+                        '4.30 p.m',
+                        '5.30 p.m',
+                        '6.30 p.m',
+                        '7.30 p.m',
+                        '8.30 p.m',
+                        '9.30 p.m',
+                        '10.30 p.m'
                     ],
                     crosshair: true,
                     title: {
@@ -1386,7 +1403,7 @@ function getStoreListData(initModules) {
                     }
                 },
                 series: [{
-                    name: 'Average Walk By',
+                    name: 'Outside opportunity',
                     data: dataObj
 
                 }],
