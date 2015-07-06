@@ -4,6 +4,7 @@
             $.ajax({
                 url: hostUrl + api,
                 data: data || {},
+                cache: true,
                 success: function(res) {
                     successCallback(res);
                 },

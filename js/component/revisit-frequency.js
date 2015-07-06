@@ -6,8 +6,8 @@
         init: function(context) {
             var s = this.settings;
             var chartContainer = $(s.target).find('#revisit-frequency-chart');
+            app['revisit-frequency'].fetchData('getRevisitFrequency', chartContainer);
 
-            app['revisit-frequency'].renderChart(chartContainer);
 
 
         },
@@ -15,7 +15,32 @@
             var self = this;
             app['revisit-frequency'].init();
         },
-        renderChart: function(chartContainer) {
+        fetchData: function(url, chartContainer) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                var dataObj = new Array();
+
+                console.log(res);
+
+                $.each(res, function(i, v) {
+                    var itemObj = new Array();
+                    itemObj.push(this['category']);
+                    itemObj.push(this['COUNT(mac_address)']);
+                    dataObj.push(itemObj);
+                });
+                app['revisit-frequency'].renderChart(chartContainer, dataObj);
+
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
+        },
+        renderChart: function(chartContainer, dataObj) {
             // Highcharts.setOptions({
             //         colors: ['#00b0f0', '#f7d348', '#92d050', '#0070c0', '#ff6d60', '#7030a0']
             //     });
@@ -26,7 +51,7 @@
                         fontFamily: 'Arial'
                     }
                 },
-                colors: ['#b4c7e7', '#0070c0', '#55c6f2', '#a9d18e', '#f7d348', '#767171'],
+                colors: ['#b4c7e7', '#0070c0', '#a9d18e', '#55c6f2', '#f7d348', '#767171'],
                 title: {
                     text: ''
                 },
@@ -52,7 +77,7 @@
                 },
                 tooltip: {
                     formatter: function() {
-                        return '<b>' + this.point.name + '</b>: ' + this.y + ' %';
+                        return '<b>' + this.point.name + '</b>: ' + this.y ;
                     }
                 },
                 legend: {
@@ -69,15 +94,8 @@
                     }
                 },
                 series: [{
-                    name: 'Browsers',
-                    data: [
-                        ["0-2 weeks", 10],
-                        ["2-4 weeks", 15],
-                        ["1-3 months", 10],
-                        ["3-6 months", 35],
-                        ["6-1 months", 10],
-                        ["> 1 year", 20]
-                    ],
+                    name: 'Revisit Freq.',
+                    data: dataObj,
                     size: '100%',
                     innerSize: '60%',
                     showInLegend: true,

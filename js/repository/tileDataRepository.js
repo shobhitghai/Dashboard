@@ -5,6 +5,7 @@ var tileDataRepository = function(connection, sendResponseCallback, filterParam)
     this.filterParam = filterParam;
     this.sendResponseCallback = sendResponseCallback;
     this.responseObject = {};
+    this.localObject = {};
 }
 
 var repo = tileDataRepository.prototype;
@@ -66,6 +67,8 @@ repo._getCurrentStoreFrontCount = function() {
             self.sendResponseCallback(self.responseObject);
         } else {
             self.responseObject.storefrontData = {};
+            self.localObject.storefrontData = {};
+            self.localObject.storefrontData.currentVal = data[0]['count(mac_address)'];
             self.responseObject.storefrontData.current = (data[0]['count(mac_address)'] / self.responseObject.opportunityData.current) * 100;
 
             self._getStoreFrontComparison();
@@ -85,6 +88,7 @@ repo._getStoreFrontComparison = function() {
             self.sendResponseCallback(self.responseObject);
 
         } else {
+            self.localObject.storefrontData.comparisonVal = data[0]['count(mac_address)'];
             var percent = ((self.responseObject.storefrontData.current - (data[0]['count(mac_address)'] * 100 / self.responseObject.opportunityData.comparisonNumber)) / (data[0]['count(mac_address)'] * 100 / self.responseObject.opportunityData.comparisonNumber)) * 100;
             self.responseObject.storefrontData.comparison = percent;
             self._getDwellTimeCount();
@@ -135,7 +139,8 @@ repo._getDwellTimeComparison = function() {
 
 repo._getRepeatCustomerCount = function() {
     var self = this;
-    var query = "select count(mac_address) from customer_tracker.t_store_visit where " + constants.getValue("repeat_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and store_id = " + this.filterParam.storeName + " and new_customer_flag = 0";
+    var query = "select sum(rc.cnt_mac_address) from(select visit_date, count(distinct mac_address) as cnt_mac_address from customer_tracker.t_store_visit where  " + constants.getValue("repeat_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and store_id = " + this.filterParam.storeName + " and new_customer_flag = 0 group by visit_date) as rc";
+    // console.log(query); 
     this.connection.query(query, function(err, data) {
 
         if (err) {
@@ -143,8 +148,12 @@ repo._getRepeatCustomerCount = function() {
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
+            // console.log(data);
+            // console.log(data[0]['rc']);
+            self.localObject.repeatCustomer = {};
             self.responseObject.repeatCustomer = {};
-            self.responseObject.repeatCustomer.current = data[0]['count(mac_address)'];
+            self.localObject.repeatCustomer.currentVal = data[0]['sum(rc.cnt_mac_address)'];
+            self.responseObject.repeatCustomer.current = data[0]['sum(rc.cnt_mac_address)'] / self.localObject.storefrontData.currentVal;
 
             self._getRepeatCustomerComparison();
         }
@@ -154,7 +163,7 @@ repo._getRepeatCustomerCount = function() {
 
 repo._getRepeatCustomerComparison = function() {
     var self = this;
-    var query = "select count(mac_address) from customer_tracker.t_store_visit where " + constants.getValue("repeat_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and store_id = " + this.filterParam.storeName + " and new_customer_flag = 0";
+    var query = "select sum(rc.cnt_mac_address) from(select visit_date, count(distinct mac_address) as cnt_mac_address from customer_tracker.t_store_visit where " + constants.getValue("repeat_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and store_id = " + this.filterParam.storeName + " and new_customer_flag = 0 group by visit_date) as rc";
 
     this.connection.query(query, function(err, data) {
 
@@ -162,7 +171,8 @@ repo._getRepeatCustomerComparison = function() {
             console.log(err)
             self.responseObject.isError = true;
         } else {
-            var percent = ((self.responseObject.repeatCustomer.current - data[0]['count(mac_address)']) / data[0]['count(mac_address)']) * 100;
+            // console.log(data[0]['sum(rc.cnt_mac_address)']);
+            var percent = ((self.localObject.repeatCustomer.currentVal / self.localObject.storefrontData.currentVal) - (data[0]['sum(rc.cnt_mac_address)'] / self.localObject.storefrontData.comparisonVal)) / (data[0]['sum(rc.cnt_mac_address)'] / self.localObject.storefrontData.comparisonVal);
             self.responseObject.repeatCustomer.comparison = percent;
         }
 

@@ -21,8 +21,6 @@
                 var dataObj = new Array();
                 var otherObj = ['Others', 0];
 
-                console.log(res);
-
                 $.each(res, function(i, v) {
                     if (i < 5) {
                         var itemObj = new Array();

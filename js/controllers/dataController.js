@@ -23,7 +23,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getStoreDetails", function(req, res) {
         self._setResponseHeader(res);
 
-        var query = "select name, city from customer_tracker.t_store_details;"
+        var query = "select name, city, brand_id from customer_tracker.t_store_details;"
         connection.query(query, function(err, data) {
 
             if (err) {
@@ -139,7 +139,6 @@ dataController.prototype.handleRoutes = function(router, connection) {
             if (err) {
                 self._sendErrorResponse(res);
             } else {
-                console.log(data)
                 res.end(JSON.stringify(data));
             }
         })
@@ -157,6 +156,22 @@ dataController.prototype.handleRoutes = function(router, connection) {
                 self._sendErrorResponse(res);
             } else {
                 console.log(data)
+                res.end(JSON.stringify(data));
+            }
+        })
+
+    });
+
+    /* Get revisit frequency */
+
+    router.get("/getRevisitFrequency", function(req, res) {
+        self._setResponseHeader(res);
+
+        var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate GROUP BY category ORDER BY category_order;"
+        connection.query(query, function(err, data) {
+            if (err) {
+                self._sendErrorResponse(res);
+            } else {
                 res.end(JSON.stringify(data));
             }
         })

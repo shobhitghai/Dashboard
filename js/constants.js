@@ -18,14 +18,14 @@ var constants = function() {
         current_Like_Day: 'DATE(first_seen) = DATE(NOW())',
         compare_Like_Day: 'first_seen <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(first_seen) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
 
-        repeat_current_Consecutive_Day: 'DATE(left_store) = DATE(NOW())',
-        repeat_current_Consecutive_Week: 'DATE(left_store) <= DATE(NOW()) and WEEK(left_store) = WEEK(NOW()) and YEAR(left_store) = YEAR(NOW())',
-        repeat_current_Consecutive_Month: 'DATE(left_store) <= DATE(NOW()) and MONTH(left_store) = MONTH(NOW()) and YEAR(left_store) = YEAR(NOW())',
-        repeat_compare_Consecutive_Day: 'left_store <= DATE_SUB(NOW(),INTERVAL 1 DAY) and DATE(left_store) = DATE(DATE_SUB(NOW(),INTERVAL 1 DAY))',
-        repeat_compare_Consecutive_Week: 'left_store <= DATE_SUB(NOW(),INTERVAL 1 WEEK) and WEEK(left_store) = WEEK(DATE_SUB(NOW(),INTERVAL 1 WEEK)) and YEAR(left_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK))',
-        repeat_compare_Consecutive_Month: 'left_store <= DATE_SUB(NOW(),INTERVAL 1 MONTH) and MONTH(left_store) = MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and YEAR(left_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 MONTH))',
-        repeat_current_Like_Day: 'DATE(left_store) = DATE(NOW())',
-        repeat_compare_Like_Day: 'left_store <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(left_store) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
+        repeat_current_Consecutive_Day: 'DATE(entered_store) = DATE(NOW())',
+        repeat_current_Consecutive_Week: 'DATE(entered_store) <= DATE(NOW()) and WEEK(entered_store) = WEEK(NOW()) and YEAR(entered_store) = YEAR(NOW())',
+        repeat_current_Consecutive_Month: 'DATE(entered_store) <= DATE(NOW()) and MONTH(entered_store) = MONTH(NOW()) and YEAR(entered_store) = YEAR(NOW())',
+        repeat_compare_Consecutive_Day: 'entered_store <= DATE_SUB(NOW(),INTERVAL 1 DAY) and DATE(entered_store) = DATE(DATE_SUB(NOW(),INTERVAL 1 DAY))',
+        repeat_compare_Consecutive_Week: 'entered_store <= DATE_SUB(NOW(),INTERVAL 1 WEEK) and WEEK(entered_store) = WEEK(DATE_SUB(NOW(),INTERVAL 1 WEEK)) and YEAR(entered_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK))',
+        repeat_compare_Consecutive_Month: 'entered_store <= DATE_SUB(NOW(),INTERVAL 1 MONTH) and MONTH(entered_store) = MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and YEAR(entered_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 MONTH))',
+        repeat_current_Like_Day: 'DATE(entered_store) = DATE(NOW())',
+        repeat_compare_Like_Day: 'entered_store <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(entered_store) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
 
 
 

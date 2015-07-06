@@ -69,6 +69,7 @@ function getStoreListData(initModules) {
 
     function successCallback(res) {
         var res = $.parseJSON(res);
+        console.log(res)
         var dropdownMenu = storeDropdown.find('.dropdown-menu');
         var storeSelected = storeDropdown.find('.store-selected .selected-value');
 
