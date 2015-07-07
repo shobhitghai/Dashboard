@@ -4,6 +4,7 @@ tileDataRepository = require("../repository/tileDataRepository");
 shopperEngagementRepository = require("../repository/shopperEngagementRepository");
 campaignImpactRepository = require("../repository/campaignImpactRepository");
 storeFrontRepository = require("../repository/storeFrontRepository");
+crossVisitRepository = require("../repository/crossVisitRepository");
 
 function dataController(router, connection) {
     var self = this;
@@ -167,7 +168,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRevisitFrequency", function(req, res) {
         self._setResponseHeader(res);
 
-        var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate GROUP BY category ORDER BY category_order;"
+        var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate where store_id = " + req.query.storeName + " GROUP BY category, store_id ORDER BY category_order;"
+        console.log(query)
         connection.query(query, function(err, data) {
             if (err) {
                 self._sendErrorResponse(res);
@@ -177,6 +179,26 @@ dataController.prototype.handleRoutes = function(router, connection) {
         })
 
     });
+
+    /* Get store front modification data */
+
+    router.get("/getCrossVisitData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new crossVisitRepository(connection, sendResponse, req.query);
+
+        repository.getData();
+
+    });
+
 
 
 }

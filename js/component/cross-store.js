@@ -7,7 +7,9 @@
             var s = this.settings;
             var chartContainer = $(s.target).find('#cross-store-chart');
 
-            app['cross-store'].renderChart(chartContainer);
+            app['cross-store'].fetchData('getCrossVisitData', chartContainer);
+
+
 
 
         },
@@ -15,7 +17,41 @@
             var self = this;
             app['cross-store'].init();
         },
-        renderChart: function(chartContainer) {
+        fetchData: function(url, chartContainer) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                res = res.crossVisit;
+                var dataObj = [{
+                    y: 0,
+                    color: '#a9d18e'
+                }, {
+                    y: 0,
+                    color: '#55c6f2'
+                }];
+
+                console.log(res);
+
+                $.each(res, function(i, v) {
+                    if (i == 'store') {
+                        dataObj[0].y = parseFloat(v);
+                    } else {
+                        dataObj[1].y = parseFloat(v);
+                    }
+
+                });
+                app['cross-store'].renderChart(chartContainer, dataObj);
+
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, {
+                storeName: window.storeDetail.name
+            }, successCallback, errorCallback)
+        },
+        renderChart: function(chartContainer, dataObj) {
             chartContainer.highcharts({
                 chart: {
                     type: 'column',
@@ -28,7 +64,7 @@
                 },
                 xAxis: {
                     categories: [
-                        'DLF Vasant Kunj',
+                        'Store',
                         'Brand Average'
                     ],
                     crosshair: true
@@ -48,14 +84,7 @@
                 },
                 series: [{
                     name: 'Cross-store',
-                    data: [{
-                        y: 49.9,
-                        color: '#a9d18e'
-                    }, {
-                        y: 71.5,
-                        color: '#55c6f2'
-                    }]
-
+                    data: dataObj
                 }],
                 credits: {
                     enabled: false

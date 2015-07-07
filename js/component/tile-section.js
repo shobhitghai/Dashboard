@@ -113,7 +113,7 @@
 
             $('.section-customers').html(this.tile_repeat_cust({
                 'tile-name': 'Repeat Customers',
-                'tile-percent': repeatCustomer['current'] || 'NA',
+                'tile-percent': repeatCustomer['current'].toFixed(1) || 'NA',
                 'tile-percent-change': (repeatCustomer['comparison'] ?
                     app['tile-section']._formatComparisonPercent(repeatCustomer['comparison'].toFixed(1)) : 'NA') + '%',
                 'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
