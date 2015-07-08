@@ -15,19 +15,17 @@
             var s = this.settings;
 
             s.metric.storeName = window.storeDetail.name;
-            app['tile-section']._fetchData('getTilesData', s.metric);
+            app['tile-section']._fetchData('getTilesData', s.metric, true);
 
-            $(s.target).find('.btn-metric[data-metric-comparison]').on('click', function() {
+            $(s.target).find('.btn-metric').off().on('click', function() {
+
                 if ($(this).attr('data-metric-comparison') == 'Like') {
                     $(s.target).find('.grp-timeline .btn-metric[data-metric-period != "Day"]').removeClass('active').addClass('disabled');
                     $(s.target).find('.grp-timeline .btn-metric[data-metric-period="Day"]').addClass('active');
-                } else {
+                } else if($(this).attr('data-metric-comparison') == 'Consecutive') {
                     $(s.target).find('.grp-timeline .btn-metric[data-metric-period != "Day"]').removeClass('disabled');
                 }
-            });
 
-
-            $(s.target).find('.btn-metric').on('click', function() {
                 if (!$(this).hasClass('active')) {
                     if ($(this).attr('data-metric-comparison')) {
                         s.metric = {
@@ -43,7 +41,7 @@
                         }
                     }
 
-                    app['tile-section']._fetchData('getTilesData', s.metric);
+                    app['tile-section']._fetchData('getTilesData', s.metric, true);
 
                 }
 
@@ -61,7 +59,7 @@
             app['tile-section'].init();
 
         },
-        _fetchData: function(url, metric) {
+        _fetchData: function(url, metric, showLoader) {
             var self = this;
             var s = this.settings;
 
@@ -77,7 +75,7 @@
                 clearInterval(self.ajaxInterval);
             }
 
-            app['ajax-wrapper'].sendAjax(url, metric, successCallback, errorCallback)
+            app['ajax-wrapper'].sendAjax(url, metric, successCallback, errorCallback, showLoader);
 
         },
         _bindTemplate: function(data, metric) {
@@ -113,7 +111,7 @@
 
             $('.section-customers').html(this.tile_repeat_cust({
                 'tile-name': 'Repeat Customers',
-                'tile-percent': repeatCustomer['current'].toFixed(1) || 'NA',
+                'tile-percent': repeatCustomer['current'] ? repeatCustomer['current'].toFixed(1) + '%' : 'NA',
                 'tile-percent-change': (repeatCustomer['comparison'] ?
                     app['tile-section']._formatComparisonPercent(repeatCustomer['comparison'].toFixed(1)) : 'NA') + '%',
                 'tile-period-param': 'vs last ' + app['tile-section']._formatPeriodParam(metric)
