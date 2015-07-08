@@ -287,7 +287,7 @@ function getStoreListData(initModules) {
                 if ($(this).attr('data-metric-comparison') == 'Like') {
                     $(s.target).find('.grp-timeline .btn-metric[data-metric-period != "Day"]').removeClass('active').addClass('disabled');
                     $(s.target).find('.grp-timeline .btn-metric[data-metric-period="Day"]').addClass('active');
-                } else if($(this).attr('data-metric-comparison') == 'Consecutive') {
+                } else if ($(this).attr('data-metric-comparison') == 'Consecutive') {
                     $(s.target).find('.grp-timeline .btn-metric[data-metric-period != "Day"]').removeClass('disabled');
                 }
 
@@ -367,7 +367,7 @@ function getStoreListData(initModules) {
             }));
 
             $('.section-dwellTime').html(this.tile_template({
-                'tile-name': 'Dwell Time (hh:mm)',
+                'tile-name': 'Dwell Time (mm:ss)',
                 'tile-percent': dwellTimeData['current'] ? app['tile-section']._formatDwellTime(dwellTimeData['current'].toFixed(0)) : 'NA',
                 'tile-percent-change': (dwellTimeData['comparison'] ?
                     app['tile-section']._formatComparisonPercent(dwellTimeData['comparison'].toFixed(1)) : 'NA') + '%',
@@ -397,10 +397,11 @@ function getStoreListData(initModules) {
             return data;
         },
         _formatDwellTime: function(seconds) {
-            var hours = parseInt(seconds / 3600) % 24;
+            // var hours = parseInt(seconds / 3600) % 24;
             var minutes = parseInt(seconds / 60) % 60;
+            var sec = parseInt(seconds) % 60;
 
-            return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes);
+            return (minutes < 10 ? "0" + minutes : minutes) + ":" + (sec < 10 ? "0" + sec : sec);
         }
     }
 })(app);
