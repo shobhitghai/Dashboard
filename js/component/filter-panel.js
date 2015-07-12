@@ -52,23 +52,24 @@
             brandArray = brandArray.getUnique();
 
             if (listType != 'city')
-                app['filter-panel'].appendList(cityArray, cityContainer, 'city');
+                app['filter-panel'].appendList(cityArray, cityContainer, 'city', 'by city');
 
             if (listType != 'name')
-                app['filter-panel'].appendList(storeArray, storeContainer, 'name');
+                app['filter-panel'].appendList(storeArray, storeContainer, 'name', 'by store');
 
             if (listType != 'brand_name')
-                app['filter-panel'].appendList(brandArray, brandContainer, 'brand_name');
+                app['filter-panel'].appendList(brandArray, brandContainer, 'brand_name', 'by brand');
 
         },
-        appendList: function(arrayList, container, listType) {
+        appendList: function(arrayList, container, listType, searchText) {
             $.each(arrayList, function(i, val) {
                 container.append('<option>' + val + '</option>');
             });
 
             container.listbox({
                 'searchbar': true,
-                'listType': listType
+                'listType': listType,
+                'searchText': searchText
             });
         },
         filterListSelection: function(res) {

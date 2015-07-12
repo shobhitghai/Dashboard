@@ -75,7 +75,7 @@
         var searchbar = $('<input>')
             .addClass(this.SEARCHBAR_CLASS)
             .appendTo(searchbarWrapper)
-            .attr('placeholder', 'search...');
+            .attr('placeholder', 'search ' + this._settings.searchText);
 
         // set filter handler
         var self = this;
