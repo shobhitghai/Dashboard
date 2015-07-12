@@ -20,8 +20,6 @@
                 var res = $.parseJSON(res);
                 var dataObj = new Array();
 
-                console.log(res);
-
                 $.each(res, function(i, v) {
                     var itemObj = new Array();
                     itemObj.push(this['category']);

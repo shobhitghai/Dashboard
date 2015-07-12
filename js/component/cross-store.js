@@ -29,8 +29,6 @@
                     color: '#55c6f2'
                 }];
 
-                console.log(res);
-
                 $.each(res, function(i, v) {
                     if (i == 'store') {
                         dataObj[0].y = parseFloat(v);

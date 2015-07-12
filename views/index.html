@@ -16,7 +16,7 @@
     <!-- Custom Fonts -->
     <link href="../css/lib/font-awesome.css" rel="stylesheet" type="text/css">
     <link href="../css/lib/nprogress.css" rel="stylesheet" type="text/css">
-
+    <link href="../css/lib/listbox.css" rel="stylesheet" type="text/css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -27,17 +27,19 @@
 
 <body>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-static-top mod-navbar" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-fixed-top mod-navbar" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.html"><i class="i-logo"></i></a>
             </div>
             <ul class="nav navbar-top-links navbar-right">
+                <div class="filter-modal">
+                    <span data-toggle="modal" data-target="#filterModal" class="filter-selection">Filter panel 
+                    <span class="fa fa-filter fa-fw"></span>
+                    </span>
+                </div>
                 <li class="dropdown store-dropdown">
                     <a href="#" class="dropdown-toggle store-selected" data-toggle="dropdown" role="button" aria-expanded="false"><span class="selected-value"></span><span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <!-- <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li> -->
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -48,6 +50,34 @@
             </ul>
         </nav>
         <div id="page-wrapper">
+            <div class="mod-filter-panel">
+                <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filter panel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Filter panel</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <select id="city-dd" multiple="" style="display: none;">
+                                        </select>
+                                        <select id="name-dd" multiple="" style="display: none;">
+                                        </select>
+                                        <select id="brand-dd" multiple="" style="display: none;">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                                <button type="button" class="btn btn-default">Reset filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="mod-tile-section panel">
                 <div class="row tab-selection-row">
                     <div class="col-xs-12">
@@ -110,7 +140,7 @@
                         </div> -->
                     </div>
                     <div class="col-xs-3 section-customers">
-                       <!--  <div class="panel panel-primary">
+                        <!--  <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-5 tile-left-section">
@@ -573,8 +603,8 @@
     <script src="../js/lib/bootstrap-datepicker.js"></script>
     <script src="../js/lib/highcharts.js"></script>
     <script src="../js/lib/handlebars.runtime.js"></script>
-    <script src="../js/build/sb-admin-2.js"></script>
     <script src="../js/build/templates.js"></script>
+    <script src="../js/lib/listbox.js"></script>
     <script src="../js/build/app.js"></script>
 </body>
 

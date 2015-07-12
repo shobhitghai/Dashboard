@@ -24,10 +24,13 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getStoreDetails", function(req, res) {
         self._setResponseHeader(res);
 
-        var query = "select name, city, brand_id from customer_tracker.t_store_details;"
+        // var query = "select name, city, brand_id from customer_tracker.t_store_details;"
+        // var query = "select * from customer_tracker.t_store_details;"
+        var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id);"
+        
+
         connection.query(query, function(err, data) {
-            console.log(err);
-            console.log(data)
+
             if (err) {
                 console.log(err)
                 self._sendErrorResponse(res);

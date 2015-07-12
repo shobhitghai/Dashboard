@@ -2,7 +2,7 @@ module.exports = function(grunt) {
     var components = [
         'js/component/base.js',
         'js/component/ajax-wrapper.js',
-        'js/component/navbar.js',
+        'js/component/filter-panel.js',
         'js/component/tile-section.js',
         'js/component/shopper-engagement.js',
         'js/component/shopper-profile.js',

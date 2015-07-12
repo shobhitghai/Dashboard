@@ -5,6 +5,17 @@
     }
     .navbar-top-links {
         margin-right: 0;
+        .filter-modal {
+            display: inline-block;
+            .filter-selection {
+                font-size: 16px;
+                color: #337ab7;
+                margin: 10px;
+                .fa{
+                    font-size: 1.1em;
+                }
+            }
+        }
         li {
             display: inline-block;
             &:last-child {
@@ -30,6 +41,15 @@
                     white-space: normal;
                 }
             }
+        }
+    }
+}
+
+.mod-filter-panel {
+    .lbjs {
+        display: inline-block;
+        .lbjs-item[data-disabled="true"] {
+            color: gray;
         }
     }
 }

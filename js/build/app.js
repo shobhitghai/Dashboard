@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-08 */
+/*! Fashion_Dashboard 1.0.0 2015-07-12 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -58,6 +58,19 @@ window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
     }
 })();
 
+//get unique global method
+Array.prototype.getUnique = function() {
+    var u = {},
+        a = [];
+    for (var i = 0, l = this.length; i < l; ++i) {
+        if (u.hasOwnProperty(this[i])) {
+            continue;
+        }
+        a.push(this[i]);
+        u[this[i]] = 1;
+    }
+    return a;
+}
 
 $(function() {
     getStoreListData(app.util.initModules);
@@ -71,12 +84,12 @@ function getStoreListData(initModules) {
 
     function successCallback(res) {
         var res = $.parseJSON(res);
-        console.log(res)
+        // console.log(res)
         var dropdownMenu = storeDropdown.find('.dropdown-menu');
         var storeSelected = storeDropdown.find('.store-selected .selected-value');
 
         $.each(res, function(i, v) {
-            var id = '10000' + (i+1);
+            var id = '10000' + (i + 1);
             dropdownMenu.append('<li><a data-id=' + id + ' href="javascript:void(0)">' + this.name + '</span></a></li>')
         });
 
@@ -222,46 +235,143 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/navbar.js
-// (function() {
-//     app['navbar'] = {
-//         settings: {
-//             target: '.mod-navbar'
-//         },
-//         init: function(context) {
-//             var s = this.settings;
+//####js/component/filter-panel.js
+(function() {
+    app['filter-panel'] = {
+        settings: {
+            target: '.mod-filter-panel'
+        },
+        init: function(context) {
+            var s = this.settings;
+            app['filter-panel'].fetchData();
 
-//             var storeDropdown = $(s.target).find('.store-dropdown');
+        },
+        fetchData: function(url, storeDropdown) {
 
-//             app['navbar'].fetchData('getStoreDetails', storeDropdown);
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                app['filter-panel'].renderList(res, '');
+                app['filter-panel'].filterListSelection(res);
+            }
 
-//         },
-//         fetchData: function(url, storeDropdown) {
-//             function successCallback(res) {
-//                 var res = $.parseJSON(res);
-//                 var dropdownMenu = storeDropdown.find('.dropdown-menu');
-//                 var storeSelected = storeDropdown.find('.store-selected .selected-value');
+            function errorCallback(err) {
+                console.log(err);
+            }
 
-//                 $.each(res, function(i, v) {
-//                     dropdownMenu.append('<li><a href="javascript:void(0)">' + this.name + '</a></li>')
-//                 });
+            $.ajax({
+                url: hostUrl + 'getStoreDetails',
+                success: function(res) {
+                    successCallback(res);
+                },
+                error: function(err) {
+                    errorCallback(err);
+                }
+            })
 
-//                 storeSelected.text(res[0].name);
-//                 dropdownMenu.find('li a').on('click', function(e) {
-//                     e.preventDefault;
-//                     storeSelected.text($(this).text());
-//                 })
-//             }
+        },
+        renderList: function(res, listType) {
+            var s = this.settings;
+            var cityContainer = $(s.target).find('#city-dd');
+            var storeContainer = $(s.target).find('#name-dd');
+            var brandContainer = $(s.target).find('#brand-dd');
 
-//             function errorCallback(err) {
-//                 console.log('navbar' + err || 'err');
-//             }
+            var cityArray = new Array();
+            var storeArray = new Array();
+            var brandArray = new Array();
 
-//             app['ajax-wrapper'].sendAjax(url, '', successCallback, errorCallback)
+            $.each(res, function(i, v) {
+                cityArray.push(this.city);
+                storeArray.push(this.name);
+                brandArray.push(this.brand_name);
+            })
 
-//         }
-//     }
-// })(app);
+            cityArray = cityArray.getUnique();
+            storeArray = storeArray.getUnique();
+            brandArray = brandArray.getUnique();
+
+            if (listType != 'city')
+                app['filter-panel'].appendList(cityArray, cityContainer, 'city');
+
+            if (listType != 'name')
+                app['filter-panel'].appendList(storeArray, storeContainer, 'name');
+
+            if (listType != 'brand_name')
+                app['filter-panel'].appendList(brandArray, brandContainer, 'brand_name');
+
+        },
+        appendList: function(arrayList, container, listType) {
+            $.each(arrayList, function(i, val) {
+                container.append('<option>' + val + '</option>');
+            });
+
+            container.listbox({
+                'searchbar': true,
+                'listType': listType
+            });
+        },
+        filterListSelection: function(res) {
+            var obj = new Array();
+
+            $('.lbjs-item').on('click', function() {
+                var self = this;
+                if ($(self).attr('selected')) {
+                    $(self).attr('data-selected', true);
+                    $(self).attr('data-disabled', false);
+                } else {
+                    $(self).attr('data-selected', false);
+                }
+
+                var type = $(self).attr('data-list-Type');
+                var value = $(self).text();
+
+                $.each(res, function(i, v) {
+                    if (this[type] === value) {
+                        if ($(self).attr('selected')) {
+                            obj.push(this);
+                        } else {
+                            obj.pop(this);
+                        }
+                    }
+                })
+
+                console.log(obj, type);
+                app['filter-panel'].enableDisableListSelection(obj, type);
+            });
+        },
+        enableDisableListSelection: function(obj, type) {
+            function disbaleItem(key) {
+                $.each($('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
+                    var self = this;
+                    // if (!$(self).attr('data-selected')) {
+                    $(self).attr('data-disabled', true);
+                    // }
+
+                    $.each(obj, function(ind, val) {
+                        if ($(self).text() === this[key]) {
+                            $(self).attr('data-disabled', false);
+                            $(self).attr('data-selected', true);
+                        };
+                    })
+                })
+            }
+
+            if (type == 'city') {
+                disbaleItem('name');
+                disbaleItem('brand_name');
+            }
+
+            if (type == 'name') {
+                disbaleItem('city');
+                disbaleItem('brand_name');
+            }
+
+            if (type == 'brand_name') {
+                disbaleItem('city');
+                disbaleItem('name');
+            }
+        }
+    }
+})(app);
 //####js/component/tile-section.js
 (function() {
     app['tile-section'] = {
@@ -641,8 +751,6 @@ function getStoreListData(initModules) {
                 var res = $.parseJSON(res);
                 var dataObj = new Array();
 
-                console.log(res);
-
                 $.each(res, function(i, v) {
                     var itemObj = new Array();
                     itemObj.push(this['category']);
@@ -762,8 +870,6 @@ function getStoreListData(initModules) {
                     y: 0,
                     color: '#55c6f2'
                 }];
-
-                console.log(res);
 
                 $.each(res, function(i, v) {
                     if (i == 'store') {

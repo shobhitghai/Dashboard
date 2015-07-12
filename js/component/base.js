@@ -56,6 +56,19 @@ window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
     }
 })();
 
+//get unique global method
+Array.prototype.getUnique = function() {
+    var u = {},
+        a = [];
+    for (var i = 0, l = this.length; i < l; ++i) {
+        if (u.hasOwnProperty(this[i])) {
+            continue;
+        }
+        a.push(this[i]);
+        u[this[i]] = 1;
+    }
+    return a;
+}
 
 $(function() {
     getStoreListData(app.util.initModules);
@@ -69,12 +82,12 @@ function getStoreListData(initModules) {
 
     function successCallback(res) {
         var res = $.parseJSON(res);
-        console.log(res)
+        // console.log(res)
         var dropdownMenu = storeDropdown.find('.dropdown-menu');
         var storeSelected = storeDropdown.find('.store-selected .selected-value');
 
         $.each(res, function(i, v) {
-            var id = '10000' + (i+1);
+            var id = '10000' + (i + 1);
             dropdownMenu.append('<li><a data-id=' + id + ' href="javascript:void(0)">' + this.name + '</span></a></li>')
         });
 
