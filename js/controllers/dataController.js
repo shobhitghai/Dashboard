@@ -26,7 +26,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
         var query = "select name, city, brand_id from customer_tracker.t_store_details;"
         connection.query(query, function(err, data) {
-
+            console.log(err);
+            console.log(data)
             if (err) {
                 console.log(err)
                 self._sendErrorResponse(res);
