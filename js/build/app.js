@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-12 */
+/*! Fashion_Dashboard 1.0.0 2015-07-13 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -244,12 +244,15 @@ function getStoreListData(initModules) {
         init: function(context) {
             var s = this.settings;
             app['filter-panel'].fetchData();
+            app['filter-panel'].selectionHandler();
 
         },
         fetchData: function(url, storeDropdown) {
+            var self = this;
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
+                self.response = res;
                 app['filter-panel'].renderList(res, '');
                 app['filter-panel'].filterListSelection(res);
             }
@@ -297,6 +300,23 @@ function getStoreListData(initModules) {
 
             if (listType != 'brand_name')
                 app['filter-panel'].appendList(brandArray, brandContainer, 'brand_name', 'by brand');
+
+        },
+        selectionHandler: function(){
+            var self= this;
+            var s = this.settings;
+            var panel = $(s.target);
+
+            panel.find('.btn-filter').on('click',function(){
+                console.log('ok')
+            });
+
+            panel.find('.btn-reset-filter').on('click',function(){
+                panel.find('.lbjs').remove();
+                panel.find('.modal-body select option').remove();
+                app['filter-panel'].renderList(self.response, '');
+                app['filter-panel'].filterListSelection(self.response);
+            });
 
         },
         appendList: function(arrayList, container, listType, searchText) {
