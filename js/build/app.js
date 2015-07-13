@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-13 */
+/*! Fashion_Dashboard 1.0.0 2015-07-14 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -252,6 +252,7 @@ function getStoreListData(initModules) {
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
+                console.log(res)
                 self.response = res;
                 app['filter-panel'].renderList(res, '');
                 app['filter-panel'].filterListSelection(res);
@@ -302,16 +303,18 @@ function getStoreListData(initModules) {
                 app['filter-panel'].appendList(brandArray, brandContainer, 'brand_name', 'by brand');
 
         },
-        selectionHandler: function(){
-            var self= this;
+        selectionHandler: function() {
+            var self = this;
             var s = this.settings;
             var panel = $(s.target);
 
-            panel.find('.btn-filter').on('click',function(){
+            panel.find('.btn-filter').on('click', function() {
                 console.log('ok')
+                
+                console.log(app['filter-panel'].getStoreId('Linking Road Store'));
             });
 
-            panel.find('.btn-reset-filter').on('click',function(){
+            panel.find('.btn-reset-filter').on('click', function() {
                 panel.find('.lbjs').remove();
                 panel.find('.modal-body select option').remove();
                 app['filter-panel'].renderList(self.response, '');
@@ -390,6 +393,30 @@ function getStoreListData(initModules) {
                 disbaleItem('city');
                 disbaleItem('name');
             }
+        },
+        getStoreId: function(name) {
+            var self = this;
+            var id;
+            $.each(self.response, function(i, v) {
+                if(this['name'] == name){
+                    id = this['store_id'];
+                    return false;
+                }
+            });
+
+            return id;
+        },
+        getBrandId: function(brand){
+            var self = this;
+            var id;
+            $.each(self.response, function(i, v) {
+                if(this['brand_name'] == name){
+                    id = this['brand_id'];
+                    return false;
+                }
+            });
+
+            return id;
         }
     }
 })(app);
