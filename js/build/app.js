@@ -307,11 +307,26 @@ function getStoreListData(initModules) {
             var self = this;
             var s = this.settings;
             var panel = $(s.target);
-
+            
             panel.find('.btn-filter').on('click', function() {
-                console.log('ok')
+                var selectedCityArr = [];
+                var selectedStoreArr = [];
+                var selectedBrandArr = [];
+
+                var selection = $('.lbjs-item[selected=selected]');
+
+                $.each(selection, function(i,v){
+                    if($(this).data('list-type') == 'city'){
+                        selectedCityArr.push($(this).text());
+                    }else if($(this).data('list-type') == 'name'){
+                        selectedStoreArr.push(app['filter-panel'].getStoreId($(this).text()));
+                    }else if($(this).data('list-type') == 'brand_name'){
+                        selectedBrandArr.push(app['filter-panel'].getBrandId($(this).text()));
+                    }
+                });
                 
-                console.log(app['filter-panel'].getStoreId('Linking Road Store'));
+                console.log(selectedCityArr, selectedStoreArr.getUnique(), selectedBrandArr.getUnique());
+                // console.log(app['filter-panel'].getStoreId('Linking Road Store'));
             });
 
             panel.find('.btn-reset-filter').on('click', function() {
@@ -410,7 +425,7 @@ function getStoreListData(initModules) {
             var self = this;
             var id;
             $.each(self.response, function(i, v) {
-                if(this['brand_name'] == name){
+                if(this['brand_name'] == brand){
                     id = this['brand_id'];
                     return false;
                 }

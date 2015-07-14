@@ -16,7 +16,7 @@ var constants = function() {
         fs_compare_Consecutive_Week: 'first_seen <= DATE_SUB(NOW(),INTERVAL 1 WEEK) and WEEK(first_seen) = WEEK(DATE_SUB(NOW(),INTERVAL 1 WEEK)) and YEAR(first_seen) = YEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK))',
         fs_compare_Consecutive_Month: 'first_seen <= DATE_SUB(NOW(),INTERVAL 1 MONTH) and MONTH(first_seen) = MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and YEAR(first_seen) = YEAR(DATE_SUB(NOW(),INTERVAL 1 MONTH))',
         fs_current_Like_Day: 'DATE(first_seen) = DATE(NOW())',
-        fs_compare_Like_Day: 'first_seen <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(first_seen) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
+        fs_compare_Like_Day: 'first_seen <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(first_seen) = DATE(DATE_SUB(NOW(),INTERVAL 7 DAY))',
 
         es_current_Consecutive_Day: 'DATE(entered_store) = DATE(NOW())',
         es_current_Consecutive_Week: 'DATE(entered_store) <= DATE(NOW()) and WEEK(entered_store) = WEEK(NOW()) and YEAR(entered_store) = YEAR(NOW())',
@@ -25,7 +25,7 @@ var constants = function() {
         es_compare_Consecutive_Week: 'entered_store <= DATE_SUB(NOW(),INTERVAL 1 WEEK) and WEEK(entered_store) = WEEK(DATE_SUB(NOW(),INTERVAL 1 WEEK)) and YEAR(entered_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK))',
         es_compare_Consecutive_Month: 'entered_store <= DATE_SUB(NOW(),INTERVAL 1 MONTH) and MONTH(entered_store) = MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) and YEAR(entered_store) = YEAR(DATE_SUB(NOW(),INTERVAL 1 MONTH))',
         es_current_Like_Day: 'DATE(entered_store) = DATE(NOW())',
-        es_compare_Like_Day: 'entered_store <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(entered_store) = DATE_SUB(NOW(),INTERVAL 7 DAY)',
+        es_compare_Like_Day: 'entered_store <= DATE_SUB(NOW(),INTERVAL 7 DAY) and DATE(entered_store) = date(DATE_SUB(NOW(),INTERVAL 7 DAY))',
 
 
 
