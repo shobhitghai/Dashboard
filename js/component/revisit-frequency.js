@@ -35,7 +35,8 @@
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                storeName: window.storeDetail.name,
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {

@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var chalk = require('chalk');
 constants = require('../constants.js');
 tileDataRepository = require("../repository/tileDataRepository");
 shopperEngagementRepository = require("../repository/shopperEngagementRepository");
@@ -27,7 +27,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
         // var query = "select name, city, brand_id from customer_tracker.t_store_details;"
         // var query = "select * from customer_tracker.t_store_details;"
         var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id);"
-        
+
 
         connection.query(query, function(err, data) {
 
@@ -35,10 +35,16 @@ dataController.prototype.handleRoutes = function(router, connection) {
                 console.log(err)
                 self._sendErrorResponse(res);
             } else {
-                console.log(data)
                 res.end(JSON.stringify(data));
             }
         })
+
+        // var param = {
+        //     storeId: ['100001', '100002', '10003'],
+        //     city: ['Mumbai', 'mumbai'],
+        //     brandId: ['crosslink']
+        // }
+
 
     });
 
@@ -85,7 +91,13 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRightNowData", function(req, res) {
         self._setResponseHeader(res);
 
-        var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and store_id = " + req.query.storeName + " group by walk_in_flag";
+        if (req.query.filterParamObj) {
+            var queryFilterParam = self._getQueryParam(req.query.filterParamObj);
+            var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by walk_in_flag";
+        } else {
+            var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and store_id = " + req.query.storeName + " group by walk_in_flag";
+        }
+
         connection.query(query, function(err, data) {
             // console.log(data)
             if (err) {
@@ -139,7 +151,14 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     router.get("/getHourOptimizationData", function(req, res) {
         self._setResponseHeader(res);
-        var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit where date(first_seen) < date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) and store_id = " + req.query.storeName + " group by visit_date, hour) as ty where hour > 2 and hour < 18 group by hour "
+
+        if (req.query.filterParamObj) {
+            var queryFilterParam = self._getQueryParam(req.query.filterParamObj);
+            var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit where date(first_seen) < date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) and " + queryFilterParam + " group by visit_date, hour) as ty where hour > 2 and hour < 18 group by hour "
+        } else {
+            var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit where date(first_seen) < date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) and store_id = " + req.query.storeName + " group by visit_date, hour) as ty where hour > 2 and hour < 18 group by hour "
+        }
+
         connection.query(query, function(err, data) {
             if (err) {
                 self._sendErrorResponse(res);
@@ -154,13 +173,18 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     router.get("/getShopperProfile", function(req, res) {
         self._setResponseHeader(res);
-        var query = "select ts.s_profile, count(distinct(tv.mac_address)) from customer_tracker.t_visit tv JOIN customer_tracker.t_shopper_profile ts ON (tv.mac_address = ts.mac_address) where visit_date >= date(date_sub(NOW(), interval 30 day)) and store_id = " + req.query.storeName + " and walk_in_flag =1 and dwell_time < 60*60 and dwell_time > 0 group by ts.s_profile order by count(distinct(tv.mac_address)) desc;"
+
+        if (req.query.filterParamObj) {
+            var queryFilterParam = self._getQueryParam(req.query.filterParamObj);
+            var query = "select ts.s_profile, count(distinct(tv.mac_address)) from customer_tracker.t_visit tv JOIN customer_tracker.t_shopper_profile ts ON (tv.mac_address = ts.mac_address) where visit_date >= date(date_sub(NOW(), interval 30 day)) and " + queryFilterParam + " and walk_in_flag =1 and dwell_time < 60*60 and dwell_time > 0 group by ts.s_profile order by count(distinct(tv.mac_address)) desc;"
+        } else {
+            var query = "select ts.s_profile, count(distinct(tv.mac_address)) from customer_tracker.t_visit tv JOIN customer_tracker.t_shopper_profile ts ON (tv.mac_address = ts.mac_address) where visit_date >= date(date_sub(NOW(), interval 30 day)) and store_id = " + req.query.storeName + " and walk_in_flag =1 and dwell_time < 60*60 and dwell_time > 0 group by ts.s_profile order by count(distinct(tv.mac_address)) desc;"
+        }
 
         connection.query(query, function(err, data) {
             if (err) {
                 self._sendErrorResponse(res);
             } else {
-                console.log(data)
                 res.end(JSON.stringify(data));
             }
         })
@@ -172,13 +196,20 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRevisitFrequency", function(req, res) {
         self._setResponseHeader(res);
 
-        var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate where store_id = " + req.query.storeName + " GROUP BY category, store_id ORDER BY category_order;"
-        console.log(query)
+        if (req.query.filterParamObj) {
+            var queryFilterParam = self._getQueryParam(req.query.filterParamObj);
+            var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate where " + queryFilterParam + " GROUP BY category, store_id ORDER BY category_order;"
+            console.log(chalk.blue(query));
+        } else {
+            var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate where store_id = " + req.query.storeName + " GROUP BY category, store_id ORDER BY category_order;"
+        }
+
         connection.query(query, function(err, data) {
             if (err) {
                 self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));
+                // console.log(data)
             }
         })
 
@@ -206,6 +237,65 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
 
 }
+
+dataController.prototype._getQueryParam = function(param) {
+    var queryObj = {
+        storeId: '',
+        city: '',
+        brandId: ''
+    }
+    var query = '';
+
+    if (param.storeId) {
+        var storeIdPlaceholder = ' store_id in (';
+        var storeIdText = '';
+        for (var i = 0; i < param.storeId.length; i++) {
+            storeIdText = storeIdText + "'" + param.storeId[i] + "'" + ",";
+        }
+        storeIdText = storeIdText.slice(0, -1);
+        storeIdPlaceholder = storeIdPlaceholder + storeIdText + ')';
+        queryObj.storeId = storeIdPlaceholder;
+    }
+
+    if (param.city) {
+        var cityPlaceholder = ' city in (';
+        var cityText = '';
+        for (var i = 0; i < param.city.length; i++) {
+            cityText = cityText + "'" + param.city[i] + "'" + ",";
+        }
+        cityText = cityText.slice(0, -1);
+        cityPlaceholder = cityPlaceholder + cityText + ')';
+        queryObj.city = cityPlaceholder;
+    }
+
+    if (param.brandId) {
+        var brandPlaceholder = ' brand_id in (';
+        var brandText = '';
+        for (var i = 0; i < param.brandId.length; i++) {
+            brandText = brandText + "'" + param.brandId[i] + "'" + ",";
+        }
+        brandText = brandText.slice(0, -1);
+        brandPlaceholder = brandPlaceholder + brandText + ')';
+        queryObj.brandId = brandPlaceholder;
+    }
+
+    if (queryObj.city != '') {
+        query = query + queryObj.city + ' and ';
+    }
+
+    if (queryObj.storeId != '') {
+        query = query + queryObj.storeId + ' and ';
+    }
+
+    if (queryObj.brandId != '') {
+        query = query + queryObj.brandId + ' and '
+    }
+
+    query = query.slice(0, -4);
+
+    return query;
+};
+
 
 dataController.prototype._setResponseHeader = function(res) {
     res.header('Access-Control-Allow-Origin', '*');

@@ -109,7 +109,7 @@ repo._getDwellTimeCount = function() {
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
-            console.log(data[0]['avg(dwell_time)'])
+            // console.log(data[0]['avg(dwell_time)'])
             self.responseObject.dwellTimeData = {};
             self.responseObject.dwellTimeData.current = data[0]['avg(dwell_time)'];
 

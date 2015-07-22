@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-14 */
+/*! Fashion_Dashboard 1.0.0 2015-07-23 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -307,7 +307,7 @@ function getStoreListData(initModules) {
             var self = this;
             var s = this.settings;
             var panel = $(s.target);
-            
+
             panel.find('.btn-filter').on('click', function() {
                 var selectedCityArr = [];
                 var selectedStoreArr = [];
@@ -315,17 +315,30 @@ function getStoreListData(initModules) {
 
                 var selection = $('.lbjs-item[selected=selected]');
 
-                $.each(selection, function(i,v){
-                    if($(this).data('list-type') == 'city'){
+                $.each(selection, function(i, v) {
+                    if ($(this).data('list-type') == 'city') {
                         selectedCityArr.push($(this).text());
-                    }else if($(this).data('list-type') == 'name'){
+                    } else if ($(this).data('list-type') == 'name') {
                         selectedStoreArr.push(app['filter-panel'].getStoreId($(this).text()));
-                    }else if($(this).data('list-type') == 'brand_name'){
+                    } else if ($(this).data('list-type') == 'brand_name') {
                         selectedBrandArr.push(app['filter-panel'].getBrandId($(this).text()));
                     }
                 });
-                
-                console.log(selectedCityArr, selectedStoreArr.getUnique(), selectedBrandArr.getUnique());
+
+                window.filterParamObj = {
+                    storeId: selectedStoreArr,
+                    city: selectedCityArr,
+                    brandId: selectedBrandArr
+                }
+
+                console.log(selectedCityArr, selectedStoreArr, selectedBrandArr);
+
+                $.each(app, function(module, v) {
+                    if (app[module].refreshData) {
+                        app[module].refreshData();
+                    }
+                })
+
                 // console.log(app['filter-panel'].getStoreId('Linking Road Store'));
             });
 
@@ -352,29 +365,35 @@ function getStoreListData(initModules) {
             var obj = new Array();
 
             $('.lbjs-item').on('click', function() {
-                var self = this;
-                if ($(self).attr('selected')) {
-                    $(self).attr('data-selected', true);
-                    $(self).attr('data-disabled', false);
-                } else {
-                    $(self).attr('data-selected', false);
+                if (!($(this).attr('disabled') == 'disabled')) {
+                    var self = this;
+
+                    // $(self).attr('data-selected', true);
+
+                    if ($(self).attr('selected')) {
+                        $(self).attr('data-selected', true);
+                        // $(self).attr('data-disabled', false);
+                    } else {
+                        $(self).attr('data-selected', false);
+                    }
+
+                    var type = $(self).attr('data-list-Type');
+                    var value = $(self).text();
+
+                    $.each(res, function(i, v) {
+                        if (this[type] === value) {
+                            if ($(self).attr('selected')) {
+                                obj.push(this);
+                            } else {
+                                obj.pop(this);
+                            }
+                        }
+                    })
+
+                    console.log(obj, type);
+                    app['filter-panel'].enableDisableListSelection(obj, type);
                 }
 
-                var type = $(self).attr('data-list-Type');
-                var value = $(self).text();
-
-                $.each(res, function(i, v) {
-                    if (this[type] === value) {
-                        if ($(self).attr('selected')) {
-                            obj.push(this);
-                        } else {
-                            obj.pop(this);
-                        }
-                    }
-                })
-
-                console.log(obj, type);
-                app['filter-panel'].enableDisableListSelection(obj, type);
             });
         },
         enableDisableListSelection: function(obj, type) {
@@ -382,12 +401,15 @@ function getStoreListData(initModules) {
                 $.each($('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
                     var self = this;
                     // if (!$(self).attr('data-selected')) {
-                    $(self).attr('data-disabled', true);
+                    // $(self).attr('data-disabled', true);
+                    $(self).attr('disabled', true);
+
                     // }
 
                     $.each(obj, function(ind, val) {
                         if ($(self).text() === this[key]) {
-                            $(self).attr('data-disabled', false);
+                            // $(self).attr('data-disabled', false);
+                            $(self).attr('disabled', false);
                             $(self).attr('data-selected', true);
                         };
                     })
@@ -413,7 +435,7 @@ function getStoreListData(initModules) {
             var self = this;
             var id;
             $.each(self.response, function(i, v) {
-                if(this['name'] == name){
+                if (this['name'] == name) {
                     id = this['store_id'];
                     return false;
                 }
@@ -421,11 +443,11 @@ function getStoreListData(initModules) {
 
             return id;
         },
-        getBrandId: function(brand){
+        getBrandId: function(brand) {
             var self = this;
             var id;
             $.each(self.response, function(i, v) {
-                if(this['brand_name'] == brand){
+                if (this['brand_name'] == brand) {
                     id = this['brand_id'];
                     return false;
                 }
@@ -737,7 +759,8 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                storeName: window.storeDetail.name,
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
@@ -829,7 +852,8 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                storeName: window.storeDetail.name,
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
@@ -951,7 +975,8 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                storeName: window.storeDetail.name,
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
@@ -1137,7 +1162,8 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                storeName: window.storeDetail.name,
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, series) {
@@ -1589,7 +1615,8 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                storeName: window.storeDetail.name,
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
