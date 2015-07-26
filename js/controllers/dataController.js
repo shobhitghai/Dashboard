@@ -6,6 +6,8 @@ shopperEngagementRepository = require("../repository/shopperEngagementRepository
 campaignImpactRepository = require("../repository/campaignImpactRepository");
 storeFrontRepository = require("../repository/storeFrontRepository");
 crossVisitRepository = require("../repository/crossVisitRepository");
+timeTrendRepository = require("../repository/timeTrendRepository");
+
 
 function dataController(router, connection) {
     var self = this;
@@ -201,6 +203,26 @@ dataController.prototype.handleRoutes = function(router, connection) {
         }
 
         var repository = new crossVisitRepository(connection, sendResponse, req.query);
+
+        repository.getData();
+
+    });
+
+
+    /* Get monthly time trend data */
+
+    router.get("/getMonthlyTimeTrendData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new timeTrendRepository(connection, sendResponse, req.query);
 
         repository.getData();
 
