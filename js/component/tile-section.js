@@ -15,6 +15,8 @@
             var s = this.settings;
 
             s.metric.storeName = window.storeDetail.name;
+            s.metric.filterParamObj = window.filterParamObj;
+
             app['tile-section']._fetchData('getTilesData', s.metric, true);
 
             $(s.target).find('.btn-metric').off().on('click', function() {
@@ -31,13 +33,15 @@
                         s.metric = {
                             comparison: $(this).data('metric-comparison').trim(),
                             period: $('.grp-timeline .active').data('metric-period').trim(),
-                            storeName: window.storeDetail.name
+                            storeName: window.storeDetail.name,
+                            filterParamObj: window.filterParamObj
                         }
                     } else {
                         s.metric = {
                             comparison: $('.grp-comparison .active').data('metric-comparison').trim(),
                             period: $(this).data('metric-period').trim(),
-                            storeName: window.storeDetail.name
+                            storeName: window.storeDetail.name,
+                            filterParamObj: window.filterParamObj
                         }
                     }
 
@@ -49,6 +53,9 @@
 
             this.ajaxInterval = setInterval(function() {
                 s.metric.storeName = window.storeDetail.name;
+                s.metric.filterParamObj = window.filterParamObj;
+
+
                 app['tile-section']._fetchData('getTilesData', s.metric);
             }, 5000);
 

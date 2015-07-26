@@ -20,7 +20,7 @@
             $('.campaign-start-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
-            
+
             $('.campaign-end-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
@@ -29,7 +29,7 @@
                 if (startDate.val() && endDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
                     reqObj.eDate = "'" + endDate.val() + "'";
-                    reqObj.storeName = window.storeDetail.name;
+                    reqObj.filterParamObj = window.filterParamObj;
 
                     app['campaign-impact'].fetchData('getCampaignImpact', reqObj);
                     configure_panel.toggleClass('edit-active');

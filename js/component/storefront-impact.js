@@ -16,7 +16,8 @@
             $(s.target).find('.config-save').off('click').on('click', function() {
                 if (startDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
-                    reqObj.storeName = window.storeDetail.name;
+                    reqObj.filterParamObj = window.filterParamObj;
+                    
                     app['modification-impact'].fetchData('getStoreFrontChange', reqObj);
                     configure_panel.toggleClass('edit-active');
 

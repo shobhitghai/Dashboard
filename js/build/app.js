@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-23 */
+/*! Fashion_Dashboard 1.0.0 2015-07-26 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -82,31 +82,21 @@ function getStoreListData(initModules) {
         name: ''
     };
 
+    window.filterParamObj = {
+        storeId: [],
+        city: [],
+        brandId: []
+    }
+
     function successCallback(res) {
         var res = $.parseJSON(res);
-        // console.log(res)
-        var dropdownMenu = storeDropdown.find('.dropdown-menu');
-        var storeSelected = storeDropdown.find('.store-selected .selected-value');
+        var initFilterArr = [];
 
         $.each(res, function(i, v) {
-            var id = '10000' + (i + 1);
-            dropdownMenu.append('<li><a data-id=' + id + ' href="javascript:void(0)">' + this.name + '</span></a></li>')
+            initFilterArr.push(this.store_id);
         });
 
-        window.storeDetail.name = "100001";
-        storeSelected.text(res[0].name);
-        dropdownMenu.find('li a').on('click', function(e) {
-            e.preventDefault;
-            storeSelected.text($(this).text());
-
-            window.storeDetail.name = $(this).data('id');
-
-            $.each(app, function(module, v) {
-                if (app[module].refreshData) {
-                    app[module].refreshData();
-                }
-            })
-        })
+        window.filterParamObj.storeId = initFilterArr;
 
         initModules();
     }
@@ -475,6 +465,8 @@ function getStoreListData(initModules) {
             var s = this.settings;
 
             s.metric.storeName = window.storeDetail.name;
+            s.metric.filterParamObj = window.filterParamObj;
+
             app['tile-section']._fetchData('getTilesData', s.metric, true);
 
             $(s.target).find('.btn-metric').off().on('click', function() {
@@ -491,13 +483,15 @@ function getStoreListData(initModules) {
                         s.metric = {
                             comparison: $(this).data('metric-comparison').trim(),
                             period: $('.grp-timeline .active').data('metric-period').trim(),
-                            storeName: window.storeDetail.name
+                            storeName: window.storeDetail.name,
+                            filterParamObj: window.filterParamObj
                         }
                     } else {
                         s.metric = {
                             comparison: $('.grp-comparison .active').data('metric-comparison').trim(),
                             period: $(this).data('metric-period').trim(),
-                            storeName: window.storeDetail.name
+                            storeName: window.storeDetail.name,
+                            filterParamObj: window.filterParamObj
                         }
                     }
 
@@ -509,6 +503,9 @@ function getStoreListData(initModules) {
 
             this.ajaxInterval = setInterval(function() {
                 s.metric.storeName = window.storeDetail.name;
+                s.metric.filterParamObj = window.filterParamObj;
+
+
                 app['tile-section']._fetchData('getTilesData', s.metric);
             }, 5000);
 
@@ -635,7 +632,7 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         reformatData: function(data) {
@@ -1409,7 +1406,7 @@ function getStoreListData(initModules) {
             $('.campaign-start-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
-            
+
             $('.campaign-end-date').datepicker({
                 format: 'yyyy-mm-dd'
             });
@@ -1418,7 +1415,7 @@ function getStoreListData(initModules) {
                 if (startDate.val() && endDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
                     reqObj.eDate = "'" + endDate.val() + "'";
-                    reqObj.storeName = window.storeDetail.name;
+                    reqObj.filterParamObj = window.filterParamObj;
 
                     app['campaign-impact'].fetchData('getCampaignImpact', reqObj);
                     configure_panel.toggleClass('edit-active');
@@ -1517,7 +1514,8 @@ function getStoreListData(initModules) {
             $(s.target).find('.config-save').off('click').on('click', function() {
                 if (startDate.val()) {
                     reqObj.sDate = "'" + startDate.val() + "'";
-                    reqObj.storeName = window.storeDetail.name;
+                    reqObj.filterParamObj = window.filterParamObj;
+                    
                     app['modification-impact'].fetchData('getStoreFrontChange', reqObj);
                     configure_panel.toggleClass('edit-active');
 

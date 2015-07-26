@@ -80,31 +80,21 @@ function getStoreListData(initModules) {
         name: ''
     };
 
+    window.filterParamObj = {
+        storeId: [],
+        city: [],
+        brandId: []
+    }
+
     function successCallback(res) {
         var res = $.parseJSON(res);
-        // console.log(res)
-        var dropdownMenu = storeDropdown.find('.dropdown-menu');
-        var storeSelected = storeDropdown.find('.store-selected .selected-value');
+        var initFilterArr = [];
 
         $.each(res, function(i, v) {
-            var id = '10000' + (i + 1);
-            dropdownMenu.append('<li><a data-id=' + id + ' href="javascript:void(0)">' + this.name + '</span></a></li>')
+            initFilterArr.push(this.store_id);
         });
 
-        window.storeDetail.name = "100001";
-        storeSelected.text(res[0].name);
-        dropdownMenu.find('li a').on('click', function(e) {
-            e.preventDefault;
-            storeSelected.text($(this).text());
-
-            window.storeDetail.name = $(this).data('id');
-
-            $.each(app, function(module, v) {
-                if (app[module].refreshData) {
-                    app[module].refreshData();
-                }
-            })
-        })
+        window.filterParamObj.storeId = initFilterArr;
 
         initModules();
     }

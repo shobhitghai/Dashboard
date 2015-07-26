@@ -32,7 +32,7 @@
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name
+                filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
         reformatData: function(data) {

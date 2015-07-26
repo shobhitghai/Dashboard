@@ -1,4 +1,5 @@
 var constants = require('../constants.js');
+var queryParamHelper = require('../queryParamHelper.js');
 
 var crossVisitRepository = function(connection, sendResponseCallback, filterParam) {
     this.connection = connection;
@@ -16,8 +17,11 @@ repo.getData = function() {
 
 repo._getStoreData = function() {
     var self = this;
-    var query = "SELECT COUNT(subsequent_to_store_id) FROM t_store_visit WHERE subsequent_to_store_id = " + this.filterParam.storeName + " AND visit_date > DATE_SUB(NOW(), INTERVAL 3 MONTH);";
 
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'subsequent_to', '_');
+    var query = "SELECT COUNT(subsequent_to_store_id) FROM t_store_visit WHERE " + queryFilterParam + " AND visit_date > DATE_SUB(NOW(), INTERVAL 3 MONTH);";
+
+    console.log(query)
     this.connection.query(query, function(err, data) {
 
         if (err) {
