@@ -7,13 +7,28 @@
             var s = this.settings;
             var chartContainer = $(s.target).find('#time-trend-chart');
 
-            app['time-trend'].renderChart(chartContainer);
-
-
+            app['time-trend'].fetchData('getMonthlyTimeTrendData', chartContainer);
         },
         refreshData: function() {
             var self = this;
             app['time-trend'].init();
+        },
+        fetchData: function(url, chartContainer) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+
+                console.log(res);
+
+                app['time-trend'].renderChart(chartContainer);
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, {
+                filterParamObj: window.filterParamObj
+            }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({

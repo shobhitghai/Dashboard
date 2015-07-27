@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-07-26 */
+/*! Fashion_Dashboard 1.0.0 2015-07-28 */
 //####js/component/base.js
 // Define Namespace
 (function() {
@@ -1028,13 +1028,28 @@ function getStoreListData(initModules) {
             var s = this.settings;
             var chartContainer = $(s.target).find('#time-trend-chart');
 
-            app['time-trend'].renderChart(chartContainer);
-
-
+            app['time-trend'].fetchData('getMonthlyTimeTrendData', chartContainer);
         },
         refreshData: function() {
             var self = this;
             app['time-trend'].init();
+        },
+        fetchData: function(url, chartContainer) {
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+
+                console.log(res);
+
+                app['time-trend'].renderChart(chartContainer);
+            }
+
+            function errorCallback(err) {
+                console.log('navbar' + err || 'err');
+            }
+
+            app['ajax-wrapper'].sendAjax(url, {
+                filterParamObj: window.filterParamObj
+            }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer) {
             chartContainer.highcharts({
