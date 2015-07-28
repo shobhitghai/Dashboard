@@ -8,7 +8,7 @@ var queryParamHelper = function() {
         var query = '';
         var tableNameExp = tableNameExp || '.';
 
-        if (param.storeId) {
+        if (param && param.storeId) {
             var storeIdPlaceholder = tableName ? ' ' + tableName + tableNameExp + 'store_id in (' : ' store_id in (';
             var storeIdText = '';
             for (var i = 0; i < param.storeId.length; i++) {
@@ -19,7 +19,7 @@ var queryParamHelper = function() {
             queryObj.storeId = storeIdPlaceholder;
         }
 
-        if (param.city) {
+        if (param && param.city) {
             var cityPlaceholder = tableName ? ' ' + tableName + tableNameExp + 'city in (' : ' city in (';
             var cityText = '';
             for (var i = 0; i < param.city.length; i++) {
@@ -30,7 +30,7 @@ var queryParamHelper = function() {
             queryObj.city = cityPlaceholder;
         }
 
-        if (param.brandId) {
+        if (param && param.brandId) {
             var brandPlaceholder = tableName ? ' ' + tableName + tableNameExp + 'brand_id in (' : ' brand_id in (';
             var brandText = '';
             for (var i = 0; i < param.brandId.length; i++) {

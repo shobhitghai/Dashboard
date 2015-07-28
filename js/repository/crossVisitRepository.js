@@ -21,7 +21,6 @@ repo._getStoreData = function() {
     var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'subsequent_to', '_');
     var query = "SELECT COUNT(subsequent_to_store_id) FROM t_store_visit WHERE " + queryFilterParam + " AND visit_date > DATE_SUB(NOW(), INTERVAL 3 MONTH);";
 
-    console.log(query)
     this.connection.query(query, function(err, data) {
 
         if (err) {

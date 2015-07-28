@@ -88,6 +88,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
         connection.query(query, function(err, data) {
             if (err) {
+                console.log(err)
                 self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));
@@ -144,6 +145,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
         connection.query(query, function(err, data) {
             if (err) {
+                console.log(err)
+
                 self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));
@@ -162,6 +165,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
         connection.query(query, function(err, data) {
             if (err) {
+                console.log(err)
+
                 self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));
@@ -180,6 +185,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
         connection.query(query, function(err, data) {
             if (err) {
+                console.log(err)
+                
                 self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));

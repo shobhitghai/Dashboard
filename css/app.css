@@ -350,11 +350,11 @@ table.dataTable thead .sorting:after {
 }
 
 /* line 49, ../sass/modules/_nav-bar.scss */
-.mod-filter-panel .lbjs {
+.mod-filter-panel .lbjs, .mod-filter-panel-time-trend .lbjs {
   display: inline-block;
 }
 /* line 51, ../sass/modules/_nav-bar.scss */
-.mod-filter-panel .lbjs .lbjs-item[data-disabled="true"] {
+.mod-filter-panel .lbjs .lbjs-item[data-disabled="true"], .mod-filter-panel-time-trend .lbjs .lbjs-item[data-disabled="true"] {
   color: gray;
 }
 

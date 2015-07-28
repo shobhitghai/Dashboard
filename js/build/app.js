@@ -303,7 +303,7 @@ function getStoreListData(initModules) {
                 var selectedStoreArr = [];
                 var selectedBrandArr = [];
 
-                var selection = $('.lbjs-item[selected=selected]');
+                var selection = $(s.target).find('.lbjs-item[selected=selected]');
 
                 $.each(selection, function(i, v) {
                     if ($(this).data('list-type') == 'city') {
@@ -352,9 +352,10 @@ function getStoreListData(initModules) {
             });
         },
         filterListSelection: function(res) {
+            var s = this.settings;
             var obj = new Array();
 
-            $('.lbjs-item').on('click', function() {
+            $(s.target).find('.lbjs-item').on('click', function() {
                 if (!($(this).attr('disabled') == 'disabled')) {
                     var self = this;
 
@@ -387,8 +388,230 @@ function getStoreListData(initModules) {
             });
         },
         enableDisableListSelection: function(obj, type) {
+            var s = this.settings;
+
             function disbaleItem(key) {
-                $.each($('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
+                $.each($(s.target).find('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
+                    var self = this;
+                    // if (!$(self).attr('data-selected')) {
+                    // $(self).attr('data-disabled', true);
+                    $(self).attr('disabled', true);
+
+                    // }
+
+                    $.each(obj, function(ind, val) {
+                        if ($(self).text() === this[key]) {
+                            // $(self).attr('data-disabled', false);
+                            $(self).attr('disabled', false);
+                            $(self).attr('data-selected', true);
+                        };
+                    })
+                })
+            }
+
+            if (type == 'city') {
+                disbaleItem('name');
+                disbaleItem('brand_name');
+            }
+
+            if (type == 'name') {
+                disbaleItem('city');
+                disbaleItem('brand_name');
+            }
+
+            if (type == 'brand_name') {
+                disbaleItem('city');
+                disbaleItem('name');
+            }
+        },
+        getStoreId: function(name) {
+            var self = this;
+            var id;
+            $.each(self.response, function(i, v) {
+                if (this['name'] == name) {
+                    id = this['store_id'];
+                    return false;
+                }
+            });
+
+            return id;
+        },
+        getBrandId: function(brand) {
+            var self = this;
+            var id;
+            $.each(self.response, function(i, v) {
+                if (this['brand_name'] == brand) {
+                    id = this['brand_id'];
+                    return false;
+                }
+            });
+
+            return id;
+        }
+    }
+})(app);
+
+
+
+
+(function() {
+    app['filter-panel-time-trend'] = {
+        settings: {
+            target: '.mod-filter-panel-time-trend'
+        },
+        init: function(context) {
+            var s = this.settings;
+            app['filter-panel-time-trend'].fetchData();
+            app['filter-panel-time-trend'].selectionHandler();
+
+        },
+        fetchData: function(url, storeDropdown) {
+            var self = this;
+
+            function successCallback(res) {
+                var res = $.parseJSON(res);
+                console.log(res)
+                self.response = res;
+                app['filter-panel-time-trend'].renderList(res, '');
+                app['filter-panel-time-trend'].filterListSelection(res);
+            }
+
+            function errorCallback(err) {
+                console.log(err);
+            }
+
+            $.ajax({
+                url: hostUrl + 'getStoreDetails',
+                success: function(res) {
+                    successCallback(res);
+                },
+                error: function(err) {
+                    errorCallback(err);
+                }
+            })
+
+        },
+        renderList: function(res, listType) {
+            var s = this.settings;
+            var cityContainer = $(s.target).find('#city-dd');
+            var storeContainer = $(s.target).find('#name-dd');
+            var brandContainer = $(s.target).find('#brand-dd');
+
+            var cityArray = new Array();
+            var storeArray = new Array();
+            var brandArray = new Array();
+
+            $.each(res, function(i, v) {
+                cityArray.push(this.city);
+                storeArray.push(this.name);
+                brandArray.push(this.brand_name);
+            })
+
+            cityArray = cityArray.getUnique();
+            storeArray = storeArray.getUnique();
+            brandArray = brandArray.getUnique();
+
+            if (listType != 'city')
+                app['filter-panel-time-trend'].appendList(cityArray, cityContainer, 'city', 'by city');
+
+            if (listType != 'name')
+                app['filter-panel-time-trend'].appendList(storeArray, storeContainer, 'name', 'by store');
+
+            if (listType != 'brand_name')
+                app['filter-panel-time-trend'].appendList(brandArray, brandContainer, 'brand_name', 'by brand');
+
+        },
+        selectionHandler: function() {
+            var self = this;
+            var s = this.settings;
+            var panel = $(s.target);
+
+            panel.find('.btn-filter').on('click', function() {
+                var selectedCityArr = [];
+                var selectedStoreArr = [];
+                var selectedBrandArr = [];
+
+                var selection = $(s.target).find('.lbjs-item[selected=selected]');
+
+                $.each(selection, function(i, v) {
+                    if ($(this).data('list-type') == 'city') {
+                        selectedCityArr.push($(this).text());
+                    } else if ($(this).data('list-type') == 'name') {
+                        selectedStoreArr.push(app['filter-panel-time-trend'].getStoreId($(this).text()));
+                    } else if ($(this).data('list-type') == 'brand_name') {
+                        selectedBrandArr.push(app['filter-panel-time-trend'].getBrandId($(this).text()));
+                    }
+                });
+
+                 window.trendSectionObj = {
+                        storeId: selectedStoreArr,
+                        city: selectedCityArr,
+                        brandId: selectedBrandArr
+                }
+
+                app['time-trend'].init(true);
+
+
+            });
+
+            panel.find('.btn-reset-filter').on('click', function() {
+                panel.find('.lbjs').remove();
+                panel.find('.modal-body select option').remove();
+                app['filter-panel-time-trend'].renderList(self.response, '');
+                app['filter-panel-time-trend'].filterListSelection(self.response);
+            });
+
+        },
+        appendList: function(arrayList, container, listType, searchText) {
+            $.each(arrayList, function(i, val) {
+                container.append('<option>' + val + '</option>');
+            });
+
+            container.listbox({
+                'searchbar': true,
+                'listType': listType,
+                'searchText': searchText
+            });
+        },
+        filterListSelection: function(res) {
+            var obj = new Array();
+
+            $(this.settings.target).find('.lbjs-item').on('click', function() {
+                if (!($(this).attr('disabled') == 'disabled')) {
+                    var self = this;
+
+                    // $(self).attr('data-selected', true);
+
+                    if ($(self).attr('selected')) {
+                        $(self).attr('data-selected', true);
+                        // $(self).attr('data-disabled', false);
+                    } else {
+                        $(self).attr('data-selected', false);
+                    }
+
+                    var type = $(self).attr('data-list-Type');
+                    var value = $(self).text();
+
+                    $.each(res, function(i, v) {
+                        if (this[type] === value) {
+                            if ($(self).attr('selected')) {
+                                obj.push(this);
+                            } else {
+                                obj.pop(this);
+                            }
+                        }
+                    })
+
+                    console.log(obj, type);
+                    app['filter-panel-time-trend'].enableDisableListSelection(obj, type);
+                }
+
+            });
+        },
+        enableDisableListSelection: function(obj, type) {
+            var s = this.settings;
+            function disbaleItem(key) {
+                $.each($(s.target).find('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
                     var self = this;
                     // if (!$(self).attr('data-selected')) {
                     // $(self).attr('data-disabled', true);
@@ -1024,11 +1247,13 @@ function getStoreListData(initModules) {
         settings: {
             target: '.mod-time-trend'
         },
-        init: function(context) {
+        init: function(reloadSection) {
             var s = this.settings;
-            var chartContainer = $(s.target).find('#time-trend-chart');
+            if(reloadSection == true){
+                var chartContainer = $(s.target).find('#time-trend-chart');
+                app['time-trend'].fetchData('getMonthlyTimeTrendData', chartContainer);
+            }
 
-            app['time-trend'].fetchData('getMonthlyTimeTrendData', chartContainer);
         },
         refreshData: function() {
             var self = this;
@@ -1037,10 +1262,11 @@ function getStoreListData(initModules) {
         fetchData: function(url, chartContainer) {
             function successCallback(res) {
                 var res = $.parseJSON(res);
-
                 console.log(res);
 
-                app['time-trend'].renderChart(chartContainer);
+                var data = app['time-trend'].buildChartObj(res);
+
+                app['time-trend'].renderChart(chartContainer, data);
             }
 
             function errorCallback(err) {
@@ -1048,10 +1274,30 @@ function getStoreListData(initModules) {
             }
 
             app['ajax-wrapper'].sendAjax(url, {
-                filterParamObj: window.filterParamObj
+                filterParamObj: window.filterParamObj,
+                sectionParamObj: window.trendSectionObj
             }, successCallback, errorCallback)
         },
-        renderChart: function(chartContainer) {
+        buildChartObj: function(res){
+            var data = {
+                globalArr: [],
+                sectionArr: [],
+                periodArr: []
+            };
+            
+
+            $.each(res.filterPanelData.data, function(i,v){
+                data.periodArr.push(this.period);
+                data.globalArr.push(this.data);
+            })
+
+            $.each(res.sectionPanelData.data, function(i,v){
+                data.sectionArr.push(this.data);
+            })
+
+            return data;
+        },
+        renderChart: function(chartContainer, data) {
             chartContainer.highcharts({
                 title: {
                     text: '',
@@ -1060,13 +1306,11 @@ function getStoreListData(initModules) {
                     }
                 },
                 xAxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                    ]
+                    categories: data.periodArr
                 },
                 yAxis: {
                     title: {
-                        text: 'Walk-ins'
+                        text: 'Count'
                     },
                     plotLines: [{
                         value: 0,
@@ -1084,11 +1328,11 @@ function getStoreListData(initModules) {
                     borderWidth: 0
                 },
                 series: [{
-                    name: 'Tokyo',
-                    data: [7.0, 6.9, 9.5, 14.5, 22, 11, 21.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                    name: 'Global Selection',
+                    data: data.globalArr
                 }, {
-                    name: 'New York',
-                    data: [-0.2, 0.8, 8, 21, 17.0, 20.0, 8, 11.1, 29.1, 14.1, 8.6, 2.5]
+                    name: 'Specific Selection',
+                    data: data.sectionArr
                 }],
                 credits: {
                     enabled: false

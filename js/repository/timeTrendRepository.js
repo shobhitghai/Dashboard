@@ -6,7 +6,8 @@ var timeTrendRepository = function(connection, sendResponseCallback, filterParam
     this.filterParam = filterParam;
     this.sendResponseCallback = sendResponseCallback;
     this.responseObject = {
-
+        filterPanelData: {},
+        sectionPanelData: {}
     };
 
 }
@@ -14,28 +15,49 @@ var timeTrendRepository = function(connection, sendResponseCallback, filterParam
 var repo = timeTrendRepository.prototype;
 
 repo.getData = function() {
-    this._getOpportunityData();
+    this._getOpportunityData(this.filterParam.filterParamObj, true);
+    this._getOpportunityData(this.filterParam.sectionParamObj, false, true);
 };
 
-repo._getOpportunityData = function() {
+repo._getOpportunityData = function(paramObj, isGlobalObj, sendResponse) {
     var self = this;
-
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
+    console.log(paramObj)
+    var queryFilterParam = queryParamHelper.getQueryParam(paramObj, 'tv');
     var query = "select sum(oop.cnt_mac_address) as 'count(mac_address)', oop.yearmonth from( select tv.visit_date, concat(year(tv.visit_date),'-',month(tv.visit_date)) as yearmonth, tv.store_id, count(distinct tv.mac_address) as cnt_mac_address from customer_tracker.t_visit tv where " + queryFilterParam + " group by visit_date, store_id) as oop group by oop.yearmonth order by oop.yearmonth asc";
-
+    console.log(query)
     this.connection.query(query, function(err, data) {
+
         if (err) {
+            console.log(err)
+
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
-            // if (self.filterParam.requestType == 'StoreFront') {
+            if (self.filterParam.requestType == 'StoreFront') {
+
+                if(isGlobalObj){
+                    self.responseObject.filterPanelData.opportunityData = self._buildObjResponse(data)
+                }else{
+                    self.responseObject.sectionPanelData.opportunityData = self._buildObjResponse(data)
+                }
+
                 self._getStoreFrontData();
-            // } else {
+            } else {
 
-                // self.responseObject.opportunityObjArr = self._buildObjResponse(data);
+                if(isGlobalObj){
+                    self.responseObject.filterPanelData.data = self._buildObjResponse(data)
+                    // console.log(self._buildObjResponse(data))
+                }else{
+                    self.responseObject.sectionPanelData.data = self._buildObjResponse(data)
+                    // console.log(self._buildObjResponse(data))
 
-            //     self.sendResponseCallback(self.responseObject);
-            // }
+                }
+
+                if(sendResponse){
+                    self.sendResponseCallback(self.responseObject);
+                    // console.log(self.responseObject)
+                }
+            }
         }
 
     });
