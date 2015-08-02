@@ -75,12 +75,18 @@ repo._getStoreFrontData = function() {
             self.responseObject.isError = true;
         } else {
             var walkInObjArr = self._buildObjResponse(data);
+
+
         }
 
         self.sendResponseCallback(self.responseObject);
 
 
     });
+}
+
+repo._buildStoreFrontResponse = function(){
+    
 }
 
 repo._buildObjResponse = function(data) {

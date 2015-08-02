@@ -48,6 +48,9 @@
 .mod-filter-panel, .mod-filter-panel-time-trend {
     .lbjs {
         display: inline-block;
+        .lbjs-list{
+            height: 250px !important;
+        }
         .lbjs-item[data-disabled="true"] {
             color: gray;
         }

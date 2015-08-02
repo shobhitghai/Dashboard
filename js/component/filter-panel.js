@@ -125,37 +125,42 @@
         },
         filterListSelection: function(res) {
             var s = this.settings;
+            var $panel = $(s.target);
             var obj = new Array();
 
-            $(s.target).find('.lbjs-item').on('click', function() {
-                if (!($(this).attr('disabled') == 'disabled')) {
-                    var self = this;
+            $panel.find('.lbjs-item').on('click', function() {
+                if ($panel.find('.lbjs-item[selected = selected]').length >= 1) {
 
-                    // $(self).attr('data-selected', true);
+                    if (!($(this).attr('disabled') == 'disabled')) {
+                        var self = this;
 
-                    if ($(self).attr('selected')) {
-                        $(self).attr('data-selected', true);
-                        // $(self).attr('data-disabled', false);
-                    } else {
-                        $(self).attr('data-selected', false);
-                    }
+                        // $(self).attr('data-selected', true);
 
-                    var type = $(self).attr('data-list-Type');
-                    var value = $(self).text();
-
-                    $.each(res, function(i, v) {
-                        if (this[type] === value) {
-                            if ($(self).attr('selected')) {
-                                obj.push(this);
-                            } else {
-                                obj.pop(this);
-                            }
+                        if ($(self).attr('selected')) {
+                            $(self).attr('data-selected', true);
+                            // $(self).attr('data-disabled', false);
+                        } else {
+                            $(self).attr('data-selected', false);
                         }
-                    })
 
-                    console.log(obj, type);
-                    app['filter-panel'].enableDisableListSelection(obj, type);
+                        var type = $(self).attr('data-list-Type');
+                        var value = $(self).text();
+
+                        $.each(res, function(i, v) {
+                            if (this[type] === value) {
+                                if ($(self).attr('selected')) {
+                                    obj.push(this);
+                                } else {
+                                    obj.pop(this);
+                                }
+                            }
+                        })
+
+                        console.log(obj, type);
+                        app['filter-panel'].enableDisableListSelection(obj, type);
+                    }
                 }
+
 
             });
         },
@@ -315,10 +320,10 @@
                     }
                 });
 
-                 window.trendSectionObj = {
-                        storeId: selectedStoreArr,
-                        city: selectedCityArr,
-                        brandId: selectedBrandArr
+                window.trendSectionObj = {
+                    storeId: selectedStoreArr,
+                    city: selectedCityArr,
+                    brandId: selectedBrandArr
                 }
 
                 app['time-trend'].init(true);
@@ -346,42 +351,48 @@
             });
         },
         filterListSelection: function(res) {
+            var s = this.settings;
+            var $panel = $(s.target);
             var obj = new Array();
 
-            $(this.settings.target).find('.lbjs-item').on('click', function() {
-                if (!($(this).attr('disabled') == 'disabled')) {
-                    var self = this;
+            $panel.find('.lbjs-item').on('click', function() {
+                if ($panel.find('.lbjs-item[selected = selected]').length >= 1) {
 
-                    // $(self).attr('data-selected', true);
+                    if (!($(this).attr('disabled') == 'disabled')) {
+                        var self = this;
 
-                    if ($(self).attr('selected')) {
-                        $(self).attr('data-selected', true);
-                        // $(self).attr('data-disabled', false);
-                    } else {
-                        $(self).attr('data-selected', false);
-                    }
+                        // $(self).attr('data-selected', true);
 
-                    var type = $(self).attr('data-list-Type');
-                    var value = $(self).text();
-
-                    $.each(res, function(i, v) {
-                        if (this[type] === value) {
-                            if ($(self).attr('selected')) {
-                                obj.push(this);
-                            } else {
-                                obj.pop(this);
-                            }
+                        if ($(self).attr('selected')) {
+                            $(self).attr('data-selected', true);
+                            // $(self).attr('data-disabled', false);
+                        } else {
+                            $(self).attr('data-selected', false);
                         }
-                    })
 
-                    console.log(obj, type);
-                    app['filter-panel-time-trend'].enableDisableListSelection(obj, type);
+                        var type = $(self).attr('data-list-Type');
+                        var value = $(self).text();
+
+                        $.each(res, function(i, v) {
+                            if (this[type] === value) {
+                                if ($(self).attr('selected')) {
+                                    obj.push(this);
+                                } else {
+                                    obj.pop(this);
+                                }
+                            }
+                        })
+
+                        console.log(obj, type);
+                        app['filter-panel-time-trend'].enableDisableListSelection(obj, type);
+                    }
                 }
 
             });
         },
         enableDisableListSelection: function(obj, type) {
             var s = this.settings;
+
             function disbaleItem(key) {
                 $.each($(s.target).find('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
                     var self = this;

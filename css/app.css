@@ -354,6 +354,10 @@ table.dataTable thead .sorting:after {
   display: inline-block;
 }
 /* line 51, ../sass/modules/_nav-bar.scss */
+.mod-filter-panel .lbjs .lbjs-list, .mod-filter-panel-time-trend .lbjs .lbjs-list {
+  height: 250px !important;
+}
+/* line 54, ../sass/modules/_nav-bar.scss */
 .mod-filter-panel .lbjs .lbjs-item[data-disabled="true"], .mod-filter-panel-time-trend .lbjs .lbjs-item[data-disabled="true"] {
   color: gray;
 }

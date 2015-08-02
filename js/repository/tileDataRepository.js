@@ -24,7 +24,8 @@ repo._getCurrentOpportunityCount = function() {
     this.connection.query(query, function(err, data) {
 
         if (err) {
-            console.log(err);
+            console.log(query)
+            console.log('tile ' + err);
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
