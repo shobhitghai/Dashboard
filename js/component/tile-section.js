@@ -9,6 +9,8 @@
             c: 0
         },
         init: function(context) {
+            var self = this;
+            this.triggerNext = true;
             this.tile_template = App.Template['tile-opportunity'];
             this.tile_repeat_cust = App.Template['tile-repeat-cust'];
 
@@ -55,8 +57,9 @@
                 s.metric.storeName = window.storeDetail.name;
                 s.metric.filterParamObj = window.filterParamObj;
 
-
-                app['tile-section']._fetchData('getTilesData', s.metric);
+                if (self.triggerNext) {
+                    app['tile-section']._fetchData('getTilesData', s.metric);
+                }
             }, 5000);
 
         },
@@ -69,11 +72,13 @@
         _fetchData: function(url, metric, showLoader) {
             var self = this;
             var s = this.settings;
+            self.triggerNext = false;
 
             function successCallback(data) {
                 if (data.Error) {
                     clearInterval(self.ajaxInterval);
                 } else {
+                    self.triggerNext = true;
                     app['tile-section']._bindTemplate(data, metric);
                 }
             }

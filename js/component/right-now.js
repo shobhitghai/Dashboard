@@ -4,6 +4,8 @@
             target: '.mod-right-now'
         },
         init: function(context) {
+            var self = this;
+            this.triggerNext = true;
             var s = this.settings;
             var shoppersMall = $(s.target).find('#shoppers-mall-chart');
             var shoppersStore = $(s.target).find('#shoppers-store-chart');
@@ -11,7 +13,9 @@
             app['right-now'].fetchData('getRightNowData');
 
             this.refreshInterval = setInterval(function() {
-                app['right-now'].fetchData('getRightNowData');
+                if (self.triggerNext) {
+                    app['right-now'].fetchData('getRightNowData');
+                }
             }, 5000);
 
 
@@ -50,11 +54,13 @@
         },
         fetchData: function(url) {
             var self = this;
+            self.triggerNext = false;
 
             function successCallback(res) {
                 if (res.Error) {
                     clearInterval(self.refreshInterval);
                 } else {
+                    self.triggerNext = true;
                     var res = $.parseJSON(res);
                     var dataObj = {};
 

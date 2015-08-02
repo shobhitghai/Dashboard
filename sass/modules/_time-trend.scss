@@ -1,10 +1,19 @@
 .mod-time-trend{
 	.grp-metric{
-		margin-top: 60px;
+		margin-top: 40px;
 		.btn-metric{
 			width: 70%;
 			display: inline-block;
 			white-space: normal;
+		}
+	}
+	.panel-top-section{
+		display: inline-block;
+		width: 100%;
+		margin-bottom: 30px;
+		h4{
+			float: left;
+			margin-right: 30px;
 		}
 	}
 }

@@ -508,13 +508,24 @@ table.dataTable thead .sorting:after {
 
 /* line 2, ../sass/modules/_time-trend.scss */
 .mod-time-trend .grp-metric {
-  margin-top: 60px;
+  margin-top: 40px;
 }
 /* line 4, ../sass/modules/_time-trend.scss */
 .mod-time-trend .grp-metric .btn-metric {
   width: 70%;
   display: inline-block;
   white-space: normal;
+}
+/* line 10, ../sass/modules/_time-trend.scss */
+.mod-time-trend .panel-top-section {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 30px;
+}
+/* line 14, ../sass/modules/_time-trend.scss */
+.mod-time-trend .panel-top-section h4 {
+  float: left;
+  margin-right: 30px;
 }
 
 /* line 3, ../sass/modules/_impact-section.scss */

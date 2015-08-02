@@ -538,29 +538,28 @@
                 <div class="mod-time-trend col-xs-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h4 class="section-heading">Monthly Time Trends</h4>
-                            <div class="filter-modal time-trend-filter">
-                                <span data-toggle="modal" data-target="#time-trend-filterModal" class="filter-selection">Select Store
-                                <span class="fa fa-chevron-down fa-fw"></span>
-                                </span>
+                            <div class="panel-top-section">
+                                <h4 class="section-heading">Monthly Time Trends</h4>
+                                <div class="filter-modal time-trend-filter">
+                                    <span data-toggle="modal" data-target="#time-trend-filterModal" class="filter-selection">Select Store
+                                        <span class="fa fa-chevron-down fa-fw"></span>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-xs-2">
                                 <div class="btn-group grp-metric" data-toggle="buttons">
                                     <div>Pick a metric</div>
-                                    <label class="btn btn-metric btn-primary active">
+                                    <label class="btn btn-metric btn-primary active" data-trend-type="Opportunities">
                                         <input type="radio" name="options" id="option1" autocomplete="off" checked>Opportunities
                                     </label>
-                                    <label class="btn btn-primary btn-metric fade-out">
+                                    <label class="btn btn-primary btn-metric" data-trend-type="StoreFront">
                                         <input type="radio" name="options" id="option2" autocomplete="off">Store front conversions
                                     </label>
-                                    <label class="btn btn-primary btn-metric fade-out">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked>Metric 3
+                                    <label class="btn btn-primary btn-metric" data-trend-type="DwellTime">
+                                        <input type="radio" name="options" id="option1" autocomplete="off" checked>Dwell Time
                                     </label>
-                                    <label class="btn btn-primary btn-metric fade-out">
-                                        <input type="radio" name="options" id="option2" autocomplete="off">Metric 4
-                                    </label>
-                                    <label class="btn btn-primary btn-metric fade-out">
-                                        <input type="radio" name="options" id="option2" autocomplete="off">Metric 5
+                                    <label class="btn btn-primary btn-metric" data-trend-type="RepeatCustomer">
+                                        <input type="radio" name="options" id="option2" autocomplete="off">Repeat Customers
                                     </label>
                                 </div>
                             </div>

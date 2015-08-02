@@ -693,6 +693,8 @@ function getStoreListData(initModules) {
             c: 0
         },
         init: function(context) {
+            var self = this;
+            this.triggerNext = true;
             this.tile_template = App.Template['tile-opportunity'];
             this.tile_repeat_cust = App.Template['tile-repeat-cust'];
 
@@ -739,8 +741,9 @@ function getStoreListData(initModules) {
                 s.metric.storeName = window.storeDetail.name;
                 s.metric.filterParamObj = window.filterParamObj;
 
-
-                app['tile-section']._fetchData('getTilesData', s.metric);
+                if (self.triggerNext) {
+                    app['tile-section']._fetchData('getTilesData', s.metric);
+                }
             }, 5000);
 
         },
@@ -753,11 +756,13 @@ function getStoreListData(initModules) {
         _fetchData: function(url, metric, showLoader) {
             var self = this;
             var s = this.settings;
+            self.triggerNext = false;
 
             function successCallback(data) {
                 if (data.Error) {
                     clearInterval(self.ajaxInterval);
                 } else {
+                    self.triggerNext = true;
                     app['tile-section']._bindTemplate(data, metric);
                 }
             }
@@ -1260,9 +1265,12 @@ function getStoreListData(initModules) {
         },
         init: function(reloadSection) {
             var s = this.settings;
-            if(reloadSection == true){
-                var chartContainer = $(s.target).find('#time-trend-chart');
-                app['time-trend'].fetchData('getMonthlyTimeTrendData', chartContainer);
+            var self = this;
+            this.chartContainer = $(s.target).find('#time-trend-chart');
+            this.response = null;
+            if (reloadSection == true) {
+                app['time-trend'].fetchData('getMonthlyTimeTrendData', this.chartContainer);
+                this.metricSelectionHandler();
             }
 
         },
@@ -1271,12 +1279,13 @@ function getStoreListData(initModules) {
             app['time-trend'].init();
         },
         fetchData: function(url, chartContainer) {
+            var self = this;
+
             function successCallback(res) {
                 var res = $.parseJSON(res);
-                console.log(res);
 
-                var data = app['time-trend'].buildChartObj(res);
-
+                self.response = res;
+                var data = app['time-trend'].buildOpportunityObj(res);
                 app['time-trend'].renderChart(chartContainer, data);
             }
 
@@ -1287,23 +1296,117 @@ function getStoreListData(initModules) {
             app['ajax-wrapper'].sendAjax(url, {
                 filterParamObj: window.filterParamObj,
                 sectionParamObj: window.trendSectionObj
-            }, successCallback, errorCallback)
+            }, successCallback, errorCallback, true)
         },
-        buildChartObj: function(res){
+        metricSelectionHandler: function() {
+            var self = this;
+            var $section = $(this.settings.target);
+
+            $section.find('.btn-metric').on('click', function() {
+                if (self.response) {
+                    if ($(this).attr('data-trend-type') == 'Opportunities') {
+
+                        app['time-trend'].renderChart(self.chartContainer, app['time-trend'].buildOpportunityObj(self.response));
+
+                    } else if ($(this).attr('data-trend-type') == 'StoreFront') {
+
+                        app['time-trend'].renderChart(self.chartContainer, app['time-trend'].buildStoreFrontObj(self.response));
+
+                    } else if ($(this).attr('data-trend-type') == 'DwellTime') {
+
+                        app['time-trend'].renderChart(self.chartContainer, app['time-trend'].buildDwellTimeObj(self.response));
+
+                    } else if ($(this).attr('data-trend-type') == 'RepeatCustomer') {
+
+                        app['time-trend'].renderChart(self.chartContainer, app['time-trend'].buildRepeatCustObj(self.response));
+
+                    }
+                }
+            });
+        },
+        buildOpportunityObj: function(res) {
             var data = {
                 globalArr: [],
                 sectionArr: [],
                 periodArr: []
             };
-            
 
-            $.each(res.filterPanelData.data, function(i,v){
+
+            $.each(res.filterPanelData.opportunityData, function(i, v) {
                 data.periodArr.push(this.period);
                 data.globalArr.push(this.data);
             })
 
-            $.each(res.sectionPanelData.data, function(i,v){
+            $.each(res.sectionPanelData.opportunityData, function(i, v) {
                 data.sectionArr.push(this.data);
+            })
+
+            return data;
+        },
+        buildStoreFrontObj: function(res) {
+            var data = {
+                globalArr: [],
+                sectionArr: [],
+                periodArr: []
+            };
+
+
+            $.each(res.filterPanelData.storeFrontData, function(i, v) {
+                data.periodArr.push(this.period);
+
+                if (res.filterPanelData.opportunityData[i]) {
+                    data.globalArr.push((this.data / res.filterPanelData.opportunityData[i].data) * 100);
+                }
+            })
+
+            $.each(res.sectionPanelData.storeFrontData, function(i, v) {
+                if (res.sectionPanelData.opportunityData[i]) {
+                    data.sectionArr.push((this.data / res.sectionPanelData.opportunityData[i].data) * 100);
+                }
+            })
+
+            return data;
+
+        },
+        buildDwellTimeObj: function(res) {
+            var data = {
+                globalArr: [],
+                sectionArr: [],
+                periodArr: []
+            };
+
+
+            $.each(res.filterPanelData.dwellTimeData, function(i, v) {
+                data.periodArr.push(this.period);
+                data.globalArr.push(this.data);
+            })
+
+            $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
+                data.sectionArr.push(this.data);
+            })
+
+            return data;
+        },
+        buildRepeatCustObj: function(res) {
+            var data = {
+                globalArr: [],
+                sectionArr: [],
+                periodArr: []
+            };
+
+
+            $.each(res.filterPanelData.repeatCustData, function(i, v) {
+                data.periodArr.push(this.period);
+
+                if (res.filterPanelData.storeFrontData[i]) {
+                    data.globalArr.push((this.data / res.filterPanelData.storeFrontData[i].data) * 100);
+                }
+            })
+
+            $.each(res.sectionPanelData.repeatCustData, function(i, v) {
+                if (res.sectionPanelData.storeFrontData[i]) {
+                    data.sectionArr.push((this.data / res.sectionPanelData.storeFrontData[i].data) * 100);
+                }
             })
 
             return data;
@@ -1330,7 +1433,8 @@ function getStoreListData(initModules) {
                     }]
                 },
                 tooltip: {
-                    valueSuffix: ''
+                    valueSuffix: '',
+                    valueDecimals: 2,
                 },
                 legend: {
                     layout: 'vertical',
@@ -1359,6 +1463,8 @@ function getStoreListData(initModules) {
             target: '.mod-right-now'
         },
         init: function(context) {
+            var self = this;
+            this.triggerNext = true;
             var s = this.settings;
             var shoppersMall = $(s.target).find('#shoppers-mall-chart');
             var shoppersStore = $(s.target).find('#shoppers-store-chart');
@@ -1366,7 +1472,9 @@ function getStoreListData(initModules) {
             app['right-now'].fetchData('getRightNowData');
 
             this.refreshInterval = setInterval(function() {
-                app['right-now'].fetchData('getRightNowData');
+                if (self.triggerNext) {
+                    app['right-now'].fetchData('getRightNowData');
+                }
             }, 5000);
 
 
@@ -1405,11 +1513,13 @@ function getStoreListData(initModules) {
         },
         fetchData: function(url) {
             var self = this;
+            self.triggerNext = false;
 
             function successCallback(res) {
                 if (res.Error) {
                     clearInterval(self.refreshInterval);
                 } else {
+                    self.triggerNext = true;
                     var res = $.parseJSON(res);
                     var dataObj = {};
 
