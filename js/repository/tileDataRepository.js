@@ -18,8 +18,8 @@ repo.getTilesData = function() {
 repo._getCurrentOpportunityCount = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
-    var query = "select sum(oop.cnt_mac_address) as 'count(mac_address)' from(select tv.visit_date, tv.store_id, count(distinct tv.mac_address) as cnt_mac_address from customer_tracker.t_visit tv where " + constants.getValue("fs_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " group by visit_date, store_id) as oop";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select sum(oop.cnt_mac_address) as 'count(mac_address)' from(select tv.visit_date, tv.store_id, count(distinct tv.mac_address) as cnt_mac_address from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) where " + constants.getValue("fs_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " group by visit_date, store_id) as oop";
 
     this.connection.query(query, function(err, data) {
 
@@ -41,8 +41,8 @@ repo._getCurrentOpportunityCount = function() {
 repo._getOpportunityComparison = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
-    var query = "select sum(oop.cnt_mac_address) as 'count(mac_address)' from( select tv.visit_date, tv.store_id, count(distinct tv.mac_address) as cnt_mac_address from customer_tracker.t_visit tv where " + constants.getValue("fs_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " group by visit_date, store_id) as oop ;"
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select sum(oop.cnt_mac_address) as 'count(mac_address)' from( select tv.visit_date, tv.store_id, count(distinct tv.mac_address) as cnt_mac_address from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) where " + constants.getValue("fs_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " group by visit_date, store_id) as oop ;"
 
     // console.log(query);
     this.connection.query(query, function(err, data) {
@@ -66,8 +66,8 @@ repo._getOpportunityComparison = function() {
 repo._getCurrentStoreFrontCount = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
-    var query = "select count(tv.mac_address) as 'count(mac_address)' from customer_tracker.t_visit tv left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where  " + constants.getValue("es_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag =1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tv.mac_address) as 'count(mac_address)' from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where  " + constants.getValue("es_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag =1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
 
 
     this.connection.query(query, function(err, data) {
@@ -90,8 +90,8 @@ repo._getCurrentStoreFrontCount = function() {
 repo._getStoreFrontComparison = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
-    var query = "select count(tv.mac_address) as 'count(mac_address)' from customer_tracker.t_visit tv left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where  " + constants.getValue("es_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag =1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tv.mac_address) as 'count(mac_address)' from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where  " + constants.getValue("es_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag =1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
 
     this.connection.query(query, function(err, data) {
 
@@ -113,8 +113,8 @@ repo._getStoreFrontComparison = function() {
 repo._getDwellTimeCount = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
-    var query = "select avg(dwell_time) from customer_tracker.t_visit tv left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where " + constants.getValue("es_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag = 1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select avg(dwell_time) from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where " + constants.getValue("es_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag = 1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
 
 
     this.connection.query(query, function(err, data) {
@@ -137,8 +137,8 @@ repo._getDwellTimeCount = function() {
 repo._getDwellTimeComparison = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tv');
-    var query = "select avg(dwell_time) from customer_tracker.t_visit tv left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where " + constants.getValue("es_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag = 1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select avg(dwell_time) from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where " + constants.getValue("es_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and walk_in_flag = 1 and (tcen.is_employee !=1 or tcen.is_employee is null); ";
 
 
     this.connection.query(query, function(err, data) {
@@ -159,8 +159,8 @@ repo._getDwellTimeComparison = function() {
 repo._getRepeatCustomerCount = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsv');
-    var query = "select count(tsv.mac_address) as 'sum(rc.cnt_mac_address)' from customer_tracker.t_store_visit tsv left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id AND tsv.mac_address = tcen.mac_address) where " + constants.getValue("es_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and new_customer_flag = 0 and (tcen.is_employee !=1 or tcen.is_employee is null);";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tsv.mac_address) as 'sum(rc.cnt_mac_address)' from customer_tracker.t_store_visit tsv left join customer_tracker.t_store_details tsds on (tsv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id AND tsv.mac_address = tcen.mac_address) where " + constants.getValue("es_current_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and new_customer_flag = 0 and (tcen.is_employee !=1 or tcen.is_employee is null);";
 
     // console.log(query); 
     this.connection.query(query, function(err, data) {
@@ -186,8 +186,8 @@ repo._getRepeatCustomerCount = function() {
 repo._getRepeatCustomerComparison = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsv');
-    var query = "select count(tsv.mac_address) as 'sum(rc.cnt_mac_address)' from customer_tracker.t_store_visit tsv left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id AND tsv.mac_address = tcen.mac_address) where " + constants.getValue("es_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and new_customer_flag = 0 and (tcen.is_employee !=1 or tcen.is_employee is null);";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tsv.mac_address) as 'sum(rc.cnt_mac_address)' from customer_tracker.t_store_visit tsv left join customer_tracker.t_store_details tsds on (tsv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id AND tsv.mac_address = tcen.mac_address) where " + constants.getValue("es_compare_" + this.filterParam.comparison + "_" + this.filterParam.period) + " and " + queryFilterParam + " and new_customer_flag = 0 and (tcen.is_employee !=1 or tcen.is_employee is null);";
 
     this.connection.query(query, function(err, data) {
 

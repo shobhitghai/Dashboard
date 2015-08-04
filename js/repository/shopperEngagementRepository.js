@@ -21,7 +21,7 @@ repo.getData = function() {
 repo._getCurrentMonthData = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj);
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj,'tsds');
     var query = constants.getValue('shopper_engagement_curr_month1') + queryFilterParam + constants.getValue('shopper_engagement_curr_month2');
 
     this.connection.query(query, function(err, data) {
@@ -44,7 +44,7 @@ repo._getCurrentMonthData = function() {
 repo._getLastMonthData = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj);
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj,'tsds');
     var query = constants.getValue('shopper_engagement_last_month1') + queryFilterParam + constants.getValue('shopper_engagement_last_month2');
 
     this.connection.query(query, function(err, data) {

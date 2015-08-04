@@ -83,8 +83,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRightNowData", function(req, res) {
         self._setResponseHeader(res);
 
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj);
-        var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by walk_in_flag";
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsds');
+        var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by walk_in_flag";
 
         connection.query(query, function(err, data) {
             if (err) {
