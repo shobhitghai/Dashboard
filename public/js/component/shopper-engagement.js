@@ -59,7 +59,7 @@
                     text: ''
                 },
                 xAxis: {
-                    categories: ['>10 mins', '5-20 mins', '2-5 mins', 'bounced'],
+                    categories: ['>10 mins', '5-10 mins', '2-5 mins', 'bounced'],
                     title: {
                         text: null
                     }

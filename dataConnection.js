@@ -2,8 +2,9 @@ var application_root = __dirname,
     express = require("express"),
     mysql = require("mysql"),
     bodyParser = require("body-parser"),
-    dataController = require("../controllers/dataController.js"),
-    constants = require("../constants.js"),
+    dataController = require("./private/controllers/dataController.js"),
+    constants = require("./private/constants.js"),
+    path = require('path'),
     port = 3000;
 
 // port = process.env.PORT || 3000;
@@ -35,15 +36,21 @@ DataConnectionLayer.prototype.connectDB = function() {
 }
 
 DataConnectionLayer.prototype.configureExpress = function(connection) {
-    var self = this;
+    var router = express.Router();
+
     app.use(bodyParser.urlencoded({
         extended: true
     }));
     app.use(bodyParser.json());
-    var router = express.Router();
+    app.use(express.static('public'));
     app.use('/api', router);
+    app.get('/app', function(req, res) {
+        res.sendFile(path.join(__dirname + '/views/index.html'));
+    });
+
     var apiController = new dataController(router, connection);
-    self.startServer();
+
+    this.startServer();
 }
 
 DataConnectionLayer.prototype.startServer = function() {

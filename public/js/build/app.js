@@ -1,5 +1,5 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-02 */
-//####js/component/base.js
+/*! Fashion_Dashboard 1.0.0 2015-08-05 */
+//####public/js/component/base.js
 // Define Namespace
 (function() {
     this.app = {};
@@ -199,7 +199,7 @@ function getStoreListData(initModules) {
         },
     }
 })(app);
-//####js/component/ajax-wrapper.js
+//####public/js/component/ajax-wrapper.js
 (function() {
     app['ajax-wrapper'] = {
         sendAjax: function(api, data, successCallback, errorCallback, showLoader) {
@@ -225,7 +225,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/filter-panel.js
+//####public/js/component/filter-panel.js
 (function() {
     app['filter-panel'] = {
         settings: {
@@ -681,7 +681,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/tile-section.js
+//####public/js/component/tile-section.js
 (function() {
     app['tile-section'] = {
         settings: {
@@ -836,7 +836,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/shopper-engagement.js
+//####public/js/component/shopper-engagement.js
 (function() {
     app['shopper-engagement'] = {
         settings: {
@@ -898,7 +898,7 @@ function getStoreListData(initModules) {
                     text: ''
                 },
                 xAxis: {
-                    categories: ['>10 mins', '5-20 mins', '2-5 mins', 'bounced'],
+                    categories: ['>10 mins', '5-10 mins', '2-5 mins', 'bounced'],
                     title: {
                         text: null
                     }
@@ -947,7 +947,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/shopper-profile.js
+//####public/js/component/shopper-profile.js
 (function() {
     app['shopper-profile'] = {
         settings: {
@@ -1050,7 +1050,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/revisit-frequency.js
+//####public/js/component/revisit-frequency.js
 (function() {
     app['revisit-frequency'] = {
         settings: {
@@ -1162,7 +1162,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/cross-store.js
+//####public/js/component/cross-store.js
 (function() {
     app['cross-store'] = {
         settings: {
@@ -1257,7 +1257,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/time-trend.js
+//####public/js/component/time-trend.js
 (function() {
     app['time-trend'] = {
         settings: {
@@ -1456,7 +1456,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/right-now.js
+//####public/js/component/right-now.js
 (function() {
     app['right-now'] = {
         settings: {
@@ -1595,7 +1595,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/internal-benchmarking.js
+//####public/js/component/internal-benchmarking.js
 (function() {
     app['internal-benchmarking'] = {
         settings: {
@@ -1763,7 +1763,7 @@ function getStoreListData(initModules) {
         }
     }
 })(app);
-//####js/component/campaign-impact.js
+//####public/js/component/campaign-impact.js
 (function() {
     app['campaign-impact'] = {
         settings: {
@@ -1875,7 +1875,7 @@ function getStoreListData(initModules) {
 //         'tile-period-param': 'Count of rows'
 //     }));
 // }
-//####js/component/storefront-impact.js
+//####public/js/component/storefront-impact.js
 (function() {
     app['modification-impact'] = {
         settings: {
@@ -1957,7 +1957,7 @@ function getStoreListData(initModules) {
 
     }
 })(app);
-//####js/component/hour-optimization.js
+//####public/js/component/hour-optimization.js
 (function() {
     app['hour-optimization'] = {
         settings: {

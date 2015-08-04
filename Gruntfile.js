@@ -1,19 +1,19 @@
 module.exports = function(grunt) {
     var components = [
-        'js/component/base.js',
-        'js/component/ajax-wrapper.js',
-        'js/component/filter-panel.js',
-        'js/component/tile-section.js',
-        'js/component/shopper-engagement.js',
-        'js/component/shopper-profile.js',
-        'js/component/revisit-frequency.js',
-        'js/component/cross-store.js',
-        'js/component/time-trend.js',
-        'js/component/right-now.js',
-        'js/component/internal-benchmarking.js',
-        'js/component/campaign-impact.js',
-        'js/component/storefront-impact.js',
-        'js/component/hour-optimization.js'
+        'public/js/component/base.js',
+        'public/js/component/ajax-wrapper.js',
+        'public/js/component/filter-panel.js',
+        'public/js/component/tile-section.js',
+        'public/js/component/shopper-engagement.js',
+        'public/js/component/shopper-profile.js',
+        'public/js/component/revisit-frequency.js',
+        'public/js/component/cross-store.js',
+        'public/js/component/time-trend.js',
+        'public/js/component/right-now.js',
+        'public/js/component/internal-benchmarking.js',
+        'public/js/component/campaign-impact.js',
+        'public/js/component/storefront-impact.js',
+        'public/js/component/hour-optimization.js'
     ];
 
     // Project configuration.
@@ -28,17 +28,17 @@ module.exports = function(grunt) {
             },
             basic: {
                 src: components,
-                dest: 'js/build/app.js'
+                dest: 'public/js/build/app.js'
             }
         },
         watch: {
             js: {
                 files: components,
                 tasks: ['concat', 'uglify', 'cssmin', 'handlebars'],
-                dest: 'js/build/app.js'
+                dest: 'public/js/build/app.js'
             },
             css: {
-                files: 'css/app.css',
+                files: 'public/css/app.css',
                 tasks: ['cssmin']
             }
         },
@@ -48,15 +48,15 @@ module.exports = function(grunt) {
             },
             build: {
                 src: components,
-                dest: 'js/build/app.min.js'
+                dest: 'public/js/build/app.min.js'
             }
         },
         cssmin: {
             minify: {
                 expand: true,
-                cwd: 'css/',
+                cwd: 'public/css/',
                 src: ['app.css'],
-                dest: 'css/',
+                dest: 'public/css/',
                 ext: '.min.css'
             }
         },
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
             },
             all: {
                 files: {
-                    "js/build/templates.js": ["templates/**/*.handlebars"]
+                    "public/js/build/templates.js": ["templates/**/*.handlebars"]
                 }
             }
         }
