@@ -77,20 +77,25 @@
 
                 var selection = $(s.target).find('.lbjs-item[selected=selected]');
 
-                $.each(selection, function(i, v) {
-                    if ($(this).data('list-type') == 'city') {
-                        selectedCityArr.push($(this).text());
-                    } else if ($(this).data('list-type') == 'name') {
-                        selectedStoreArr.push(app['filter-panel'].getStoreId($(this).text()));
-                    } else if ($(this).data('list-type') == 'brand_name') {
-                        selectedBrandArr.push(app['filter-panel'].getBrandId($(this).text()));
-                    }
-                });
+                if (selection.length) {
 
-                window.filterParamObj = {
-                    storeId: selectedStoreArr,
-                    city: selectedCityArr,
-                    brandId: selectedBrandArr
+                    $.each(selection, function(i, v) {
+                        if ($(this).data('list-type') == 'city') {
+                            selectedCityArr.push($(this).text());
+                        } else if ($(this).data('list-type') == 'name') {
+                            selectedStoreArr.push(app['filter-panel'].getStoreId($(this).text()));
+                        } else if ($(this).data('list-type') == 'brand_name') {
+                            selectedBrandArr.push(app['filter-panel'].getBrandId($(this).text()));
+                        }
+                    });
+
+                    window.filterParamObj = {
+                        storeId: selectedStoreArr,
+                        city: selectedCityArr,
+                        brandId: selectedBrandArr
+                    }
+                } else {
+                    window.filterParamObj.storeId = window.defaultFilterParam;
                 }
 
                 console.log(selectedCityArr, selectedStoreArr, selectedBrandArr);
@@ -310,20 +315,25 @@
 
                 var selection = $(s.target).find('.lbjs-item[selected=selected]');
 
-                $.each(selection, function(i, v) {
-                    if ($(this).data('list-type') == 'city') {
-                        selectedCityArr.push($(this).text());
-                    } else if ($(this).data('list-type') == 'name') {
-                        selectedStoreArr.push(app['filter-panel-time-trend'].getStoreId($(this).text()));
-                    } else if ($(this).data('list-type') == 'brand_name') {
-                        selectedBrandArr.push(app['filter-panel-time-trend'].getBrandId($(this).text()));
-                    }
-                });
+                if (selection.length) {
+                    $.each(selection, function(i, v) {
+                        if ($(this).data('list-type') == 'city') {
+                            selectedCityArr.push($(this).text());
+                        } else if ($(this).data('list-type') == 'name') {
+                            selectedStoreArr.push(app['filter-panel-time-trend'].getStoreId($(this).text()));
+                        } else if ($(this).data('list-type') == 'brand_name') {
+                            selectedBrandArr.push(app['filter-panel-time-trend'].getBrandId($(this).text()));
+                        }
+                    });
 
-                window.trendSectionObj = {
-                    storeId: selectedStoreArr,
-                    city: selectedCityArr,
-                    brandId: selectedBrandArr
+                    window.trendSectionObj = {
+                        storeId: selectedStoreArr,
+                        city: selectedCityArr,
+                        brandId: selectedBrandArr
+                    }
+
+                } else {
+                    window.filterParamObj.storeId = window.defaultFilterParam;
                 }
 
                 app['time-trend'].init(true);

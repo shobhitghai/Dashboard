@@ -95,6 +95,7 @@ function getStoreListData(initModules) {
         });
 
         window.filterParamObj.storeId = initFilterArr;
+        window.defaultFilterParam = initFilterArr;
 
         initModules();
     }
