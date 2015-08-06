@@ -74,7 +74,8 @@ DataConnectionLayer.prototype._authModule = function() {
         } else {
             //Redirect to login url
 
-            // res.redirect('url provided');
+            // res.redirect(req.query.redirect_uri); //what if it is null, means user comes directly by typing direct url
+
             res.redirect('/app'); //to be removed
         }
     });
