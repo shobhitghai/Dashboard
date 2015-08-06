@@ -69,30 +69,30 @@ DataConnectionLayer.prototype._authModule = function() {
 
         if (req.session.isLoggedin) {
             console.log('auth user');
-            res.redirect('/app');
+            
+            res.sendFile(path.join(__dirname + '/views/index.html'));
+
+
         } else {
             //Redirect to login url
 
-            // use url http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost&response_type=code
-            // http://localhost/auth_token
             res.redirect('http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost:3000/auth_token&response_type=code')
-                // res.redirect('/app'); //to be removed
         }
     });
 
 
     //route where user will land after logging in from the url
-    app.get('/auth_token', function(req, res) {
+    app.get('/auth_token', function(req, res, next) {
         //secret key from config
         //send post call with secret key to get access_token from http://52.74.64.83/crosslink_auth/oauth/access_token
         //get access token
 
         //get req.param.auth_token
-
-        console.log(req.param)
+        var self = this;
+        self.res = res;
 
         var data = querystring.stringify({
-            grant_type: req.param.code,
+            grant_type: req.query.code,
             code: 'cuoxPLUrgYPrLCgrg4MwBQfanzPwgQCBnSmtP5hs',
             redirect_uri: 'http://localhost:3000/auth_token',
             client_secret: constants.getValue('client_secret'),
@@ -100,8 +100,9 @@ DataConnectionLayer.prototype._authModule = function() {
         });
 
         var options = {
-            host: 'http://52.74.64.83/crosslink_auth/oauth/access_token',
+            host: '52.74.64.83',
             port: 80,
+            path: '/crosslink_auth/oauth/access_token',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -109,7 +110,7 @@ DataConnectionLayer.prototype._authModule = function() {
             }
         };
 
-        var req = http.request(options, function(res) {
+        var requestCall = http.request(options, function(res) {
             res.setEncoding('utf8');
             res.on('data', function(chunk) {
                 console.log("body: " + chunk);
@@ -120,17 +121,16 @@ DataConnectionLayer.prototype._authModule = function() {
 
                 //update the session.isLoggedin
                 req.session.isLoggedin = true;
-                res.redirect('/');
+                self.res.redirect('/');
+
+                // self.res.redirect('/');
             });
         });
 
-        req.write(data);
-        req.end();
 
-    });
+        requestCall.write(data);
+        requestCall.end();
 
-    app.get('/app', function(req, res) {
-        res.sendFile(path.join(__dirname + '/views/index.html'));
     });
 
 }
