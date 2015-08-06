@@ -1,6 +1,10 @@
 var constants = function() {
     this.obj = {
 
+        //auth details
+        client_secret: 'Sess10nSecret',
+        session_name: 'acton_ops',
+
         //db details
         db_host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
         db_user: 'webapp',

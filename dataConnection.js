@@ -6,6 +6,8 @@ var application_root = __dirname,
     constants = require("./private/constants.js"),
     session = require('express-session'),
     path = require('path'),
+    querystring = require('querystring'),
+    http = require('http'),
     port = 3000;
 
 // port = process.env.PORT || 3000;
@@ -38,7 +40,6 @@ DataConnectionLayer.prototype.connectDB = function() {
 
 DataConnectionLayer.prototype.configureExpress = function(connection) {
     var router = express.Router();
-    var sess;
 
     app.use(bodyParser.urlencoded({
         extended: true
@@ -55,42 +56,77 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
 }
 
 DataConnectionLayer.prototype._authModule = function() {
+    var sessionVar;
+
     app.use(session({
-        secret: 'Sess10nSecret',
-        name: 'acton_ops',
+        secret: constants.getValue('client_secret'),
+        name: constants.getValue('session_name'),
         resave: true,
         saveUninitialized: true
     }));
 
     app.get('/', function(req, res, next) {
-        if (req.session.isLoggedin) {
-            //send to get auth token
+        sessionVar = req.session.isLoggedin;
 
+        if (sessionVar) {
             console.log('auth user');
-            res.redirect('/auth_token');
+            res.redirect('/app');
         } else {
             //Redirect to login url
 
-            console.log('unauth user')
-
-            //test
-            res.redirect('/app');
+            // res.redirect('url provided');
+            res.redirect('/app'); //to be removed
         }
     });
 
+
+    //route where user will land after logging in from the url
+    //check with biplav to get the name of the route
     app.get('/auth_token', function(req, res) {
-        //send call to other url to get auth token details
-        //http://52.74.64.83/crosslink_auth/oauth/access_token
+        //secret key from config
+        //send post call with secret key to get access_token from http://52.74.64.83/crosslink_auth/oauth/access_token
         //get access token
-        //success callback
-        //res.redirect('/app')
+
+        var data = querystring.stringify({
+            authorization_code: '', //????
+            code: 'cuoxPLUrgYPrLCgrg4MwBQfanzPwgQCBnSmtP5hs',
+            redirect_uri: 'http://localhost',
+            client_secret: constants.getValue('client_secret'),
+            client_id: 'abcde'
+        });
+
+        var options = {
+            host: 'http://52.74.64.83/crosslink_auth/oauth/access_token',
+            port: 80,
+            path: '/login', //????
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': Buffer.byteLength(data)
+            }
+        };
+
+        var req = http.request(options, function(res) {
+            res.setEncoding('utf8');
+            res.on('data', function(chunk) {
+                console.log("body: " + chunk);
+
+                //get user info by passing token
+                // ? another post call
+                //http://52.74.64.83/crosslink_auth/public/api/user?access_token=PS0WysKrSP0iNNl9nG3gbv4Dv0nxeXcURsTnvkxO
+
+                //update the session.isLoggedin
+                sessionVar = true;
+                //res.redirect('/app')
+            });
+        });
+
+        req.write(data);
+        req.end();
 
     });
 
     app.get('/app', function(req, res) {
-        //get user info by passing token
-        //http://52.74.64.83/crosslink_auth/public/api/user?access_token=PS0WysKrSP0iNNl9nG3gbv4Dv0nxeXcURsTnvkxO
-
         // if (req.session.isLoggedin) {
         res.sendFile(path.join(__dirname + '/views/index.html'));
         // }
