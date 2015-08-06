@@ -4,6 +4,14 @@ var constants = function() {
         //auth details
         client_secret: 'Sess10nSecret',
         session_name: 'acton_ops',
+        oauth_url: "http://52.74.64.83/crosslink_auth/oauth/authorize",
+        client_id: "abcde",
+        redirect_uri: "http://localhost:3000/auth_token",
+        response_type: "code",
+        auth_token_code: "cuoxPLUrgYPrLCgrg4MwBQfanzPwgQCBnSmtP5hs",
+        token_req_host: "52.74.64.83",
+        token_req_path: "/crosslink_auth/oauth/access_token",
+        user_info_req_path: "/crosslink_auth/public/api/user",
 
         //db details
         db_host: 'ec2-52-74-25-254.ap-southeast-1.compute.amazonaws.com',
