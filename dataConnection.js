@@ -66,32 +66,35 @@ DataConnectionLayer.prototype._authModule = function() {
     }));
 
     app.get('/', function(req, res, next) {
-        sessionVar = req.session.isLoggedin;
 
-        if (sessionVar) {
+        if (req.session.isLoggedin) {
             console.log('auth user');
             res.redirect('/app');
         } else {
             //Redirect to login url
 
-            // res.redirect(req.query.redirect_uri); //what if it is null, means user comes directly by typing direct url
-
-            res.redirect('/app'); //to be removed
+            // use url http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost&response_type=code
+            // http://localhost/auth_token
+            res.redirect('http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost:3000/auth_token&response_type=code')
+                // res.redirect('/app'); //to be removed
         }
     });
 
 
     //route where user will land after logging in from the url
-    //check with biplav to get the name of the route
     app.get('/auth_token', function(req, res) {
         //secret key from config
         //send post call with secret key to get access_token from http://52.74.64.83/crosslink_auth/oauth/access_token
         //get access token
 
+        //get req.param.auth_token
+
+        console.log(req.param)
+
         var data = querystring.stringify({
-            authorization_code: '', //????
+            grant_type: req.param.code,
             code: 'cuoxPLUrgYPrLCgrg4MwBQfanzPwgQCBnSmtP5hs',
-            redirect_uri: 'http://localhost',
+            redirect_uri: 'http://localhost:3000/auth_token',
             client_secret: constants.getValue('client_secret'),
             client_id: 'abcde'
         });
@@ -99,7 +102,6 @@ DataConnectionLayer.prototype._authModule = function() {
         var options = {
             host: 'http://52.74.64.83/crosslink_auth/oauth/access_token',
             port: 80,
-            path: '/login', //????
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -117,8 +119,8 @@ DataConnectionLayer.prototype._authModule = function() {
                 //http://52.74.64.83/crosslink_auth/public/api/user?access_token=PS0WysKrSP0iNNl9nG3gbv4Dv0nxeXcURsTnvkxO
 
                 //update the session.isLoggedin
-                sessionVar = true;
-                //res.redirect('/app')
+                req.session.isLoggedin = true;
+                res.redirect('/');
             });
         });
 
@@ -128,9 +130,7 @@ DataConnectionLayer.prototype._authModule = function() {
     });
 
     app.get('/app', function(req, res) {
-        // if (req.session.isLoggedin) {
         res.sendFile(path.join(__dirname + '/views/index.html'));
-        // }
     });
 
 }
