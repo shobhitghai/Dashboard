@@ -8,7 +8,7 @@ var application_root = __dirname,
     path = require('path'),
     querystring = require('querystring'),
     http = require('http'),
-    port = 3000;
+    port = 80;
 
 // port = process.env.PORT || 3000;
 
@@ -85,7 +85,7 @@ DataConnectionLayer.prototype._authModule = function() {
 
 
     //route where user will land after logging in from the url
-    app.get('/auth_token', function(req, res, next) {
+    app.get('/monitoring/auth_token', function(req, res, next) {
         var self = this;
         self.res = res;
         self.auth_token = req.query.code

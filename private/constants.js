@@ -7,7 +7,7 @@ var constants = function() {
         oauth_url: "http://52.74.64.83/crosslink_auth/oauth/authorize",
         client_id: "abcde",
         // redirect_uri: "http://localhost:3000/auth_token",
-        redirect_uri: "http://52.74.25.254:3000/auth_token",
+        redirect_uri: "http://52.74.25.254/monitoring/auth_token",
         response_type: "code",
         auth_token_code: "cuoxPLUrgYPrLCgrg4MwBQfanzPwgQCBnSmtP5hs",
         token_req_host: "52.74.64.83",

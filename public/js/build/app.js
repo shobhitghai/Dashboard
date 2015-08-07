@@ -33,7 +33,7 @@ function getDeviceState() {
 }
 
 //sets host url for ajax call
-window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
+window.hostUrl = 'http://' + window.location.hostname + '/api/';
 
 
 
