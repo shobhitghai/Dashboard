@@ -65,7 +65,7 @@ DataConnectionLayer.prototype._authModule = function() {
         saveUninitialized: true
     }));
 
-    app.get('/', function(req, res, next) {
+    app.get('/monitoring', function(req, res, next) {
         console.log('root session' + req.session.isLoggedin)
         if (req.session.isLoggedin) {
             res.sendFile(path.join(__dirname + '/views/index.html'));
@@ -80,7 +80,7 @@ DataConnectionLayer.prototype._authModule = function() {
         console.log('logout called')
         req.session.isLoggedin = false;
         console.log("logout session " + req.session.isLoggedin)
-        res.redirect('/');
+        res.redirect('/monitoring');
     })
 
 
@@ -136,7 +136,7 @@ DataConnectionLayer.prototype._authModule = function() {
                         // console.log("success " + data);
 
                         req.session.isLoggedin = true;
-                        self.res.redirect('/');
+                        self.res.redirect('/monitoring');
                     });
 
                 })
