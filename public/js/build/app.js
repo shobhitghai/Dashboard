@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-08 */
+/*! Fashion_Dashboard 1.0.0 2015-08-07 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -34,11 +34,7 @@ function getDeviceState() {
 
 //sets host url for ajax call
 
-//server 
-// window.hostUrl = 'http://' + window.location.hostname + '/api/';
-
-//local
-// window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
+window.hostUrl = window.hostUrl  ? window.hostUrl : 'http://' + window.location.hostname + '/api/';
 
 
 // FOR DEBUG
@@ -208,7 +204,6 @@ function getStoreListData(initModules) {
 (function() {
     app['ajax-wrapper'] = {
         sendAjax: function(api, data, successCallback, errorCallback, showLoader) {
-            window.hostUrl = hostUrl ? hostUrl : 'http://' + window.location.hostname + '/api/';;
 
             if (showLoader) {
                 NProgress.start(true);
