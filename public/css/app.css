@@ -4,7 +4,7 @@ i, .i {
   vertical-align: middle;
   background-repeat: no-repeat;
   background-position: top left;
-  background-image: url('/css/img/icon-sff83e5d9d3.png');
+  background-image: url('/css/img/icon-s9ed983fbdc.png');
 }
 /* line 11, ../sass/global/_icons.scss */
 .lt-ie8 i, .lt-ie8 .i {
@@ -12,10 +12,17 @@ i, .i {
 }
 
 /* line 17, ../sass/global/_icons.scss */
+.i-logo-new {
+  height: 42px;
+  width: 129px;
+  background-position: 0 0;
+}
+
+/* line 17, ../sass/global/_icons.scss */
 .i-logo {
   height: 42px;
   width: 224px;
-  background-position: 0 0;
+  background-position: -134px 0;
 }
 
 /*

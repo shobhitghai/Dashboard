@@ -1,6 +1,7 @@
 (function() {
     app['ajax-wrapper'] = {
         sendAjax: function(api, data, successCallback, errorCallback, showLoader) {
+            window.hostUrl = hostUrl ? hostUrl : 'http://' + window.location.hostname + '/api/';;
 
             if (showLoader) {
                 NProgress.start(true);

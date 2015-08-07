@@ -36,7 +36,7 @@ function getDeviceState() {
 // window.hostUrl = 'http://' + window.location.hostname + '/api/';
 
 //local
-window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
+// window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
 
 
 // FOR DEBUG

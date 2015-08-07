@@ -38,7 +38,7 @@ function getDeviceState() {
 // window.hostUrl = 'http://' + window.location.hostname + '/api/';
 
 //local
-window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
+// window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
 
 
 // FOR DEBUG
@@ -208,6 +208,7 @@ function getStoreListData(initModules) {
 (function() {
     app['ajax-wrapper'] = {
         sendAjax: function(api, data, successCallback, errorCallback, showLoader) {
+            window.hostUrl = hostUrl ? hostUrl : 'http://' + window.location.hostname + '/api/';;
 
             if (showLoader) {
                 NProgress.start(true);
