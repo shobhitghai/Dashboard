@@ -66,14 +66,22 @@ DataConnectionLayer.prototype._authModule = function() {
     }));
 
     app.get('/', function(req, res, next) {
-
+        console.log('root session' + req.session.isLoggedin)
         if (req.session.isLoggedin) {
             res.sendFile(path.join(__dirname + '/views/index.html'));
         } else {
+            console.log("redirect called")
             res.redirect(constants.getValue("oauth_url") + "?client_id=" + constants.getValue("client_id") + "&redirect_uri=" + constants.getValue('redirect_uri') + "&response_type=" + constants.getValue('response_type'));
             // res.redirect('http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost:3000/auth_token&response_type=code')
         }
     });
+
+    app.get('/logout', function(req, res){
+        console.log('logout called')
+        req.session.isLoggedin = false;
+        console.log("logout session " + req.session.isLoggedin)
+        res.redirect('/');
+    })
 
 
     //route where user will land after logging in from the url
@@ -104,7 +112,7 @@ DataConnectionLayer.prototype._authModule = function() {
         var token_req = http.request(options, function(res) {
             res.setEncoding('utf8');
             res.on('data', function(chunk) {
-                console.log("body: " + chunk);
+                // console.log("body: " + chunk);
 
                 var param = querystring.stringify({
                     access_token: self.auth_token
@@ -125,7 +133,7 @@ DataConnectionLayer.prototype._authModule = function() {
                     res.setEncoding('utf8');
                     res.on('data', function(data) {
 
-                        console.log("success " + data);
+                        // console.log("success " + data);
 
                         req.session.isLoggedin = true;
                         self.res.redirect('/');
