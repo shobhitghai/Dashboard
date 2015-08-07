@@ -65,6 +65,10 @@ DataConnectionLayer.prototype._authModule = function() {
         saveUninitialized: true
     }));
 
+    app.get('/', function(req, res){
+        res.redirect('/monitoring');
+    })
+
     app.get('/monitoring', function(req, res, next) {
         console.log('root session' + req.session.isLoggedin)
         if (req.session.isLoggedin) {
