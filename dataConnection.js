@@ -8,9 +8,9 @@ var application_root = __dirname,
     path = require('path'),
     querystring = require('querystring'),
     http = require('http'),
-    port = 80;
+    port = constants.getValue('port');
 
-// port = process.env.PORT || 3000;
+    // port = process.env.PORT || 3000;
 
 var app = express();
 
@@ -66,6 +66,7 @@ DataConnectionLayer.prototype._authModule = function() {
     }));
 
     app.get('/', function(req, res){
+        console.log('root redirect')
         res.redirect('/monitoring');
     })
 
@@ -76,7 +77,6 @@ DataConnectionLayer.prototype._authModule = function() {
         } else {
             console.log("redirect called")
             res.redirect(constants.getValue("oauth_url") + "?client_id=" + constants.getValue("client_id") + "&redirect_uri=" + constants.getValue('redirect_uri') + "&response_type=" + constants.getValue('response_type'));
-            // res.redirect('http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost:3000/auth_token&response_type=code')
         }
     });
 
@@ -126,19 +126,18 @@ DataConnectionLayer.prototype._authModule = function() {
                     host: constants.getValue("token_req_host"),
                     port: 80,
                     path: constants.getValue("user_info_req_path"),
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Content-Length': Buffer.byteLength(param)
-                    }
+                    method: 'GET'
+                    // headers: {
+                    //     'Content-Type': 'application/x-www-form-urlencoded',
+                    //     'Content-Length': Buffer.byteLength(param)
+                    // }
                 }
 
                 var infoReq = http.request(getUserInfoOptions, function(res) {
                     res.setEncoding('utf8');
                     res.on('data', function(data) {
 
-                        // console.log("success " + data);
-
+                        console.log("success " + data);
                         req.session.isLoggedin = true;
                         self.res.redirect('/monitoring');
                     });

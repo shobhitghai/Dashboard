@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-07 */
+/*! Fashion_Dashboard 1.0.0 2015-08-08 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -33,8 +33,12 @@ function getDeviceState() {
 }
 
 //sets host url for ajax call
-window.hostUrl = 'http://' + window.location.hostname + '/api/';
 
+//server 
+// window.hostUrl = 'http://' + window.location.hostname + '/api/';
+
+//local
+window.hostUrl = 'http://' + window.location.hostname + ':3000/api/';
 
 
 // FOR DEBUG
