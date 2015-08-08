@@ -84,7 +84,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
         self._setResponseHeader(res);
 
         var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsds');
-        var query = "select count(mac_address) as cnt, walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by walk_in_flag";
+        var query = "select count(tv.mac_address) as cnt, tv.walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by tv.walk_in_flag";
 
         connection.query(query, function(err, data) {
             if (err) {
@@ -180,13 +180,13 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRevisitFrequency", function(req, res) {
         self._setResponseHeader(res);
 
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj);
-        var query = "SELECT category, COUNT(mac_address) FROM t_store_frequency_rate where " + queryFilterParam + " GROUP BY category, store_id ORDER BY category_order;"
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsfr');
+        var query = "SELECT tsfr.category, COUNT(tsfr.mac_address) as 'COUNT(mac_address)' FROM t_store_frequency_rate tsfr left join t_store_details tsds on (tsfr.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsfr.store_id = tcen.store_id and tsfr.mac_address = tcen.mac_address) where " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) GROUP BY category ORDER BY category_order;"
 
         connection.query(query, function(err, data) {
             if (err) {
                 console.log(err)
-                
+
                 self._sendErrorResponse(res);
             } else {
                 res.end(JSON.stringify(data));
