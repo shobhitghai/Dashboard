@@ -10,8 +10,6 @@ var application_root = __dirname,
     http = require('http'),
     port = constants.getValue('port');
 
-    // port = process.env.PORT || 3000;
-
 var app = express();
 
 function DataConnectionLayer() {
@@ -56,7 +54,6 @@ DataConnectionLayer.prototype.configureExpress = function(connection) {
 }
 
 DataConnectionLayer.prototype._authModule = function() {
-    var sessionVar;
 
     app.use(session({
         secret: constants.getValue('client_secret'),
@@ -65,13 +62,11 @@ DataConnectionLayer.prototype._authModule = function() {
         saveUninitialized: true
     }));
 
-    app.get('/', function(req, res){
-        console.log('root redirect')
+    app.get('/', function(req, res) {
         res.redirect('/monitoring');
     })
 
     app.get('/monitoring', function(req, res, next) {
-        console.log('root session' + req.session.isLoggedin)
         if (req.session.isLoggedin) {
             res.sendFile(path.join(__dirname + '/views/index.html'));
         } else {
@@ -80,7 +75,7 @@ DataConnectionLayer.prototype._authModule = function() {
         }
     });
 
-    app.get('/logout', function(req, res){
+    app.get('/logout', function(req, res) {
         console.log('logout called')
         req.session.isLoggedin = false;
         console.log("logout session " + req.session.isLoggedin)
@@ -95,11 +90,11 @@ DataConnectionLayer.prototype._authModule = function() {
         self.auth_token = req.query.code
 
         var data = querystring.stringify({
-            grant_type: self.auth_token,
-            code: constants.getValue("auth_token_code"),
+            grant_type: 'authorization_code',
+            code: self.auth_token,
             redirect_uri: constants.getValue("redirect_uri"),
-            client_secret: constants.getValue('client_secret'),
-            client_id: constants.getValue("client_id")
+            client_id: constants.getValue("client_id"),
+            client_secret: constants.getValue('client_secret')
         });
 
         var options = {
@@ -115,50 +110,45 @@ DataConnectionLayer.prototype._authModule = function() {
 
         var token_req = http.request(options, function(res) {
             res.setEncoding('utf8');
-            res.on('data', function(chunk) {
-                // console.log("body: " + chunk);
+            res.on('data', function(tokenObj) {
+                var tokenObj = JSON.parse(tokenObj);
 
-                var param = querystring.stringify({
-                    access_token: self.auth_token
-                });
+                if (tokenObj["access_token"]) {
 
-                var getUserInfoOptions = {
-                    host: constants.getValue("token_req_host"),
-                    port: 80,
-                    path: constants.getValue("user_info_req_path"),
-                    method: 'GET'
-                    // headers: {
-                    //     'Content-Type': 'application/x-www-form-urlencoded',
-                    //     'Content-Length': Buffer.byteLength(param)
-                    // }
-                }
+                    var getUserInfoOptions = {
+                        host: constants.getValue("token_req_host"),
+                        port: 80,
+                        path: constants.getValue("user_info_req_path") + "?access_token=" + tokenObj["access_token"],
+                        method: 'GET'
+                    }
 
-                var infoReq = http.request(getUserInfoOptions, function(res) {
-                    res.setEncoding('utf8');
-                    res.on('data', function(data) {
+                    var infoReq = http.request(getUserInfoOptions, function(res) {
+                        res.setEncoding('utf8');
+                        res.on('data', function(userInfo) {
 
-                        console.log("success " + data);
-                        req.session.isLoggedin = true;
-                        self.res.redirect('/monitoring');
+                            if (userInfo.hasOwnProperty("error")) {
+                                console.log("error fetching user info");
+                                console.log(userInfo);
+                                self.res.redirect('/monitoring');
+                            } else {
+                                req.session.isLoggedin = true;
+                                req.session.userInfo = userInfo;
+                                self.res.redirect('/monitoring');
+                            }
+
+                        });
+
+                    })
+
+                    infoReq.on('error', function(err) {
+                        console.log("userinfo error " + err)
                     });
 
-                })
+                    infoReq.end();
+                } else {
+                    self.res.redirect('/monitoring');
+                }
 
-                infoReq.on('error', function(err) {
-                    console.log(" error called ")
-                    console.log(err)
-                });
-
-                infoReq.write(param);
-                infoReq.end();
-
-                //get user info by passing token
-                // ? another post call
-                //http://52.74.64.83/crosslink_auth/public/api/user?access_token=PS0WysKrSP0iNNl9nG3gbv4Dv0nxeXcURsTnvkxO
-
-                //update the session.isLoggedin
-                // req.session.isLoggedin = true;
-                // self.res.redirect('/');
             });
         });
 
