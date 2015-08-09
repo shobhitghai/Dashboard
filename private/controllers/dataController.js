@@ -139,9 +139,9 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     router.get("/getHourOptimizationData", function(req, res) {
         self._setResponseHeader(res);
-
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj);
-        var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit where date(first_seen) < date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) and " + queryFilterParam + " group by visit_date, hour) as ty where hour > 2 and hour < 18 group by hour "
+        /* The query has a date >= '2015-08-09' hard coded. It was done because timezone was changed on this date from UCT to IST. Hence the hoursly averages would have skewed if data before this date is taken in average) */
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsds');
+        var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) where date(first_seen) <= date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) AND date(first_seen) >='2015-08-09' AND " + queryFilterParam + " group by visit_date, hour) as ty where hour >= 9 and hour <= 22 group by hour "
 
         connection.query(query, function(err, data) {
             if (err) {

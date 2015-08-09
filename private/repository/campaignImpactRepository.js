@@ -21,8 +21,9 @@ repo.getData = function() {
 repo._getCampaignPeriodData = function() {
     var self = this;
     
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj);
-    var query = "select count(mac_address) as cnt, DATEDIFF(" + this.filterParam.sDate + "," + this.filterParam.eDate + ") + 1 AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) <=" + this.filterParam.eDate + "and DATE(first_seen) >=" + this.filterParam.sDate + " and " + queryFilterParam + " and walk_in_flag = 1";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    // var query = "select count(mac_address) as cnt, DATEDIFF(" + this.filterParam.sDate + "," + this.filterParam.eDate + ") + 1 AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) <=" + this.filterParam.eDate + "and DATE(first_seen) >=" + this.filterParam.sDate + " and " + queryFilterParam + " and walk_in_flag = 1";
+	var query = "select count(tv.mac_address) as cnt, count(distinct tv.visit_date) as DiffDate, avg(tv.dwell_time) as dwt from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where visit_date <=" + this.filterParam.eDate + " and visit_date >=" + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and walk_in_flag = 1";
 
     this.connection.query(query, function(err, data) {
         if (err) {
@@ -39,8 +40,9 @@ repo._getCampaignPeriodData = function() {
 repo._getLastMonthData = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj);
-    var query = "select count(mac_address) as cnt, DATEDIFF(DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY)," + this.filterParam.sDate + ") AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY) and DATE(first_seen) < " + this.filterParam.sDate + " and " + queryFilterParam + " and walk_in_flag = 1";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    // var query = "select count(mac_address) as cnt, DATEDIFF(DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY)," + this.filterParam.sDate + ") AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY) and DATE(first_seen) < " + this.filterParam.sDate + " and " + queryFilterParam + " and walk_in_flag = 1";
+	var query = "select count(tv.mac_address) as cnt, count(distinct tv.visit_date) as DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where visit_date >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 WEEK) and visit_date < " + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and walk_in_flag = 1";
 
     this.connection.query(query, function(err, data) {
 

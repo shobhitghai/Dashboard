@@ -22,8 +22,8 @@ repo.getData = function() {
 repo._getstoreFrontData = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj);
-    var query = "select count(mac_address) as cnt, avg(dwell_time) as dt, walk_in_flag from customer_tracker.t_visit where DATE(first_seen) >= " + this.filterParam.sDate + " and DATE(first_seen) < DATE_ADD(" + this.filterParam.sDate + " , INTERVAL 7 DAY) and " + queryFilterParam + " group by walk_in_flag";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tv.mac_address) as cnt, avg(tv.dwell_time) as dt, tv.walk_in_flag as walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where DATE(first_seen) >= " + this.filterParam.sDate + "  and DATE(first_seen) < DATE_ADD(" + this.filterParam.sDate + " , INTERVAL 7 DAY) and " + queryFilterParam + " group by walk_in_flag ";
 
     this.connection.query(query, function(err, data) {
         if (err) {
@@ -40,8 +40,8 @@ repo._getstoreFrontData = function() {
 repo._getstoreFrontComparisonData = function() {
     var self = this;
 
-    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj);
-    var query = "select count(mac_address) as cnt, avg(dwell_time) as dt, walk_in_flag from customer_tracker.t_visit where DATE(first_seen) < " + this.filterParam.sDate + " and DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + " , INTERVAL 7 DAY) and " + queryFilterParam + " group by walk_in_flag";
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = " select count(tv.mac_address) as cnt, avg(tv.dwell_time) as dt, tv.walk_in_flag as walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where DATE(first_seen) < " + this.filterParam.sDate + " and DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + " , INTERVAL 7 DAY) and " + queryFilterParam + " group by walk_in_flag";
     // console.log(query)
     this.connection.query(query, function(err, data) {
         // console.log(data)

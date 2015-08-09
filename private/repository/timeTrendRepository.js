@@ -24,8 +24,9 @@ repo.getData = function() {
 repo._getOpportunityData = function(paramObj, isGlobalObj, triggerNext) {
     var self = this;
     console.log(paramObj)
-    var queryFilterParam = queryParamHelper.getQueryParam(paramObj, 'tv');
-    var query = "select sum(oop.cnt_mac_address) as 'count(mac_address)', oop.yearmonth from( select tv.visit_date, concat(year(tv.visit_date),'-',month(tv.visit_date)) as yearmonth, tv.store_id, count(distinct tv.mac_address) as cnt_mac_address from customer_tracker.t_visit tv where " + queryFilterParam + " group by visit_date, store_id) as oop group by oop.yearmonth order by oop.yearmonth asc";
+    /*daily OOP average*/
+    var queryFilterParam = queryParamHelper.getQueryParam(paramObj, 'tsds');
+    var query = "SELECT round(sum(oop.cnt_mac_address)/count(oop.visit_date)) AS 'count(mac_address)', oop.yearmonth from (SELECT tv.visit_date as visit_date, date_format(concat(year(tv.visit_date),'-',month(tv.visit_date),'-01'), '%b %y') AS yearmonth, concat(year(tv.visit_date),'-',month(tv.visit_date), '-01') AS yearofmonth, tv.store_id, count(DISTINCT tv.mac_address) AS cnt_mac_address FROM customer_tracker.t_visit tv LEFT JOIN customer_tracker.t_store_details tsds ON (tv.store_id=tsds.store_id) where " + queryFilterParam + "GROUP BY visit_date, store_id) AS oop GROUP BY oop.yearmonth ORDER BY month(oop.yearofmonth), year(oop.yearofmonth) ASC ";
     console.log(query)
     this.connection.query(query, function(err, data) {
 
