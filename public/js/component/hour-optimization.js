@@ -18,13 +18,15 @@
         fetchData: function(url, chartContainer) {
             function successCallback(res) {
                 var res = $.parseJSON(res);
-                var dataObj = new Array();
+                var dataObj = new Array();  
+                var periodObj = new Array();
 
                 $.each(res, function(i, v) {
                     dataObj.push(Math.round(this.avg_walk_by));
+                    periodObj.push(Math.round(this.hour))
                 });
 
-                app['hour-optimization'].renderChart(chartContainer, dataObj);
+                app['hour-optimization'].renderChart(chartContainer, dataObj, periodObj);
 
             }
 
@@ -37,7 +39,7 @@
                 filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
-        renderChart: function(chartContainer, dataObj) {
+        renderChart: function(chartContainer, dataObj, periodObj) {
             chartContainer.highcharts({
                 chart: {
                     type: 'column',
@@ -49,23 +51,7 @@
                     text: ''
                 },
                 xAxis: {
-                    categories: [
-                        '8.30 a.m',
-                        '9.30 a.m',
-                        '10.30 a.m',
-                        '11.30 a.m',
-                        '12.30 p.m',
-                        '1.30 p.m',
-                        '2.30 p.m',
-                        '3.30 p.m',
-                        '4.30 p.m',
-                        '5.30 p.m',
-                        '6.30 p.m',
-                        '7.30 p.m',
-                        '8.30 p.m',
-                        '9.30 p.m',
-                        '10.30 p.m'
-                    ],
+                    categories: periodObj,
                     crosshair: true,
                     title: {
                         text: null

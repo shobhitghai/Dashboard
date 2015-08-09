@@ -70,6 +70,8 @@
 
                         $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
                         $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                        $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
+
                     }
                 }
 

@@ -133,6 +133,7 @@ DataConnectionLayer.prototype._authModule = function() {
                             } else {
                                 req.session.isLoggedin = true;
                                 req.session.userInfo = userInfo;
+                                console.log(userInfo);
                                 self.res.redirect('/monitoring');
                             }
 
@@ -156,6 +157,10 @@ DataConnectionLayer.prototype._authModule = function() {
         token_req.write(data);
         token_req.end();
 
+    });
+
+    app.get('/api/getUserInfo', function(req, res){
+        res.end(req.session.userInfo);
     });
 
 }

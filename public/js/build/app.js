@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-08 */
+/*! Fashion_Dashboard 1.0.0 2015-08-10 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -34,7 +34,7 @@ function getDeviceState() {
 
 //sets host url for ajax call
 
-window.hostUrl = window.hostUrl  ? window.hostUrl : 'http://' + window.location.hostname + '/api/';
+window.hostUrl = window.hostUrl ? window.hostUrl : 'http://' + window.location.hostname + '/api/';
 
 
 // FOR DEBUG
@@ -73,10 +73,37 @@ Array.prototype.getUnique = function() {
 }
 
 $(function() {
-    getStoreListData(app.util.initModules);
+    getInitData();
 });
 
-function getStoreListData(initModules) {
+function getInitData() {
+    function successCallback(res) {
+        var userinfo = $.parseJSON(res)[0];
+
+
+        if (userinfo && userinfo.email) {
+            window.uId = userinfo.email;
+            $('.nav-user-name a').text("Welcome " + userinfo.name);
+            getStoreListData(app.util.initModules, userinfo.email);
+        }
+    }
+
+    function errorCallback(err) {
+        console.log('userinfo ' + err || 'err');
+    }
+
+    $.ajax({
+        url: hostUrl + 'getUserInfo',
+        success: function(res) {
+            successCallback(res);
+        },
+        error: function(err) {
+            errorCallback(err);
+        }
+    })
+}
+
+function getStoreListData(initModules, uId) {
     var storeDropdown = $('.mod-navbar').find('.store-dropdown');
     window.storeDetail = {
         name: ''
@@ -91,6 +118,7 @@ function getStoreListData(initModules) {
     function successCallback(res) {
         var res = $.parseJSON(res);
         var initFilterArr = [];
+        window.panelList = res;
 
         $.each(res, function(i, v) {
             initFilterArr.push(this.store_id);
@@ -108,6 +136,9 @@ function getStoreListData(initModules) {
 
     $.ajax({
         url: hostUrl + 'getStoreDetails',
+        data: {
+            id: uId
+        },
         success: function(res) {
             successCallback(res);
         },
@@ -255,6 +286,9 @@ function getStoreListData(initModules) {
 
             $.ajax({
                 url: hostUrl + 'getStoreDetails',
+                data: {
+                    id: uId
+                },
                 success: function(res) {
                     successCallback(res);
                 },
@@ -493,6 +527,9 @@ function getStoreListData(initModules) {
 
             $.ajax({
                 url: hostUrl + 'getStoreDetails',
+                data: {
+                    id: uId
+                },
                 success: function(res) {
                     successCallback(res);
                 },
@@ -1221,9 +1258,16 @@ function getStoreListData(initModules) {
                 console.log('navbar' + err || 'err');
             }
 
+            // console.log(window.panelList)
+
+            // $.each(window.panelList, function(i,v){
+                
+            // });
+
             app['ajax-wrapper'].sendAjax(url, {
                 storeName: window.storeDetail.name,
-                filterParamObj: window.filterParamObj
+                filterParamObj: window.filterParamObj,
+                panelList: window.panelList
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
@@ -1239,10 +1283,19 @@ function getStoreListData(initModules) {
                 },
                 xAxis: {
                     categories: [
-                        'Store',
+                        'Selected Store(s)',
                         'Brand Average'
                     ],
                     crosshair: true
+                },
+                yAxis: {
+                    title: {
+                        text: '% (cross store visits to total visits)'
+                    }
+                },
+                legend: {
+                    reversed: true,
+                    enabled: false
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -1279,10 +1332,10 @@ function getStoreListData(initModules) {
             var self = this;
             this.chartContainer = $(s.target).find('#time-trend-chart');
             this.response = null;
-            if (reloadSection == true) {
-                app['time-trend'].fetchData('getMonthlyTimeTrendData', this.chartContainer);
-                this.metricSelectionHandler();
-            }
+            // if (reloadSection == true) {
+            app['time-trend'].fetchData('getMonthlyTimeTrendData', this.chartContainer);
+            this.metricSelectionHandler();
+            // }
 
         },
         refreshData: function() {
@@ -1294,7 +1347,8 @@ function getStoreListData(initModules) {
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
-
+                console.log("from time trend");
+                console.log(res)
                 self.response = res;
                 var data = app['time-trend'].buildOpportunityObj(res);
                 app['time-trend'].renderChart(chartContainer, data);
@@ -1348,9 +1402,12 @@ function getStoreListData(initModules) {
                 data.globalArr.push(this.data);
             })
 
-            $.each(res.sectionPanelData.opportunityData, function(i, v) {
-                data.sectionArr.push(this.data);
-            })
+            if (res.sectionPanelData.opportunityData) {
+                $.each(res.sectionPanelData.opportunityData, function(i, v) {
+                    data.sectionArr.push(this.data);
+                })
+            }
+
 
             return data;
         },
@@ -1370,11 +1427,13 @@ function getStoreListData(initModules) {
                 }
             })
 
-            $.each(res.sectionPanelData.storeFrontData, function(i, v) {
-                if (res.sectionPanelData.opportunityData[i]) {
-                    data.sectionArr.push((this.data / res.sectionPanelData.opportunityData[i].data) * 100);
-                }
-            })
+            if (res.sectionPanelData.storeFrontData) {
+                $.each(res.sectionPanelData.storeFrontData, function(i, v) {
+                    if (res.sectionPanelData.opportunityData[i]) {
+                        data.sectionArr.push((this.data / res.sectionPanelData.opportunityData[i].data) * 100);
+                    }
+                })
+            }
 
             return data;
 
@@ -1392,9 +1451,11 @@ function getStoreListData(initModules) {
                 data.globalArr.push(this.data);
             })
 
-            $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
-                data.sectionArr.push(this.data);
-            })
+            if (res.sectionPanelData.dwellTimeData) {
+                $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
+                    data.sectionArr.push(this.data);
+                })
+            }
 
             return data;
         },
@@ -1414,11 +1475,14 @@ function getStoreListData(initModules) {
                 }
             })
 
-            $.each(res.sectionPanelData.repeatCustData, function(i, v) {
-                if (res.sectionPanelData.storeFrontData[i]) {
-                    data.sectionArr.push((this.data / res.sectionPanelData.storeFrontData[i].data) * 100);
-                }
-            })
+            if (res.sectionPanelData.dwellTimeData) {
+
+                $.each(res.sectionPanelData.repeatCustData, function(i, v) {
+                    if (res.sectionPanelData.storeFrontData[i]) {
+                        data.sectionArr.push((this.data / res.sectionPanelData.storeFrontData[i].data) * 100);
+                    }
+                })
+            }
 
             return data;
         },
@@ -1540,6 +1604,8 @@ function getStoreListData(initModules) {
 
                         $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
                         $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                        $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
+
                     }
                 }
 
@@ -1989,13 +2055,15 @@ function getStoreListData(initModules) {
         fetchData: function(url, chartContainer) {
             function successCallback(res) {
                 var res = $.parseJSON(res);
-                var dataObj = new Array();
+                var dataObj = new Array();  
+                var periodObj = new Array();
 
                 $.each(res, function(i, v) {
                     dataObj.push(Math.round(this.avg_walk_by));
+                    periodObj.push(Math.round(this.hour))
                 });
 
-                app['hour-optimization'].renderChart(chartContainer, dataObj);
+                app['hour-optimization'].renderChart(chartContainer, dataObj, periodObj);
 
             }
 
@@ -2008,7 +2076,7 @@ function getStoreListData(initModules) {
                 filterParamObj: window.filterParamObj
             }, successCallback, errorCallback)
         },
-        renderChart: function(chartContainer, dataObj) {
+        renderChart: function(chartContainer, dataObj, periodObj) {
             chartContainer.highcharts({
                 chart: {
                     type: 'column',
@@ -2020,23 +2088,7 @@ function getStoreListData(initModules) {
                     text: ''
                 },
                 xAxis: {
-                    categories: [
-                        '8.30 a.m',
-                        '9.30 a.m',
-                        '10.30 a.m',
-                        '11.30 a.m',
-                        '12.30 p.m',
-                        '1.30 p.m',
-                        '2.30 p.m',
-                        '3.30 p.m',
-                        '4.30 p.m',
-                        '5.30 p.m',
-                        '6.30 p.m',
-                        '7.30 p.m',
-                        '8.30 p.m',
-                        '9.30 p.m',
-                        '10.30 p.m'
-                    ],
+                    categories: periodObj,
                     crosshair: true,
                     title: {
                         text: null

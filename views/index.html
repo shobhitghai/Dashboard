@@ -7,8 +7,9 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Dashboard</title>
+    <title>Spout Monitoring</title>
     <!-- Bootstrap Core CSS -->
+    <link rel="icon" href="../css/img/favicon.ico" type="image/icon" sizes="16x16">
     <link href="../css/lib/bootstrap.css" rel="stylesheet">
     <link href="../css/lib/bootstrap-datepicker.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -46,9 +47,13 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="fa fa-bars fa-fw fa-2x"></span></span>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-user-name">
+                            <a href=""></a>
+                        </li>
+                        <li><a href="/logout">Log out</a></li>
+                    </ul>
                 </li>
-
-                <a href="/logout">logout</a>
             </ul>
         </nav>
         <div id="page-wrapper">
@@ -199,7 +204,7 @@
                     </div>
                 </div>
                 <div class="col-xs-4">
-                    <div class="panel panel-default mod-shopper-profile">
+                    <div class="panel panel-default mod-shopper-profile fade-out">
                         <div class="panel-body">
                             <h4 class="section-heading">Shopper's profile</h4>
                             <div id="shopper-profile-chart">
@@ -223,10 +228,10 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="people-text">Ideal # of sales people</div>
-                                    <div class="people-count people-sales-count">2</div>
+                                    <div class="people-count people-sales-count"></div>
                                 </div>
                             </div>
-                            <div class="mod-current-shoppers">
+                            <div class="mod-current-shoppers fade-out">
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="people-text">Shoppers profile in mall</div>

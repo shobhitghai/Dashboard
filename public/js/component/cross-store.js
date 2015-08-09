@@ -45,9 +45,16 @@
                 console.log('navbar' + err || 'err');
             }
 
+            // console.log(window.panelList)
+
+            // $.each(window.panelList, function(i,v){
+                
+            // });
+
             app['ajax-wrapper'].sendAjax(url, {
                 storeName: window.storeDetail.name,
-                filterParamObj: window.filterParamObj
+                filterParamObj: window.filterParamObj,
+                panelList: window.panelList
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
@@ -63,10 +70,19 @@
                 },
                 xAxis: {
                     categories: [
-                        'Store',
+                        'Selected Store(s)',
                         'Brand Average'
                     ],
                     crosshair: true
+                },
+                yAxis: {
+                    title: {
+                        text: '% (cross store visits to total visits)'
+                    }
+                },
+                legend: {
+                    reversed: true,
+                    enabled: false
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',

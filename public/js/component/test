@@ -1,18 +1,10 @@
-session.isAuth == undefined
-    => redirect to url param from express 
-http://52.74.64.83/crosslink_auth/oauth/authorize?client_id=abcde&redirect_uri=http://localhost&response_type=code
+1. Logout functionality to be completed, logout button inside the burger icon. 
+2. On clicking the burger icon, when a dropdown/slider opens, it should mention the name of the user.
+3. The current selection made in filter panel should be visible in the top bar. 
+    - If multiple stores selected, it should show first couple and then ...
+    - If no selection made, it should show "All Stores"
+4. The information/help icon is needed in All sections on top right of each section. On clicking, content should show up. Will share content by later today. You can start by putting dummy content. 
 
 
-after login from above url, add another route to get access token(which route )
-
-http://52.74.64.83/crosslink_auth/oauth/access_token
-
-get acdess token
-{"access_token":"PS0WysKrSP0iNNl9nG3gbv4Dv0nxeXcURsTnvkxO","token_type":"Bearer","expires_in":36000}
-
-data come —> update session cookie —> redirect to home —> user is auth —> get info
-
-Then at the backend following request need to be fired to get the user info
-http://52.74.64.83/crosslink_auth/public/api/user?access_token=PS0WysKrSP0iNNl9nG3gbv4Dv0nxeXcURsTnvkxO
-
-—> dashboard 
+F. Cross Store Duration 
+1. Change the chart based on new SQL queries shared. 

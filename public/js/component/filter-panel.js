@@ -26,6 +26,9 @@
 
             $.ajax({
                 url: hostUrl + 'getStoreDetails',
+                data: {
+                    id: uId
+                },
                 success: function(res) {
                     successCallback(res);
                 },
@@ -264,6 +267,9 @@
 
             $.ajax({
                 url: hostUrl + 'getStoreDetails',
+                data: {
+                    id: uId
+                },
                 success: function(res) {
                     successCallback(res);
                 },

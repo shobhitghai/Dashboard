@@ -32,7 +32,7 @@ function getDeviceState() {
 
 //sets host url for ajax call
 
-window.hostUrl = window.hostUrl  ? window.hostUrl : 'http://' + window.location.hostname + '/api/';
+window.hostUrl = window.hostUrl ? window.hostUrl : 'http://' + window.location.hostname + '/api/';
 
 
 // FOR DEBUG
@@ -71,10 +71,37 @@ Array.prototype.getUnique = function() {
 }
 
 $(function() {
-    getStoreListData(app.util.initModules);
+    getInitData();
 });
 
-function getStoreListData(initModules) {
+function getInitData() {
+    function successCallback(res) {
+        var userinfo = $.parseJSON(res)[0];
+
+
+        if (userinfo && userinfo.email) {
+            window.uId = userinfo.email;
+            $('.nav-user-name a').text("Welcome " + userinfo.name);
+            getStoreListData(app.util.initModules, userinfo.email);
+        }
+    }
+
+    function errorCallback(err) {
+        console.log('userinfo ' + err || 'err');
+    }
+
+    $.ajax({
+        url: hostUrl + 'getUserInfo',
+        success: function(res) {
+            successCallback(res);
+        },
+        error: function(err) {
+            errorCallback(err);
+        }
+    })
+}
+
+function getStoreListData(initModules, uId) {
     var storeDropdown = $('.mod-navbar').find('.store-dropdown');
     window.storeDetail = {
         name: ''
@@ -89,6 +116,7 @@ function getStoreListData(initModules) {
     function successCallback(res) {
         var res = $.parseJSON(res);
         var initFilterArr = [];
+        window.panelList = res;
 
         $.each(res, function(i, v) {
             initFilterArr.push(this.store_id);
@@ -106,6 +134,9 @@ function getStoreListData(initModules) {
 
     $.ajax({
         url: hostUrl + 'getStoreDetails',
+        data: {
+            id: uId
+        },
         success: function(res) {
             successCallback(res);
         },

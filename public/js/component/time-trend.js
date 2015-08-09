@@ -8,10 +8,10 @@
             var self = this;
             this.chartContainer = $(s.target).find('#time-trend-chart');
             this.response = null;
-            if (reloadSection == true) {
-                app['time-trend'].fetchData('getMonthlyTimeTrendData', this.chartContainer);
-                this.metricSelectionHandler();
-            }
+            // if (reloadSection == true) {
+            app['time-trend'].fetchData('getMonthlyTimeTrendData', this.chartContainer);
+            this.metricSelectionHandler();
+            // }
 
         },
         refreshData: function() {
@@ -23,7 +23,8 @@
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
-
+                console.log("from time trend");
+                console.log(res)
                 self.response = res;
                 var data = app['time-trend'].buildOpportunityObj(res);
                 app['time-trend'].renderChart(chartContainer, data);
@@ -77,9 +78,12 @@
                 data.globalArr.push(this.data);
             })
 
-            $.each(res.sectionPanelData.opportunityData, function(i, v) {
-                data.sectionArr.push(this.data);
-            })
+            if (res.sectionPanelData.opportunityData) {
+                $.each(res.sectionPanelData.opportunityData, function(i, v) {
+                    data.sectionArr.push(this.data);
+                })
+            }
+
 
             return data;
         },
@@ -99,11 +103,13 @@
                 }
             })
 
-            $.each(res.sectionPanelData.storeFrontData, function(i, v) {
-                if (res.sectionPanelData.opportunityData[i]) {
-                    data.sectionArr.push((this.data / res.sectionPanelData.opportunityData[i].data) * 100);
-                }
-            })
+            if (res.sectionPanelData.storeFrontData) {
+                $.each(res.sectionPanelData.storeFrontData, function(i, v) {
+                    if (res.sectionPanelData.opportunityData[i]) {
+                        data.sectionArr.push((this.data / res.sectionPanelData.opportunityData[i].data) * 100);
+                    }
+                })
+            }
 
             return data;
 
@@ -121,9 +127,11 @@
                 data.globalArr.push(this.data);
             })
 
-            $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
-                data.sectionArr.push(this.data);
-            })
+            if (res.sectionPanelData.dwellTimeData) {
+                $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
+                    data.sectionArr.push(this.data);
+                })
+            }
 
             return data;
         },
@@ -143,11 +151,14 @@
                 }
             })
 
-            $.each(res.sectionPanelData.repeatCustData, function(i, v) {
-                if (res.sectionPanelData.storeFrontData[i]) {
-                    data.sectionArr.push((this.data / res.sectionPanelData.storeFrontData[i].data) * 100);
-                }
-            })
+            if (res.sectionPanelData.dwellTimeData) {
+
+                $.each(res.sectionPanelData.repeatCustData, function(i, v) {
+                    if (res.sectionPanelData.storeFrontData[i]) {
+                        data.sectionArr.push((this.data / res.sectionPanelData.storeFrontData[i].data) * 100);
+                    }
+                })
+            }
 
             return data;
         },

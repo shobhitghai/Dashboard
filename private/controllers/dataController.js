@@ -27,18 +27,72 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getStoreDetails", function(req, res) {
         self._setResponseHeader(res);
 
-        var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id);"
+        var query = "select * from customer_tracker.t_section_access where user_id = '" + req.query.id + "'";
+
         connection.query(query, function(err, data) {
 
             if (err) {
                 console.log(err)
                 self._sendErrorResponse(res);
             } else {
-                res.end(JSON.stringify(data));
+                var queryString;
+                var itemArr = new Array();
+
+                for (var i = data.length - 1; i >= 0; i--) {
+                    queryString = "(";
+                    var item = data[i];
+
+
+                    if (item['city']) {
+                        queryString = queryString + " tsd.city = " + "'" + item['city'] + "'";
+                        if (item['store_id'] || item['brand_id']) {
+                            queryString = queryString + " and ";
+                        }
+                    }
+
+                    if (item['store_id']) {
+                        queryString = queryString + " tsd.store_id = " + item['store_id'];
+                        if (item['brand_id']) {
+                            queryString = queryString + " and ";
+                        }
+                    }
+
+                    if (item['brand_id']) {
+                        queryString = queryString + " tsd.brand_id = " + item['brand_id'];
+                    }
+
+                    queryString = queryString + ")";
+
+                    itemArr.push(queryString)
+
+                };
+
+
+                var filterString = "";
+                for (var i = 0; i < itemArr.length; i++) {
+                    if (i != itemArr.length - 1) {
+                        filterString = itemArr[i] + " or "
+                    } else {
+                        filterString = filterString + itemArr[i];
+                    }
+                };
+
+                var queryParam = "where (tsd.store_id "
+                var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id) where " + filterString;
+
+                connection.query(query, function(err, data) {
+                    if (err) {
+                        console.log(err)
+                        self._sendErrorResponse(res);
+                    } else {
+                        res.end(JSON.stringify(data));
+                    }
+                });
             }
         })
 
     });
+
 
     /* Get Tile data for Opportunity, Storefront, Dwell time */
 
@@ -83,7 +137,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRightNowData", function(req, res) {
         self._setResponseHeader(res);
 
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsds');
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsds');
         var query = "select count(tv.mac_address) as cnt, tv.walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by tv.walk_in_flag";
 
         connection.query(query, function(err, data) {
@@ -140,7 +194,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getHourOptimizationData", function(req, res) {
         self._setResponseHeader(res);
         /* The query has a date >= '2015-08-09' hard coded. It was done because timezone was changed on this date from UCT to IST. Hence the hoursly averages would have skewed if data before this date is taken in average) */
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsds');
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsds');
         var query = "select avg(ty.cnt_mac_address) as avg_walk_by, ty.hour as hour from (select visit_date, hour(time(first_seen)) as hour, count(distinct(mac_address)) as cnt_mac_address from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) where date(first_seen) <= date(now()) and date(first_seen) >=date_sub(date(now()), interval 1 month) AND date(first_seen) >='2015-08-09' AND " + queryFilterParam + " group by visit_date, hour) as ty where hour >= 9 and hour <= 22 group by hour "
 
         connection.query(query, function(err, data) {
@@ -180,7 +234,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRevisitFrequency", function(req, res) {
         self._setResponseHeader(res);
 
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsfr');
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsfr');
         var query = "SELECT tsfr.category, COUNT(tsfr.mac_address) as 'COUNT(mac_address)' FROM t_store_frequency_rate tsfr left join t_store_details tsds on (tsfr.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsfr.store_id = tcen.store_id and tsfr.mac_address = tcen.mac_address) where " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) GROUP BY category ORDER BY category_order;"
 
         connection.query(query, function(err, data) {
