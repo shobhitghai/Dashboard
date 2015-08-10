@@ -1899,6 +1899,8 @@ function getStoreListData(initModules, uId) {
 
             function successCallback(data) {
                 var response = $.parseJSON(data);
+                console.log("res from camp impact")
+                console.log(response)
 
                 var avgCampaignPeriod = response['campaignData'].cnt / response['campaignData'].DiffDate;
                 var avgLastMonth = response['lastMonthData'].cnt / response['lastMonthData'].DiffDate;
@@ -1908,8 +1910,14 @@ function getStoreListData(initModules, uId) {
                 var dwtLastMonth = response['lastMonthData'].dwt;
                 var dwell_time = Math.round((dwtCampaignPeriod - dwtLastMonth) / dwtLastMonth * 100);
 
+                var newWalkinData = response['newWalkinData'];
+                var newWalkInDataCurrent = newWalkinData.current.cnt / newWalkinData.current.DiffDate;
+                var newWalkInDataComparison = newWalkinData.comparison.cnt / newWalkinData.comparison.DiffDate;
+                var newWalkIn = Math.round((newWalkInDataCurrent - newWalkInDataComparison)/newWalkInDataComparison * 100);
+
                 $('#campaign-walkin span').text(self.formatConversionData(walk_in) + '%');
                 $('#campaign-dwt span').text(self.formatConversionData(dwell_time) + '%');
+                $('#campaing-new-walkin span').text(self.formatConversionData(newWalkIn) + '%');
 
                 self.formatImpactChangeColor();
             }

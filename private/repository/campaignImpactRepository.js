@@ -7,7 +7,8 @@ var campaignImpactRepository = function(connection, sendResponseCallback, filter
     this.sendResponseCallback = sendResponseCallback;
     this.responseObject = {
         campaignData: {},
-        lastMonthData: {}
+        lastMonthData: {},
+        newWalkinData: {}
     };
 
 }
@@ -22,11 +23,11 @@ repo._getCampaignPeriodData = function() {
     var self = this;
     
     var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
-    // var query = "select count(mac_address) as cnt, DATEDIFF(" + this.filterParam.sDate + "," + this.filterParam.eDate + ") + 1 AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) <=" + this.filterParam.eDate + "and DATE(first_seen) >=" + this.filterParam.sDate + " and " + queryFilterParam + " and walk_in_flag = 1";
-	var query = "select count(tv.mac_address) as cnt, count(distinct tv.visit_date) as DiffDate, avg(tv.dwell_time) as dwt from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where visit_date <=" + this.filterParam.eDate + " and visit_date >=" + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and walk_in_flag = 1";
+    var query = "select count(tv.mac_address) as cnt, count(distinct tv.visit_date) as DiffDate, avg(tv.dwell_time) as dwt from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where visit_date <=" + this.filterParam.eDate + " and visit_date >=" + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and walk_in_flag = 1";
 
     this.connection.query(query, function(err, data) {
         if (err) {
+            console.log("err from campaignImpactRepository")
             self.responseObject.isError = true;
             self.sendResponseCallback(self.responseObject);
         } else {
@@ -41,8 +42,7 @@ repo._getLastMonthData = function() {
     var self = this;
 
     var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
-    // var query = "select count(mac_address) as cnt, DATEDIFF(DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY)," + this.filterParam.sDate + ") AS DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit where DATE(first_seen) >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 DAY) and DATE(first_seen) < " + this.filterParam.sDate + " and " + queryFilterParam + " and walk_in_flag = 1";
-	var query = "select count(tv.mac_address) as cnt, count(distinct tv.visit_date) as DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where visit_date >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 WEEK) and visit_date < " + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and walk_in_flag = 1";
+    var query = "select count(tv.mac_address) as cnt, count(distinct tv.visit_date) as DiffDate, avg(dwell_time) as dwt from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id=tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id and tv.mac_address = tcen.mac_address) where visit_date >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 WEEK) and visit_date < " + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and walk_in_flag = 1";
 
     this.connection.query(query, function(err, data) {
 
@@ -50,6 +50,42 @@ repo._getLastMonthData = function() {
             self.responseObject.isError = true;
         } else {
             self.responseObject.lastMonthData = data[0];
+            self._getNewWalkinDataCurrent();
+        }
+
+    });
+}
+
+repo._getNewWalkinDataCurrent = function() {
+    var self = this;
+
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tsv.mac_address) as cnt, count(distinct tsv.visit_date) as DiffDate from customer_tracker.t_store_visit tsv left join customer_tracker.t_store_details tsds on (tsv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id and tsv.mac_address = tcen.mac_address) where visit_date <=" + this.filterParam.eDate + " and visit_date >=" + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and new_customer_flag = 1;"
+
+    this.connection.query(query, function(err, data) {
+
+        if (err) {
+            self.responseObject.isError = true;
+        } else {
+            self.responseObject.newWalkinData.current = data[0];
+            self._getNewWalkinDataComparison();
+        }
+
+    });
+}
+
+repo._getNewWalkinDataComparison = function() {
+    var self = this;
+
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
+    var query = "select count(tsv.mac_address) as cnt, count(distinct tsv.visit_date) as DiffDate from customer_tracker.t_store_visit tsv left join customer_tracker.t_store_details tsds on (tsv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id and tsv.mac_address = tcen.mac_address) where visit_date >= DATE_SUB(" + this.filterParam.sDate + ", INTERVAL 1 WEEK) and visit_date < " + this.filterParam.sDate + " and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) and new_customer_flag = 1;"
+
+    this.connection.query(query, function(err, data) {
+
+        if (err) {
+            self.responseObject.isError = true;
+        } else {
+            self.responseObject.newWalkinData.comparison = data[0];
         }
 
         self.sendResponseCallback(self.responseObject);
