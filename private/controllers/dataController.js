@@ -77,8 +77,12 @@ dataController.prototype.handleRoutes = function(router, connection) {
                     }
                 };
 
-                var queryParam = "where (tsd.store_id "
-                var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id) where " + filterString;
+                if(req.query.filterParamObj){
+                    var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsd');
+                    var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id) where " + queryFilterParam;
+                }else{
+                    var query = "select store_id, tsd.name, tsd.city, tsd.brand_id, tbd.brand_name from t_store_details tsd left join t_brand_details tbd on (tsd.brand_id=tbd.brand_id) where " + filterString;
+                }
 
                 connection.query(query, function(err, data) {
                     if (err) {
