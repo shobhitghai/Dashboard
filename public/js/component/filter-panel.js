@@ -9,7 +9,7 @@
             app['filter-panel'].selectionHandler();
 
         },
-        fetchData: function(isFilter, obj, bindFilterValue) {
+        fetchData: function(isFilter, obj, bindFilterValue, item) {
             var self = this;
 
             function successCallback(res) {
@@ -20,6 +20,10 @@
 
                     if(bindFilterValue){
                         bindFilterValue(self.filterSelectionResponse);
+                    }
+
+                    if(!self.filterSelectionResponse.length){
+                        item.click();
                     }
                 }else{
                     self.response = res;
@@ -177,7 +181,7 @@
 
                 // console.log(filterParamObj)
 
-                app['filter-panel'].fetchData(true,filterParamObj, self.bindFilterValue);
+                app['filter-panel'].fetchData(true,filterParamObj, self.bindFilterValue, $(this));
 
 
 
