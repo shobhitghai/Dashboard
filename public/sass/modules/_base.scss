@@ -11,6 +11,7 @@ body {
   margin-top: 0px;
   color: $color-lightblue;
   font-weight: normal;
+  display: inline-block;
 }
 
 .section-desc{
@@ -191,4 +192,11 @@ table.dataTable thead {
       color: #df8a13;
     }
   }
+}
+
+.fa-info-circle.fa-2x{
+  font-size: 1.3em;
+  color: #55c6f2;
+  float: right;
+  display: inline-block;
 }

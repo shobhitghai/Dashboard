@@ -181,7 +181,7 @@
 
                 // console.log(filterParamObj)
 
-                app['filter-panel'].fetchData(true,filterParamObj, self.bindFilterValue, $(this));
+                app['filter-panel'].fetchData(true,filterParamObj, app['filter-panel'].bindFilterValue, $(this));
 
 
 
@@ -354,15 +354,30 @@
             app['filter-panel-time-trend'].selectionHandler();
 
         },
-        fetchData: function(url, storeDropdown) {
+        fetchData: function(isFilter, obj, bindFilterValue, item) {
             var self = this;
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
-                console.log(res)
-                self.response = res;
-                app['filter-panel-time-trend'].renderList(res, '');
-                app['filter-panel-time-trend'].filterListSelection(res);
+
+                if(isFilter){
+                    self.filterSelectionResponse = res;
+
+                    if(bindFilterValue){
+                        bindFilterValue(self.filterSelectionResponse);
+                    }
+
+                    if(!self.filterSelectionResponse.length){
+                        item.click();
+                    }
+                }else{
+                    self.response = res;
+                    $(self.settings.target).find('.lbjs').remove();
+                    $(self.settings.target).find('.modal-body select option').remove();
+                    app['filter-panel-time-trend'].renderList(res, '');
+                    app['filter-panel-time-trend'].filterListSelection();
+                }
+
             }
 
             function errorCallback(err) {
@@ -372,7 +387,8 @@
             $.ajax({
                 url: hostUrl + 'getStoreDetails',
                 data: {
-                    id: uId
+                    id: uId,
+                    filterParamObj: obj ? obj : ''
                 },
                 success: function(res) {
                     successCallback(res);
@@ -426,6 +442,7 @@
                 var selection = $(s.target).find('.lbjs-item[selected=selected]');
 
                 if (selection.length) {
+
                     $.each(selection, function(i, v) {
                         if ($(this).data('list-type') == 'city') {
                             selectedCityArr.push($(this).text());
@@ -436,12 +453,11 @@
                         }
                     });
 
-                    window.trendSectionObj = {
+                    window.filterParamObj = {
                         storeId: selectedStoreArr,
                         city: selectedCityArr,
                         brandId: selectedBrandArr
                     }
-
                 } else {
                     window.filterParamObj.storeId = window.defaultFilterParam;
                 }
@@ -449,13 +465,15 @@
                 app['time-trend'].init(true);
 
 
+                // console.log(app['filter-panel'].getStoreId('Linking Road Store'));
             });
 
             panel.find('.btn-reset-filter').on('click', function() {
                 panel.find('.lbjs').remove();
                 panel.find('.modal-body select option').remove();
                 app['filter-panel-time-trend'].renderList(self.response, '');
-                app['filter-panel-time-trend'].filterListSelection(self.response);
+                app['filter-panel-time-trend'].filterListSelection();
+                // app['filter-panel'].filterListSelection(self.response);
             });
 
         },
@@ -470,64 +488,152 @@
                 'searchText': searchText
             });
         },
-        filterListSelection: function(res) {
+        filterListSelection: function() {
             var s = this.settings;
+            var self = this;
             var $panel = $(s.target);
             var obj = new Array();
 
             $panel.find('.lbjs-item').on('click', function() {
-                if ($panel.find('.lbjs-item[selected = selected]').length >= 1) {
 
-                    if (!($(this).attr('disabled') == 'disabled')) {
-                        var self = this;
+                var selectedCityArr = [];
+                var selectedStoreArr = [];
+                var selectedBrandArr = [];
 
-                        // $(self).attr('data-selected', true);
+                var selection = $(s.target).find('.lbjs-item[selected=selected]');
 
-                        if ($(self).attr('selected')) {
-                            $(self).attr('data-selected', true);
-                            // $(self).attr('data-disabled', false);
-                        } else {
-                            $(self).attr('data-selected', false);
-                        }
 
-                        var type = $(self).attr('data-list-Type');
-                        var value = $(self).text();
-
-                        $.each(res, function(i, v) {
-                            if (this[type] === value) {
-                                if ($(self).attr('selected')) {
-                                    obj.push(this);
-                                } else {
-                                    obj.pop(this);
-                                }
-                            }
-                        })
-
-                        console.log(obj, type);
-                        app['filter-panel-time-trend'].enableDisableListSelection(obj, type);
+                $.each(selection, function(i, v) {
+                    if ($(this).data('list-type') == 'city') {
+                        selectedCityArr.push($(this).text());
+                    } else if ($(this).data('list-type') == 'name') {
+                        selectedStoreArr.push(app['filter-panel-time-trend'].getStoreId($(this).text()));
+                    } else if ($(this).data('list-type') == 'brand_name') {
+                        selectedBrandArr.push(app['filter-panel-time-trend'].getBrandId($(this).text()));
                     }
+                });
+
+                var filterParamObj = {
+                    storeId: selectedStoreArr,
+                    city: selectedCityArr,
+                    brandId: selectedBrandArr
                 }
+
+                // console.log(filterParamObj)
+
+                app['filter-panel-time-trend'].fetchData(true,filterParamObj, app['filter-panel-time-trend'].bindFilterValue, $(this));
+
+
+
+                // if ($panel.find('.lbjs-item[selected = selected]').length >= 1) {
+
+                //     if (!($(this).attr('disabled') == 'disabled')) {
+                //         var self = this;
+
+                //         // $(self).attr('data-selected', true);
+
+                //         if ($(self).attr('selected')) {
+                //             $(self).attr('data-selected', true);
+                //             // $(self).attr('data-disabled', false);
+                //         } else {
+                //             $(self).attr('data-selected', false);
+                //         }
+
+                //         var type = $(self).attr('data-list-Type');
+                //         var value = $(self).text();
+
+                //         $.each(res, function(i, v) {
+                //             if (this[type] === value) {
+                //                 if ($(self).attr('selected')) {
+                //                     obj.push(this);
+                //                 } else {
+                //                     obj.pop(this);
+                //                 }
+                //             }
+                //         })
+
+                //         console.log(obj, type);
+                //         app['filter-panel'].enableDisableListSelection(obj, type, value);
+                //         // obj = [];
+                //     }
+                // } else {
+                //     $.each($(s.target).find('.lbjs-item'), function(i, v) {
+                //         $(this).attr('disabled', false);
+                //     });
+
+                // }
+
 
             });
         },
-        enableDisableListSelection: function(obj, type) {
+        bindFilterValue: function(res){
+            var self = this;
+            var tempStore = [];
+            var tempBrand = [];
+            var tempCity = [];
+
+
+            $.each(res, function(i,v){
+                tempStore.push(this['name']);
+                tempBrand.push(this['brand_name']);
+                tempCity.push(this['city']);
+            })
+
+            $('.lbjs-item').addClass('fade-out');
+
+
+            $.each($('div[data-list-type = city]'),function(i,v){
+                if(tempCity.indexOf($(this).text()) > -1){
+                    $(this).removeClass('fade-out');
+                }else{
+                    $(this).removeAttr('selected');
+                }
+            });
+
+            $.each($('div[data-list-type = name]'),function(i,v){
+                if(tempStore.indexOf($(this).text()) > -1){
+                    $(this).removeClass('fade-out');
+                }else{
+                    $(this).removeAttr('selected');
+
+                }
+            });
+
+            $.each($('div[data-list-type = brand_name]'),function(i,v){
+                if(tempBrand.indexOf($(this).text()) > -1){
+                   $(this).removeClass('fade-out');
+                }else{
+                    $(this).removeAttr('selected');
+
+                }
+            });
+
+
+
+
+        },
+        enableDisableListSelection: function(obj, type, value) {
             var s = this.settings;
+
+            obj = obj.uniqueObjects(["brand_id", "brand_name", "city", "name", "store_id"])
+            console.log(obj)
 
             function disableItem(key) {
                 $.each($(s.target).find('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
                     var self = this;
-                    // if (!$(self).attr('data-selected')) {
-                    // $(self).attr('data-disabled', true);
-                    $(self).attr('disabled', true);
 
-                    // }
+                    $(self).attr('disabled', true);
 
                     $.each(obj, function(ind, val) {
                         if ($(self).text() === this[key]) {
                             // $(self).attr('data-disabled', false);
                             $(self).attr('disabled', false);
-                            $(self).attr('data-selected', true);
-                        };
+                            // $(self).attr('selected', true);
+                            // $(self).attr('data-selected', true);
+                        } else {
+                            $(self).attr('data-selected', false);
+                            $(self).attr('selected', false);
+                        }
                     })
                 })
             }
