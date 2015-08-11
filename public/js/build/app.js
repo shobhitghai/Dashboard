@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-11 */
+/*! Fashion_Dashboard 1.0.0 2015-08-12 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -2278,10 +2278,11 @@ function getStoreListData(initModules, uId) {
                 var res = $.parseJSON(res);
                 var dataObj = new Array();  
                 var periodObj = new Array();
+                console.log(res)
 
                 $.each(res, function(i, v) {
                     dataObj.push(Math.round(this.avg_walk_by));
-                    periodObj.push(Math.round(this.hour))
+                    periodObj.push(this.hour)
                 });
 
                 app['hour-optimization'].renderChart(chartContainer, dataObj, periodObj);

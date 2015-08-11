@@ -20,10 +20,11 @@
                 var res = $.parseJSON(res);
                 var dataObj = new Array();  
                 var periodObj = new Array();
+                console.log(res)
 
                 $.each(res, function(i, v) {
                     dataObj.push(Math.round(this.avg_walk_by));
-                    periodObj.push(Math.round(this.hour))
+                    periodObj.push(this.hour)
                 });
 
                 app['hour-optimization'].renderChart(chartContainer, dataObj, periodObj);
