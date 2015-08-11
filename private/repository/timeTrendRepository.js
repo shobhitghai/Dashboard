@@ -39,7 +39,7 @@ repo._getOpportunityData = function(paramObj, isGlobalObj, triggerNext) {
                 self.responseObject.isError = true;
                 self.sendResponseCallback(self.responseObject);
             } else {
-
+                
                 if (isGlobalObj) {
                     self.responseObject.filterPanelData.opportunityData = self._buildObjResponse(data)
                 } else {
@@ -76,7 +76,7 @@ repo._getStoreFrontData = function(paramObj, isGlobalObj, triggerNext) {
             if (err) {
                 self.responseObject.isError = true;
             } else {
-                console.log(data)
+                // console.log(data)
 
                 if (isGlobalObj) {
                     self.responseObject.filterPanelData.storeFrontData = self._buildObjResponse(data);
@@ -115,7 +115,7 @@ repo._getDwellTimeData = function(paramObj, isGlobalObj, triggerNext) {
             if (err) {
                 self.responseObject.isError = true;
             } else {
-                console.log(data)
+                // console.log(data)
 
                 if (isGlobalObj) {
                     self.responseObject.filterPanelData.dwellTimeData = self._buildObjResponse(data);
@@ -154,7 +154,7 @@ repo._getRepeatCustomerData = function(paramObj, isGlobalObj, triggerNext) {
             if (err) {
                 self.responseObject.isError = true;
             } else {
-                console.log(data)
+                // console.log(data)
 
                 if (isGlobalObj) {
                     self.responseObject.filterPanelData.repeatCustData = self._buildObjResponse(data);

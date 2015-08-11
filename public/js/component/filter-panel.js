@@ -462,13 +462,13 @@
                         }
                     });
 
-                    window.filterParamObj = {
+                    window.trendSectionObj = {
                         storeId: selectedStoreArr,
                         city: selectedCityArr,
                         brandId: selectedBrandArr
                     }
                 } else {
-                    window.filterParamObj.storeId = window.defaultFilterParam;
+                    window.trendSectionObj = null;
                 }
 
                 app['time-trend'].init(true);

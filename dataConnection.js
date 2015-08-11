@@ -128,12 +128,12 @@ DataConnectionLayer.prototype._authModule = function() {
 
                             if (userInfo.hasOwnProperty("error")) {
                                 console.log("error fetching user info");
-                                console.log(userInfo);
+                                // console.log(userInfo);
                                 self.res.redirect('/monitoring');
                             } else {
                                 req.session.isLoggedin = true;
                                 req.session.userInfo = userInfo;
-                                console.log(userInfo);
+                                // console.log(userInfo);
                                 self.res.redirect('/monitoring');
                             }
 
