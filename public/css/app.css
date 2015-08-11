@@ -539,9 +539,13 @@ table.dataTable thead .sorting:after {
   margin-bottom: 30px;
 }
 /* line 14, ../sass/modules/_time-trend.scss */
-.mod-time-trend .panel-top-section h4 {
+.mod-time-trend .panel-top-section .section-heading {
   float: left;
   margin-right: 30px;
+}
+/* line 18, ../sass/modules/_time-trend.scss */
+.mod-time-trend .panel-top-section .fa-info-circle {
+  margin-top: -20px;
 }
 
 /* line 3, ../sass/modules/_impact-section.scss */

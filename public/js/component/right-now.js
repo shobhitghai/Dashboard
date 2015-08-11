@@ -64,11 +64,12 @@
                     var res = $.parseJSON(res);
                     var dataObj = {};
 
-                    if (res.length) {
+                    if (res.length && res[0] && res[1]) {
                         dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
                         dataObj.peopleStore = res[1]['cnt'];
+                        dataObj.conv = (dataObj.peopleStore / dataObj.peopleMall).toFixed(2) * 100 + '%';
 
-                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                        $(self.settings.target).find('.people-mall-count').text(dataObj.conv);
                         $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
                         $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
 

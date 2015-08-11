@@ -11,9 +11,12 @@
 		display: inline-block;
 		width: 100%;
 		margin-bottom: 30px;
-		h4{
+		.section-heading{
 			float: left;
 			margin-right: 30px;
+		}
+		.fa-info-circle{
+		 	margin-top: -20px;
 		}
 	}
 }

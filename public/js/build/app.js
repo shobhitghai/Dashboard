@@ -1266,7 +1266,8 @@ function getStoreListData(initModules, uId) {
                     plotShadow: false,
                     style: {
                         fontFamily: 'Arial'
-                    }
+                    },
+                    height: 366
                 },
                 colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9', '#b4c7e7', '#767171'],
                 title: {
@@ -1809,11 +1810,12 @@ function getStoreListData(initModules, uId) {
                     var res = $.parseJSON(res);
                     var dataObj = {};
 
-                    if (res.length) {
+                    if (res.length && res[0] && res[1]) {
                         dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
                         dataObj.peopleStore = res[1]['cnt'];
+                        dataObj.conv = (dataObj.peopleStore / dataObj.peopleMall).toFixed(2) * 100 + '%';
 
-                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                        $(self.settings.target).find('.people-mall-count').text(dataObj.conv);
                         $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
                         $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
 

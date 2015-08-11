@@ -57,7 +57,8 @@
                     plotShadow: false,
                     style: {
                         fontFamily: 'Arial'
-                    }
+                    },
+                    height: 366
                 },
                 colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9', '#b4c7e7', '#767171'],
                 title: {
