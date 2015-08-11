@@ -9,9 +9,6 @@
 
             app['cross-store'].fetchData('getCrossVisitData', chartContainer);
 
-
-
-
         },
         refreshData: function() {
             var self = this;
@@ -28,12 +25,12 @@
                     y: 0,
                     color: '#55c6f2'
                 }];
-
+                console.log(res)
                 $.each(res, function(i, v) {
                     if (i == 'store') {
-                        dataObj[0].y = parseFloat(v);
+                        dataObj[0].y = v;
                     } else {
-                        dataObj[1].y = parseFloat(v);
+                        dataObj[1].y = v;
                     }
 
                 });
@@ -45,16 +42,9 @@
                 console.log('navbar' + err || 'err');
             }
 
-            // console.log(window.panelList)
-
-            // $.each(window.panelList, function(i,v){
-                
-            // });
-
             app['ajax-wrapper'].sendAjax(url, {
-                storeName: window.storeDetail.name,
                 filterParamObj: window.filterParamObj,
-                panelList: window.panelList
+                brandObj: window.brandObj
             }, successCallback, errorCallback)
         },
         renderChart: function(chartContainer, dataObj) {
@@ -86,7 +76,7 @@
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+                    pointFormat: '<tr><td style="padding:0"><b>{point.y:.2f}%</b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true

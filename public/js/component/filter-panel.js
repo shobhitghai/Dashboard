@@ -15,17 +15,17 @@
             function successCallback(res) {
                 var res = $.parseJSON(res);
 
-                if(isFilter){
+                if (isFilter) {
                     self.filterSelectionResponse = res;
 
-                    if(bindFilterValue){
+                    if (bindFilterValue) {
                         bindFilterValue(self.filterSelectionResponse);
                     }
 
-                    if(!self.filterSelectionResponse.length){
+                    if (!self.filterSelectionResponse.length) {
                         item.click();
                     }
-                }else{
+                } else {
                     self.response = res;
                     $(self.settings.target).find('.lbjs').remove();
                     $(self.settings.target).find('.modal-body select option').remove();
@@ -113,6 +113,15 @@
                         city: selectedCityArr,
                         brandId: selectedBrandArr
                     }
+
+                    var brandObjArr = [];
+
+                    $.each(self.filterSelectionResponse, function(i,v){
+                        brandObjArr.push(this['brand_id']);
+                    });
+
+                    window.brandObj.brandId = brandObjArr.getUnique();
+
                 } else {
                     window.filterParamObj.storeId = window.defaultFilterParam;
                 }
@@ -181,7 +190,7 @@
 
                 // console.log(filterParamObj)
 
-                app['filter-panel'].fetchData(true,filterParamObj, app['filter-panel'].bindFilterValue, $(this));
+                app['filter-panel'].fetchData(true, filterParamObj, app['filter-panel'].bindFilterValue, $(this));
 
 
 
@@ -226,14 +235,14 @@
 
             });
         },
-        bindFilterValue: function(res){
+        bindFilterValue: function(res) {
             var self = this;
             var tempStore = [];
             var tempBrand = [];
             var tempCity = [];
 
 
-            $.each(res, function(i,v){
+            $.each(res, function(i, v) {
                 tempStore.push(this['name']);
                 tempBrand.push(this['brand_name']);
                 tempCity.push(this['city']);
@@ -242,27 +251,27 @@
             $('.lbjs-item').addClass('fade-out');
 
 
-            $.each($('div[data-list-type = city]'),function(i,v){
-                if(tempCity.indexOf($(this).text()) > -1){
+            $.each($('div[data-list-type = city]'), function(i, v) {
+                if (tempCity.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
-                }else{
+                } else {
                     $(this).removeAttr('selected');
                 }
             });
 
-            $.each($('div[data-list-type = name]'),function(i,v){
-                if(tempStore.indexOf($(this).text()) > -1){
+            $.each($('div[data-list-type = name]'), function(i, v) {
+                if (tempStore.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
-                }else{
+                } else {
                     $(this).removeAttr('selected');
 
                 }
             });
 
-            $.each($('div[data-list-type = brand_name]'),function(i,v){
-                if(tempBrand.indexOf($(this).text()) > -1){
-                   $(this).removeClass('fade-out');
-                }else{
+            $.each($('div[data-list-type = brand_name]'), function(i, v) {
+                if (tempBrand.indexOf($(this).text()) > -1) {
+                    $(this).removeClass('fade-out');
+                } else {
                     $(this).removeAttr('selected');
 
                 }
@@ -360,17 +369,17 @@
             function successCallback(res) {
                 var res = $.parseJSON(res);
 
-                if(isFilter){
+                if (isFilter) {
                     self.filterSelectionResponse = res;
 
-                    if(bindFilterValue){
+                    if (bindFilterValue) {
                         bindFilterValue(self.filterSelectionResponse);
                     }
 
-                    if(!self.filterSelectionResponse.length){
+                    if (!self.filterSelectionResponse.length) {
                         item.click();
                     }
-                }else{
+                } else {
                     self.response = res;
                     $(self.settings.target).find('.lbjs').remove();
                     $(self.settings.target).find('.modal-body select option').remove();
@@ -521,7 +530,7 @@
 
                 // console.log(filterParamObj)
 
-                app['filter-panel-time-trend'].fetchData(true,filterParamObj, app['filter-panel-time-trend'].bindFilterValue, $(this));
+                app['filter-panel-time-trend'].fetchData(true, filterParamObj, app['filter-panel-time-trend'].bindFilterValue, $(this));
 
 
 
@@ -566,14 +575,14 @@
 
             });
         },
-        bindFilterValue: function(res){
+        bindFilterValue: function(res) {
             var self = this;
             var tempStore = [];
             var tempBrand = [];
             var tempCity = [];
 
 
-            $.each(res, function(i,v){
+            $.each(res, function(i, v) {
                 tempStore.push(this['name']);
                 tempBrand.push(this['brand_name']);
                 tempCity.push(this['city']);
@@ -582,27 +591,27 @@
             $('.lbjs-item').addClass('fade-out');
 
 
-            $.each($('div[data-list-type = city]'),function(i,v){
-                if(tempCity.indexOf($(this).text()) > -1){
+            $.each($('div[data-list-type = city]'), function(i, v) {
+                if (tempCity.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
-                }else{
+                } else {
                     $(this).removeAttr('selected');
                 }
             });
 
-            $.each($('div[data-list-type = name]'),function(i,v){
-                if(tempStore.indexOf($(this).text()) > -1){
+            $.each($('div[data-list-type = name]'), function(i, v) {
+                if (tempStore.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
-                }else{
+                } else {
                     $(this).removeAttr('selected');
 
                 }
             });
 
-            $.each($('div[data-list-type = brand_name]'),function(i,v){
-                if(tempBrand.indexOf($(this).text()) > -1){
-                   $(this).removeClass('fade-out');
-                }else{
+            $.each($('div[data-list-type = brand_name]'), function(i, v) {
+                if (tempBrand.indexOf($(this).text()) > -1) {
+                    $(this).removeClass('fade-out');
+                } else {
                     $(this).removeAttr('selected');
 
                 }

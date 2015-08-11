@@ -237,7 +237,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getRevisitFrequency", function(req, res) {
         self._setResponseHeader(res);
 
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsfr');
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsds');
         var query = "SELECT tsfr.category, COUNT(tsfr.mac_address) as 'COUNT(mac_address)' FROM t_store_frequency_rate tsfr left join t_store_details tsds on (tsfr.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsfr.store_id = tcen.store_id and tsfr.mac_address = tcen.mac_address) where " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) GROUP BY category ORDER BY category_order;"
 
         connection.query(query, function(err, data) {

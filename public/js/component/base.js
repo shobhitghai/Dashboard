@@ -113,16 +113,23 @@ function getStoreListData(initModules, uId) {
         brandId: []
     }
 
+    window.brandObj = {
+
+    }
+
     function successCallback(res) {
         var res = $.parseJSON(res);
         var initFilterArr = [];
+        var brandArr = [];
         window.panelList = res;
 
         $.each(res, function(i, v) {
             initFilterArr.push(this.store_id);
+            brandArr.push(this.brand_id);
         });
 
         window.filterParamObj.storeId = initFilterArr;
+        window.brandObj.brandId = brandArr.getUnique();
         window.defaultFilterParam = initFilterArr;
 
         initModules();
