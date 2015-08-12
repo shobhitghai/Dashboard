@@ -8,9 +8,13 @@
         .filter-modal {
             display: inline-block;
             .filter-selection {
+                cursor: pointer;
                 font-size: 16px;
                 color: #337ab7;
                 margin: 10px;
+                &:hover{
+                    text-decoration: underline;
+                }
                 .fa{
                     font-size: 1.1em;
                 }

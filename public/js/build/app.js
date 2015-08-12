@@ -382,12 +382,35 @@ function getStoreListData(initModules, uId) {
                     }
 
                     var brandObjArr = [];
+                    var storeNameArr = [];
 
                     $.each(self.filterSelectionResponse, function(i,v){
                         brandObjArr.push(this['brand_id']);
+                        storeNameArr.push(this['name']);
                     });
 
+                    var storenameStr = "";
+                    if(storeNameArr.length){
+                        $.each(storeNameArr, function(i,v){
+                            if(i <= 1){
+                                if( i+1 != storeNameArr.length){
+                                    storenameStr = storenameStr + v + ", ";
+                                }else{
+                                    storenameStr = storenameStr + v;
+                                }
+                            }else{
+                                storenameStr = storenameStr + "...";
+                                return false;
+                            }
+                            
+                        })   
+
+                        $('.filter-selection[data-target="#filterModal"] .filter-text').text(storenameStr); 
+                    }
+
                     window.brandObj.brandId = brandObjArr.getUnique();
+
+
 
                 } else {
                     window.filterParamObj.storeId = window.defaultFilterParam;
@@ -736,6 +759,31 @@ function getStoreListData(initModules, uId) {
                     }
                 } else {
                     window.trendSectionObj = null;
+                }
+
+                var storeNameArr = [];
+
+                $.each(self.filterSelectionResponse, function(i,v){
+                    storeNameArr.push(this['name']);
+                });
+
+                var storenameStr = "";
+                if(storeNameArr.length){
+                    $.each(storeNameArr, function(i,v){
+                        if(i <= 1){
+                            if( i+1 != storeNameArr.length){
+                                storenameStr = storenameStr + v + ", ";
+                            }else{
+                                storenameStr = storenameStr + v;
+                            }
+                        }else{
+                            storenameStr = storenameStr + "...";
+                            return false;
+                        }
+                        
+                    })   
+
+                    $('.filter-selection[data-target="#time-trend-filterModal"] .filter-text').text(storenameStr); 
                 }
 
                 app['time-trend'].init(true);

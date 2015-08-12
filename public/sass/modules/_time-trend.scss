@@ -18,5 +18,11 @@
 		.fa-info-circle{
 		 	margin-top: -20px;
 		}
+		.filter-selection{
+			cursor: pointer;
+			&:hover{
+                    text-decoration: underline;
+       		 }
+		}
 	}
 }
