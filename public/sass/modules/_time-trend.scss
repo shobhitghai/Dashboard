@@ -10,19 +10,25 @@
 	.panel-top-section{
 		display: inline-block;
 		width: 100%;
-		margin-bottom: 30px;
+		margin-bottom: 10px;
 		.section-heading{
 			float: left;
 			margin-right: 30px;
 		}
-		.fa-info-circle{
-		 	margin-top: -20px;
-		}
+	}
+	.compare-selection{
+		margin-bottom: 20px;
 		.filter-selection{
 			cursor: pointer;
 			&:hover{
                     text-decoration: underline;
        		 }
 		}
+		.time-trend-filter{
+			display: inline-block;
+			margin-left: 10px;
+		}
 	}
+
+	
 }

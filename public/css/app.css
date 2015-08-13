@@ -541,24 +541,29 @@ table.dataTable thead .sorting:after {
 .mod-time-trend .panel-top-section {
   display: inline-block;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 /* line 14, ../sass/modules/_time-trend.scss */
 .mod-time-trend .panel-top-section .section-heading {
   float: left;
   margin-right: 30px;
 }
-/* line 18, ../sass/modules/_time-trend.scss */
-.mod-time-trend .panel-top-section .fa-info-circle {
-  margin-top: -20px;
+/* line 19, ../sass/modules/_time-trend.scss */
+.mod-time-trend .compare-selection {
+  margin-bottom: 20px;
 }
 /* line 21, ../sass/modules/_time-trend.scss */
-.mod-time-trend .panel-top-section .filter-selection {
+.mod-time-trend .compare-selection .filter-selection {
   cursor: pointer;
 }
 /* line 23, ../sass/modules/_time-trend.scss */
-.mod-time-trend .panel-top-section .filter-selection:hover {
+.mod-time-trend .compare-selection .filter-selection:hover {
   text-decoration: underline;
+}
+/* line 27, ../sass/modules/_time-trend.scss */
+.mod-time-trend .compare-selection .time-trend-filter {
+  display: inline-block;
+  margin-left: 10px;
 }
 
 /* line 3, ../sass/modules/_impact-section.scss */
