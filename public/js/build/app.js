@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-12 */
+/*! Fashion_Dashboard 1.0.0 2015-08-14 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -384,36 +384,28 @@ function getStoreListData(initModules, uId) {
                     var brandObjArr = [];
                     var storeNameArr = [];
 
-                    $.each(self.filterSelectionResponse, function(i,v){
+                    $.each(self.filterSelectionResponse, function(i, v) {
                         brandObjArr.push(this['brand_id']);
                         storeNameArr.push(this['name']);
                     });
 
-                    var storenameStr = "";
-                    if(storeNameArr.length){
-                        $.each(storeNameArr, function(i,v){
-                            if(i <= 1){
-                                if( i+1 != storeNameArr.length){
-                                    storenameStr = storenameStr + v + ", ";
-                                }else{
-                                    storenameStr = storenameStr + v;
-                                }
-                            }else{
-                                storenameStr = storenameStr + "...";
-                                return false;
-                            }
-                            
-                        })   
+                    self.showSelectionDetails(storeNameArr);
 
-                        $('.filter-selection[data-target="#filterModal"] .filter-text').text(storenameStr); 
-                    }
 
                     window.brandObj.brandId = brandObjArr.getUnique();
 
 
 
                 } else {
+                    var storeNameArr = [];
+
                     window.filterParamObj.storeId = window.defaultFilterParam;
+
+                    $.each(self.response, function(i, v) {
+                        storeNameArr.push(this['name']);
+                    });
+
+                    self.showSelectionDetails(storeNameArr);
                 }
 
                 console.log(selectedCityArr, selectedStoreArr, selectedBrandArr);
@@ -424,7 +416,6 @@ function getStoreListData(initModules, uId) {
                     }
                 })
 
-                // console.log(app['filter-panel'].getStoreId('Linking Road Store'));
             });
 
             panel.find('.btn-reset-filter').on('click', function() {
@@ -432,9 +423,31 @@ function getStoreListData(initModules, uId) {
                 panel.find('.modal-body select option').remove();
                 app['filter-panel'].renderList(self.response, '');
                 app['filter-panel'].filterListSelection();
-                // app['filter-panel'].filterListSelection(self.response);
+
+                self.filterSelectionResponse = self.response;
+
             });
 
+        },
+        showSelectionDetails: function(storeNameArr) {
+            var storenameStr = "";
+            if (storeNameArr.length) {
+                $.each(storeNameArr, function(i, v) {
+                    if (i <= 1) {
+                        if (i + 1 != storeNameArr.length) {
+                            storenameStr = storenameStr + v + ", ";
+                        } else {
+                            storenameStr = storenameStr + v;
+                        }
+                    } else {
+                        storenameStr = "Store Selected: " + storeNameArr.length;
+                        return false;
+                    }
+
+                })
+
+                $('.filter-selection[data-target="#filterModal"] .filter-text').text(storenameStr);
+            }
         },
         appendList: function(arrayList, container, listType, searchText) {
             $.each(arrayList, function(i, val) {
@@ -478,49 +491,7 @@ function getStoreListData(initModules, uId) {
                     brandId: selectedBrandArr
                 }
 
-                // console.log(filterParamObj)
-
                 app['filter-panel'].fetchData(true, filterParamObj, app['filter-panel'].bindFilterValue, $(this));
-
-
-
-                // if ($panel.find('.lbjs-item[selected = selected]').length >= 1) {
-
-                //     if (!($(this).attr('disabled') == 'disabled')) {
-                //         var self = this;
-
-                //         // $(self).attr('data-selected', true);
-
-                //         if ($(self).attr('selected')) {
-                //             $(self).attr('data-selected', true);
-                //             // $(self).attr('data-disabled', false);
-                //         } else {
-                //             $(self).attr('data-selected', false);
-                //         }
-
-                //         var type = $(self).attr('data-list-Type');
-                //         var value = $(self).text();
-
-                //         $.each(res, function(i, v) {
-                //             if (this[type] === value) {
-                //                 if ($(self).attr('selected')) {
-                //                     obj.push(this);
-                //                 } else {
-                //                     obj.pop(this);
-                //                 }
-                //             }
-                //         })
-
-                //         console.log(obj, type);
-                //         app['filter-panel'].enableDisableListSelection(obj, type, value);
-                //         // obj = [];
-                //     }
-                // } else {
-                //     $.each($(s.target).find('.lbjs-item'), function(i, v) {
-                //         $(this).attr('disabled', false);
-                //     });
-
-                // }
 
 
             });
@@ -570,47 +541,6 @@ function getStoreListData(initModules, uId) {
 
 
 
-        },
-        enableDisableListSelection: function(obj, type, value) {
-            var s = this.settings;
-
-            obj = obj.uniqueObjects(["brand_id", "brand_name", "city", "name", "store_id"])
-            console.log(obj)
-
-            function disableItem(key) {
-                $.each($(s.target).find('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
-                    var self = this;
-
-                    $(self).attr('disabled', true);
-
-                    $.each(obj, function(ind, val) {
-                        if ($(self).text() === this[key]) {
-                            // $(self).attr('data-disabled', false);
-                            $(self).attr('disabled', false);
-                            // $(self).attr('selected', true);
-                            // $(self).attr('data-selected', true);
-                        } else {
-                            $(self).attr('data-selected', false);
-                            $(self).attr('selected', false);
-                        }
-                    })
-                })
-            }
-
-            if (type == 'city') {
-                disableItem('name');
-                disableItem('brand_name');
-            }
-
-            if (type == 'name') {
-                disableItem('city');
-                disableItem('brand_name');
-            }
-
-            if (type == 'brand_name') {
-                disableItem('city');
-                disableItem('name');
-            }
         },
         getStoreId: function(name) {
             var self = this;
@@ -758,38 +688,28 @@ function getStoreListData(initModules, uId) {
                         brandId: selectedBrandArr
                     }
                 } else {
-                    window.trendSectionObj = null;
+                    var storeNameArr = [];
+
+                    self.trendSectionObj = null;
+
+                    $.each(self.response, function(i, v) {
+                        storeNameArr.push(this['name']);
+                    });
+
+                    self.showSelectionDetails(storeNameArr);
                 }
 
                 var storeNameArr = [];
 
-                $.each(self.filterSelectionResponse, function(i,v){
+                $.each(self.filterSelectionResponse, function(i, v) {
                     storeNameArr.push(this['name']);
                 });
 
-                var storenameStr = "";
-                if(storeNameArr.length){
-                    $.each(storeNameArr, function(i,v){
-                        if(i <= 1){
-                            if( i+1 != storeNameArr.length){
-                                storenameStr = storenameStr + v + ", ";
-                            }else{
-                                storenameStr = storenameStr + v;
-                            }
-                        }else{
-                            storenameStr = storenameStr + "...";
-                            return false;
-                        }
-                        
-                    })   
+                self.showSelectionDetails(storeNameArr);
 
-                    $('.filter-selection[data-target="#time-trend-filterModal"] .filter-text').text(storenameStr); 
-                }
 
                 app['time-trend'].init(true);
 
-
-                // console.log(app['filter-panel'].getStoreId('Linking Road Store'));
             });
 
             panel.find('.btn-reset-filter').on('click', function() {
@@ -797,9 +717,30 @@ function getStoreListData(initModules, uId) {
                 panel.find('.modal-body select option').remove();
                 app['filter-panel-time-trend'].renderList(self.response, '');
                 app['filter-panel-time-trend'].filterListSelection();
-                // app['filter-panel'].filterListSelection(self.response);
+                self.filterSelectionResponse = self.response;
             });
 
+        },
+        showSelectionDetails: function(storeNameArr) {
+            var storenameStr = "";
+            if (storeNameArr.length) {
+                $.each(storeNameArr, function(i, v) {
+                    if (i <= 1) {
+                        if (i + 1 != storeNameArr.length) {
+                            storenameStr = storenameStr + v + ", ";
+                        } else {
+                            storenameStr = storenameStr + v;
+                        }
+                    } else {
+                        storenameStr = "Store Selected: " + storeNameArr.length;
+
+                        return false;
+                    }
+
+                })
+
+                $('.filter-selection[data-target="#time-trend-filterModal"] .filter-text').text(storenameStr);
+            }
         },
         appendList: function(arrayList, container, listType, searchText) {
             $.each(arrayList, function(i, val) {
@@ -843,49 +784,9 @@ function getStoreListData(initModules, uId) {
                     brandId: selectedBrandArr
                 }
 
-                // console.log(filterParamObj)
 
                 app['filter-panel-time-trend'].fetchData(true, filterParamObj, app['filter-panel-time-trend'].bindFilterValue, $(this));
 
-
-
-                // if ($panel.find('.lbjs-item[selected = selected]').length >= 1) {
-
-                //     if (!($(this).attr('disabled') == 'disabled')) {
-                //         var self = this;
-
-                //         // $(self).attr('data-selected', true);
-
-                //         if ($(self).attr('selected')) {
-                //             $(self).attr('data-selected', true);
-                //             // $(self).attr('data-disabled', false);
-                //         } else {
-                //             $(self).attr('data-selected', false);
-                //         }
-
-                //         var type = $(self).attr('data-list-Type');
-                //         var value = $(self).text();
-
-                //         $.each(res, function(i, v) {
-                //             if (this[type] === value) {
-                //                 if ($(self).attr('selected')) {
-                //                     obj.push(this);
-                //                 } else {
-                //                     obj.pop(this);
-                //                 }
-                //             }
-                //         })
-
-                //         console.log(obj, type);
-                //         app['filter-panel'].enableDisableListSelection(obj, type, value);
-                //         // obj = [];
-                //     }
-                // } else {
-                //     $.each($(s.target).find('.lbjs-item'), function(i, v) {
-                //         $(this).attr('disabled', false);
-                //     });
-
-                // }
 
 
             });
@@ -935,47 +836,6 @@ function getStoreListData(initModules, uId) {
 
 
 
-        },
-        enableDisableListSelection: function(obj, type, value) {
-            var s = this.settings;
-
-            obj = obj.uniqueObjects(["brand_id", "brand_name", "city", "name", "store_id"])
-            console.log(obj)
-
-            function disableItem(key) {
-                $.each($(s.target).find('.lbjs-item[data-list-type =' + key + ']'), function(i, v) {
-                    var self = this;
-
-                    $(self).attr('disabled', true);
-
-                    $.each(obj, function(ind, val) {
-                        if ($(self).text() === this[key]) {
-                            // $(self).attr('data-disabled', false);
-                            $(self).attr('disabled', false);
-                            // $(self).attr('selected', true);
-                            // $(self).attr('data-selected', true);
-                        } else {
-                            $(self).attr('data-selected', false);
-                            $(self).attr('selected', false);
-                        }
-                    })
-                })
-            }
-
-            if (type == 'city') {
-                disableItem('name');
-                disableItem('brand_name');
-            }
-
-            if (type == 'name') {
-                disableItem('city');
-                disableItem('brand_name');
-            }
-
-            if (type == 'brand_name') {
-                disableItem('city');
-                disableItem('name');
-            }
         },
         getStoreId: function(name) {
             var self = this;
@@ -1626,7 +1486,7 @@ function getStoreListData(initModules, uId) {
             app['ajax-wrapper'].sendAjax(url, {
                 filterParamObj: window.filterParamObj,
                 sectionParamObj: window.trendSectionObj
-            }, successCallback, errorCallback, true)
+            }, successCallback, errorCallback)
         },
         metricSelectionHandler: function() {
             var self = this;
@@ -1866,10 +1726,10 @@ function getStoreListData(initModules, uId) {
                     if (res.length && res[0] && res[1]) {
                         dataObj.peopleMall = res[0]['cnt'] + res[1]['cnt'];
                         dataObj.peopleStore = res[1]['cnt'];
-                        dataObj.conv = (dataObj.peopleStore / dataObj.peopleMall).toFixed(2) * 100 + '%';
+                        dataObj.conv = ((dataObj.peopleStore / dataObj.peopleMall) * 100).toFixed(2) + '%';
 
-                        $(self.settings.target).find('.people-mall-count').text(dataObj.conv);
-                        $(self.settings.target).find('.people-store-count').text(dataObj.peopleStore);
+                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
+                        $(self.settings.target).find('.people-store-count').text(dataObj.conv);
                         $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
 
                     }

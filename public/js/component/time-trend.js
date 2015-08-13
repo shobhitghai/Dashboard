@@ -37,7 +37,7 @@
             app['ajax-wrapper'].sendAjax(url, {
                 filterParamObj: window.filterParamObj,
                 sectionParamObj: window.trendSectionObj
-            }, successCallback, errorCallback, true)
+            }, successCallback, errorCallback)
         },
         metricSelectionHandler: function() {
             var self = this;
