@@ -501,6 +501,7 @@ function getStoreListData(initModules, uId) {
             var tempStore = [];
             var tempBrand = [];
             var tempCity = [];
+            var panel = $(app['filter-panel'].settings.target);
 
 
             $.each(res, function(i, v) {
@@ -509,10 +510,10 @@ function getStoreListData(initModules, uId) {
                 tempCity.push(this['city']);
             })
 
-            $('.lbjs-item').addClass('fade-out');
+            panel.find('.lbjs-item').addClass('fade-out');
 
 
-            $.each($('div[data-list-type = city]'), function(i, v) {
+            $.each(panel.find('div[data-list-type = city]'), function(i, v) {
                 if (tempCity.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
                 } else {
@@ -520,7 +521,7 @@ function getStoreListData(initModules, uId) {
                 }
             });
 
-            $.each($('div[data-list-type = name]'), function(i, v) {
+            $.each(panel.find('div[data-list-type = name]'), function(i, v) {
                 if (tempStore.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
                 } else {
@@ -529,7 +530,7 @@ function getStoreListData(initModules, uId) {
                 }
             });
 
-            $.each($('div[data-list-type = brand_name]'), function(i, v) {
+            $.each(panel.find('div[data-list-type = brand_name]'), function(i, v) {
                 if (tempBrand.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
                 } else {
@@ -796,6 +797,7 @@ function getStoreListData(initModules, uId) {
             var tempStore = [];
             var tempBrand = [];
             var tempCity = [];
+            var panel = $(app['filter-panel-time-trend'].settings.target);
 
 
             $.each(res, function(i, v) {
@@ -804,10 +806,10 @@ function getStoreListData(initModules, uId) {
                 tempCity.push(this['city']);
             })
 
-            $('.lbjs-item').addClass('fade-out');
+            panel.find('.lbjs-item').addClass('fade-out');
 
 
-            $.each($('div[data-list-type = city]'), function(i, v) {
+            $.each(panel.find('div[data-list-type = city]'), function(i, v) {
                 if (tempCity.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
                 } else {
@@ -815,7 +817,7 @@ function getStoreListData(initModules, uId) {
                 }
             });
 
-            $.each($('div[data-list-type = name]'), function(i, v) {
+            $.each(panel.find('div[data-list-type = name]'), function(i, v) {
                 if (tempStore.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
                 } else {
@@ -824,7 +826,7 @@ function getStoreListData(initModules, uId) {
                 }
             });
 
-            $.each($('div[data-list-type = brand_name]'), function(i, v) {
+            $.each(panel.find('div[data-list-type = brand_name]'), function(i, v) {
                 if (tempBrand.indexOf($(this).text()) > -1) {
                     $(this).removeClass('fade-out');
                 } else {

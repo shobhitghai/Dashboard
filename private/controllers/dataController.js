@@ -142,7 +142,7 @@ dataController.prototype.handleRoutes = function(router, connection) {
         self._setResponseHeader(res);
 
         var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj, 'tsds');
-        var query = "select count(tv.mac_address) as cnt, tv.walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " group by tv.walk_in_flag";
+        var query = "select count(tv.mac_address) as cnt, tv.walk_in_flag from customer_tracker.t_visit tv left join customer_tracker.t_store_details tsds on (tv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tv.store_id = tcen.store_id AND tv.mac_address = tcen.mac_address) where last_seen >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) and last_seen <= NOW() and DATE(first_seen) = DATE(NOW()) and " + queryFilterParam + " and (tcen.is_employee !=1 or tcen.is_employee is null) group by tv.walk_in_flag";
 
         connection.query(query, function(err, data) {
             if (err) {
