@@ -77,7 +77,7 @@ DataConnectionLayer.prototype._authModule = function() {
 
     app.get('/logout', function(req, res) {
         req.session.isLoggedin = false;
-        res.redirect('http://accounts.crosslink.co.in/crosslink_auth/public/api/logout?redirect_uri=http://accounts.crosslink.co.in/crosslink_auth/auth/login');
+        res.redirect('http://accounts.crosslink.co.in/crosslink_auth/public/api/logout?redirect_uri=' + constants.getValue("oauth_url") + "?client_id=" + constants.getValue("client_id") + "&redirect_uri=" + constants.getValue('redirect_uri') + "&response_type=" + constants.getValue('response_type'));
     })
 
 
