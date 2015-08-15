@@ -55,6 +55,7 @@
         fetchData: function(url) {
             var self = this;
             self.triggerNext = false;
+            var section = $(self.settings.target);
 
             function successCallback(res) {
                 if (res.Error) {
@@ -69,10 +70,14 @@
                         dataObj.peopleStore = res[1]['cnt'];
                         dataObj.conv = ((dataObj.peopleStore / dataObj.peopleMall) * 100).toFixed(2) + '%';
 
-                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
-                        $(self.settings.target).find('.people-store-count').text(dataObj.conv);
-                        $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
+                        section.find('.people-mall-count').text(dataObj.peopleMall);
+                        section.find('.people-store-count').text(dataObj.conv);
+                        section.find('.people-sales-count').text(Math.ceil(dataObj.peopleStore / 4));
 
+                    } else {
+                        section.find('.people-mall-count').text("NA");
+                        section.find('.people-store-count').text("NA");
+                        section.find('.people-sales-count').text("NA");
                     }
                 }
 

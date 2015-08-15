@@ -20,13 +20,16 @@
         },
         fetchData: function(url, chartContainer) {
             var self = this;
+            var section = $(self.settings.target);
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
-                console.log("from time trend");
-                console.log(res)
+                
                 self.response = res;
                 var data = app['time-trend'].buildOpportunityObj(res);
+
+                section.find('.btn-metric').removeClass('active');
+                section.find('[data-trend-type="Opportunities"]').addClass('active');
                 app['time-trend'].renderChart(chartContainer, data);
             }
 
@@ -34,10 +37,12 @@
                 console.log('navbar' + err || 'err');
             }
 
+            var showProgresBar = window.trendSectionObj ? true : false;
+
             app['ajax-wrapper'].sendAjax(url, {
                 filterParamObj: window.filterParamObj,
                 sectionParamObj: window.trendSectionObj
-            }, successCallback, errorCallback)
+            }, successCallback, errorCallback, showProgresBar )
         },
         metricSelectionHandler: function() {
             var self = this;
@@ -69,7 +74,8 @@
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "No. of people"
             };
 
 
@@ -91,7 +97,8 @@
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "%"
             };
 
 
@@ -118,18 +125,19 @@
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "minutes (spent in store)"
             };
 
 
             $.each(res.filterPanelData.dwellTimeData, function(i, v) {
                 data.periodArr.push(this.period);
-                data.globalArr.push(this.data);
+                data.globalArr.push(this.data/60);
             })
 
             if (res.sectionPanelData.dwellTimeData) {
                 $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
-                    data.sectionArr.push(this.data);
+                    data.sectionArr.push(this.data/60);
                 })
             }
 
@@ -139,7 +147,8 @@
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "No. of people"
             };
 
 
@@ -175,7 +184,7 @@
                 },
                 yAxis: {
                     title: {
-                        text: 'Count'
+                        text: data.label
                     },
                     plotLines: [{
                         value: 0,
