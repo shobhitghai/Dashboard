@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-14 */
+/*! Fashion_Dashboard 1.0.0 2015-08-15 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -1471,13 +1471,16 @@ function getStoreListData(initModules, uId) {
         },
         fetchData: function(url, chartContainer) {
             var self = this;
+            var section = $(self.settings.target);
 
             function successCallback(res) {
                 var res = $.parseJSON(res);
-                console.log("from time trend");
-                console.log(res)
+                
                 self.response = res;
                 var data = app['time-trend'].buildOpportunityObj(res);
+
+                section.find('.btn-metric').removeClass('active');
+                section.find('[data-trend-type="Opportunities"]').addClass('active');
                 app['time-trend'].renderChart(chartContainer, data);
             }
 
@@ -1485,10 +1488,12 @@ function getStoreListData(initModules, uId) {
                 console.log('navbar' + err || 'err');
             }
 
+            var showProgresBar = window.trendSectionObj ? true : false;
+
             app['ajax-wrapper'].sendAjax(url, {
                 filterParamObj: window.filterParamObj,
                 sectionParamObj: window.trendSectionObj
-            }, successCallback, errorCallback)
+            }, successCallback, errorCallback, showProgresBar )
         },
         metricSelectionHandler: function() {
             var self = this;
@@ -1520,7 +1525,8 @@ function getStoreListData(initModules, uId) {
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "No. of people"
             };
 
 
@@ -1542,7 +1548,8 @@ function getStoreListData(initModules, uId) {
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "%"
             };
 
 
@@ -1569,18 +1576,19 @@ function getStoreListData(initModules, uId) {
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "minutes (spent in store)"
             };
 
 
             $.each(res.filterPanelData.dwellTimeData, function(i, v) {
                 data.periodArr.push(this.period);
-                data.globalArr.push(this.data);
+                data.globalArr.push(this.data/60);
             })
 
             if (res.sectionPanelData.dwellTimeData) {
                 $.each(res.sectionPanelData.dwellTimeData, function(i, v) {
-                    data.sectionArr.push(this.data);
+                    data.sectionArr.push(this.data/60);
                 })
             }
 
@@ -1590,7 +1598,8 @@ function getStoreListData(initModules, uId) {
             var data = {
                 globalArr: [],
                 sectionArr: [],
-                periodArr: []
+                periodArr: [],
+                label: "No. of people"
             };
 
 
@@ -1626,7 +1635,7 @@ function getStoreListData(initModules, uId) {
                 },
                 yAxis: {
                     title: {
-                        text: 'Count'
+                        text: data.label
                     },
                     plotLines: [{
                         value: 0,
@@ -1716,6 +1725,7 @@ function getStoreListData(initModules, uId) {
         fetchData: function(url) {
             var self = this;
             self.triggerNext = false;
+            var section = $(self.settings.target);
 
             function successCallback(res) {
                 if (res.Error) {
@@ -1730,10 +1740,14 @@ function getStoreListData(initModules, uId) {
                         dataObj.peopleStore = res[1]['cnt'];
                         dataObj.conv = ((dataObj.peopleStore / dataObj.peopleMall) * 100).toFixed(2) + '%';
 
-                        $(self.settings.target).find('.people-mall-count').text(dataObj.peopleMall);
-                        $(self.settings.target).find('.people-store-count').text(dataObj.conv);
-                        $(self.settings.target).find('.people-sales-count').text(Math.ceil(dataObj.peopleStore/4));
+                        section.find('.people-mall-count').text(dataObj.peopleMall);
+                        section.find('.people-store-count').text(dataObj.conv);
+                        section.find('.people-sales-count').text(Math.ceil(dataObj.peopleStore / 4));
 
+                    } else {
+                        section.find('.people-mall-count').text("NA");
+                        section.find('.people-store-count').text("NA");
+                        section.find('.people-sales-count').text("NA");
                     }
                 }
 
