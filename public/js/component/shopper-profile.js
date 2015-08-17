@@ -36,7 +36,22 @@
 
                 });
 
+                //right now obj
+                var rightNowArr = [];
+
+                $.each(res, function(i, v) {
+                    var rightNowObj = {};
+                    var dataArr = [];
+                    rightNowObj.name = this['s_profile'];
+                    dataArr.push(Math.round(this['count(distinct(tv.mac_address))']));
+                    rightNowObj.data = dataArr;
+
+                    rightNowArr.push(rightNowObj)
+                });
+
                 app['shopper-profile'].renderChart(chartContainer, dataObj);
+                app['right-now'].renderChart($('#shoppers-mall-chart'), rightNowArr);
+                app['right-now'].renderChart($('#shoppers-store-chart'), rightNowArr);
 
             }
 

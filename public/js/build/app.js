@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-15 */
+/*! Fashion_Dashboard 1.0.0 2015-08-17 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -1170,7 +1170,22 @@ function getStoreListData(initModules, uId) {
 
                 });
 
+                //right now obj
+                var rightNowArr = [];
+
+                $.each(res, function(i, v) {
+                    var rightNowObj = {};
+                    var dataArr = [];
+                    rightNowObj.name = this['s_profile'];
+                    dataArr.push(Math.round(this['count(distinct(tv.mac_address))']));
+                    rightNowObj.data = dataArr;
+
+                    rightNowArr.push(rightNowObj)
+                });
+
                 app['shopper-profile'].renderChart(chartContainer, dataObj);
+                app['right-now'].renderChart($('#shoppers-mall-chart'), rightNowArr);
+                app['right-now'].renderChart($('#shoppers-store-chart'), rightNowArr);
 
             }
 
@@ -1690,30 +1705,30 @@ function getStoreListData(initModules, uId) {
 
 
 
-            var shoppersMall_series = [{
-                name: 'Discount Sensitive',
-                data: [5]
-            }, {
-                name: 'Utility Buyer',
-                data: [2]
-            }, {
-                name: 'Fashion',
-                data: [3]
-            }];
+            // var shoppersMall_series = [{
+            //     name: 'Discount Sensitive',
+            //     data: [5]
+            // }, {
+            //     name: 'Utility Buyer',
+            //     data: [2]
+            // }, {
+            //     name: 'Fashion',
+            //     data: [3]
+            // }];
 
-            var shoppersStore_series = [{
-                name: 'Discount Sensitive',
-                data: [2]
-            }, {
-                name: 'Utility Buyer',
-                data: [5]
-            }, {
-                name: 'Fashion',
-                data: [3]
-            }]
+            // var shoppersStore_series = [{
+            //     name: 'Discount Sensitive',
+            //     data: [2]
+            // }, {
+            //     name: 'Utility Buyer',
+            //     data: [5]
+            // }, {
+            //     name: 'Fashion',
+            //     data: [3]
+            // }]
 
-            app['right-now'].renderChart(shoppersMall, shoppersMall_series);
-            app['right-now'].renderChart(shoppersStore, shoppersStore_series);
+            // app['right-now'].renderChart(shoppersMall, shoppersMall_series);
+            // app['right-now'].renderChart(shoppersStore, shoppersStore_series);
 
 
         },
@@ -1768,7 +1783,7 @@ function getStoreListData(initModules, uId) {
                     type: 'bar',
                     height: 100,
                 },
-                colors: ['#f7d348', '#55c6f2', '#a9d18e'],
+                colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9', '#b4c7e7', '#767171'],
                 title: {
                     text: ''
                 },
@@ -1803,7 +1818,15 @@ function getStoreListData(initModules, uId) {
                 plotOptions: {
                     series: {
                         stacking: 'normal',
-                        pointWidth: 50
+                        pointWidth: 50,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Math.round(this.percentage) + '%';
+                            },
+                            distance: -30,
+                            color: 'white'
+                        }
                     }
                 },
                 series: series,
@@ -2003,11 +2026,13 @@ function getStoreListData(initModules, uId) {
             configure_panel.addClass('edit-active');
 
             $('.campaign-start-date').datepicker({
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
+                autoclose: true
             });
 
             $('.campaign-end-date').datepicker({
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
+                autoclose: true
             });
 
             $(s.target).find('.config-save').off('click').on('click', function() {
@@ -2134,7 +2159,8 @@ function getStoreListData(initModules, uId) {
             });
 
             $('.storefront-start-date').datepicker({
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
+                autoclose: true
             });
 
         },

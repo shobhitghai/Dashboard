@@ -18,11 +18,13 @@
             configure_panel.addClass('edit-active');
 
             $('.campaign-start-date').datepicker({
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
+                autoclose: true
             });
 
             $('.campaign-end-date').datepicker({
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
+                autoclose: true
             });
 
             $(s.target).find('.config-save').off('click').on('click', function() {

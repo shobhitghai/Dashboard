@@ -20,30 +20,30 @@
 
 
 
-            var shoppersMall_series = [{
-                name: 'Discount Sensitive',
-                data: [5]
-            }, {
-                name: 'Utility Buyer',
-                data: [2]
-            }, {
-                name: 'Fashion',
-                data: [3]
-            }];
+            // var shoppersMall_series = [{
+            //     name: 'Discount Sensitive',
+            //     data: [5]
+            // }, {
+            //     name: 'Utility Buyer',
+            //     data: [2]
+            // }, {
+            //     name: 'Fashion',
+            //     data: [3]
+            // }];
 
-            var shoppersStore_series = [{
-                name: 'Discount Sensitive',
-                data: [2]
-            }, {
-                name: 'Utility Buyer',
-                data: [5]
-            }, {
-                name: 'Fashion',
-                data: [3]
-            }]
+            // var shoppersStore_series = [{
+            //     name: 'Discount Sensitive',
+            //     data: [2]
+            // }, {
+            //     name: 'Utility Buyer',
+            //     data: [5]
+            // }, {
+            //     name: 'Fashion',
+            //     data: [3]
+            // }]
 
-            app['right-now'].renderChart(shoppersMall, shoppersMall_series);
-            app['right-now'].renderChart(shoppersStore, shoppersStore_series);
+            // app['right-now'].renderChart(shoppersMall, shoppersMall_series);
+            // app['right-now'].renderChart(shoppersStore, shoppersStore_series);
 
 
         },
@@ -98,7 +98,7 @@
                     type: 'bar',
                     height: 100,
                 },
-                colors: ['#f7d348', '#55c6f2', '#a9d18e'],
+                colors: ['#55c6f2', '#a9d18e', '#f7d348', '#c9c9c9', '#b4c7e7', '#767171'],
                 title: {
                     text: ''
                 },
@@ -133,7 +133,15 @@
                 plotOptions: {
                     series: {
                         stacking: 'normal',
-                        pointWidth: 50
+                        pointWidth: 50,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Math.round(this.percentage) + '%';
+                            },
+                            distance: -30,
+                            color: 'white'
+                        }
                     }
                 },
                 series: series,
