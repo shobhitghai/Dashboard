@@ -526,6 +526,10 @@ table.dataTable thead .sorting:after {
 .mod-right-now .mod-current-shoppers {
   margin-top: 40px;
 }
+/* line 18, ../sass/modules/_3g-section.scss */
+.mod-right-now .sales-div {
+  padding: 0;
+}
 
 /* line 2, ../sass/modules/_time-trend.scss */
 .mod-time-trend .grp-metric {
@@ -629,24 +633,24 @@ table.dataTable thead .sorting:after {
   transition: opacity 0.3s linear;
   opacity: 1;
 }
-/* line 51, ../sass/modules/_impact-section.scss */
+/* line 50, ../sass/modules/_impact-section.scss */
 .impact-edit .edit-dropdown .btn {
   border-radius: 0px;
 }
-/* line 54, ../sass/modules/_impact-section.scss */
+/* line 53, ../sass/modules/_impact-section.scss */
 .impact-edit .edit-dropdown .dropdown-menu {
   border-radius: 0px;
 }
-/* line 59, ../sass/modules/_impact-section.scss */
+/* line 57, ../sass/modules/_impact-section.scss */
 .impact-edit .form-control {
   border-radius: 0px;
 }
-/* line 63, ../sass/modules/_impact-section.scss */
+/* line 60, ../sass/modules/_impact-section.scss */
 .impact-edit .input-group-addon {
   background-color: #ffffff;
   border-radius: 0px;
 }
-/* line 68, ../sass/modules/_impact-section.scss */
+/* line 64, ../sass/modules/_impact-section.scss */
 .impact-edit .edit-mode-btns {
   float: right;
 }
