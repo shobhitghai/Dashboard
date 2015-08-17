@@ -9,22 +9,24 @@
             .edit-btn {
                 float: right;
                 display: inline-block;
+                font-size: 1.3em;
+                color: #55c6f2;
             }
         }
-        .row {
-            margin: 15px;
-            .impact-label, .impact-desc {
-                font-size: 15px;
+    }
+    .row {
+        margin: 15px;
+        .impact-label, .impact-desc {
+            font-size: 15px;
+        }
+        .impact-change {
+            font-size: 18px;
+            text-align: right;
+            &.impact-pos {
+                color: $color-darkgreen;
             }
-            .impact-change {
-                font-size: 18px;
-                text-align: right;
-                &.impact-pos {
-                    color: $color-darkgreen;
-                }
-                &.impact-neg {
-                    color: $color-red;
-                }
+            &.impact-neg {
+                color: $color-red;
             }
         }
     }

@@ -1794,8 +1794,14 @@ function getStoreListData(initModules, uId) {
                     labels: {
                         enabled: false
                     },
+                    title: {
+                        text: ''
+                    },
                     minorTickLength: 0,
                     tickLength: 0
+                },
+                tooltip: {
+                    headerFormat: '',
                 },
                 yAxis: {
                     lineWidth: 0,
@@ -1812,7 +1818,6 @@ function getStoreListData(initModules, uId) {
                     tickLength: 0
                 },
                 legend: {
-                    reversed: true,
                     enabled: false
                 },
                 plotOptions: {

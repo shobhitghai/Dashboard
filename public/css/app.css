@@ -581,36 +581,38 @@ table.dataTable thead .sorting:after {
 .impact-edit .panel-body .panel-top .edit-btn {
   float: right;
   display: inline-block;
+  font-size: 1.3em;
+  color: #55c6f2;
 }
-/* line 14, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row,
-.impact-edit .panel-body .row {
+/* line 17, ../sass/modules/_impact-section.scss */
+.mod-impact .row,
+.impact-edit .row {
   margin: 15px;
 }
-/* line 16, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-label, .mod-impact .panel-body .row .impact-desc,
-.impact-edit .panel-body .row .impact-label,
-.impact-edit .panel-body .row .impact-desc {
+/* line 19, ../sass/modules/_impact-section.scss */
+.mod-impact .row .impact-label, .mod-impact .row .impact-desc,
+.impact-edit .row .impact-label,
+.impact-edit .row .impact-desc {
   font-size: 15px;
 }
-/* line 19, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-change,
-.impact-edit .panel-body .row .impact-change {
+/* line 22, ../sass/modules/_impact-section.scss */
+.mod-impact .row .impact-change,
+.impact-edit .row .impact-change {
   font-size: 18px;
   text-align: right;
 }
-/* line 22, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-change.impact-pos,
-.impact-edit .panel-body .row .impact-change.impact-pos {
+/* line 25, ../sass/modules/_impact-section.scss */
+.mod-impact .row .impact-change.impact-pos,
+.impact-edit .row .impact-change.impact-pos {
   color: #a9d18e;
 }
-/* line 25, ../sass/modules/_impact-section.scss */
-.mod-impact .panel-body .row .impact-change.impact-neg,
-.impact-edit .panel-body .row .impact-change.impact-neg {
+/* line 28, ../sass/modules/_impact-section.scss */
+.mod-impact .row .impact-change.impact-neg,
+.impact-edit .row .impact-change.impact-neg {
   color: #ff6d60;
 }
 
-/* line 33, ../sass/modules/_impact-section.scss */
+/* line 35, ../sass/modules/_impact-section.scss */
 .impact-edit {
   position: absolute;
   top: 0;
@@ -621,30 +623,30 @@ table.dataTable thead .sorting:after {
   color: #ffffff;
   opacity: 0;
 }
-/* line 42, ../sass/modules/_impact-section.scss */
+/* line 44, ../sass/modules/_impact-section.scss */
 .impact-edit.edit-active {
   visibility: visible;
   transition: opacity 0.3s linear;
   opacity: 1;
 }
-/* line 48, ../sass/modules/_impact-section.scss */
+/* line 51, ../sass/modules/_impact-section.scss */
 .impact-edit .edit-dropdown .btn {
   border-radius: 0px;
 }
-/* line 51, ../sass/modules/_impact-section.scss */
+/* line 54, ../sass/modules/_impact-section.scss */
 .impact-edit .edit-dropdown .dropdown-menu {
   border-radius: 0px;
 }
-/* line 55, ../sass/modules/_impact-section.scss */
+/* line 59, ../sass/modules/_impact-section.scss */
 .impact-edit .form-control {
   border-radius: 0px;
 }
-/* line 58, ../sass/modules/_impact-section.scss */
+/* line 63, ../sass/modules/_impact-section.scss */
 .impact-edit .input-group-addon {
   background-color: #ffffff;
   border-radius: 0px;
 }
-/* line 62, ../sass/modules/_impact-section.scss */
+/* line 68, ../sass/modules/_impact-section.scss */
 .impact-edit .edit-mode-btns {
   float: right;
 }
