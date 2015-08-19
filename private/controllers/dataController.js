@@ -293,6 +293,26 @@ dataController.prototype.handleRoutes = function(router, connection) {
     });
 
 
+    /* Get internal benchmark data */
+
+    router.get("/getInternalBenchmarkData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new timeTrendRepository(connection, sendResponse, req.query);
+
+        repository.getData();
+
+    });
+
+
 
 }
 
