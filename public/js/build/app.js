@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-08-17 */
+/*! Fashion_Dashboard 1.0.0 2015-09-03 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
@@ -398,14 +398,17 @@ function getStoreListData(initModules, uId) {
 
                 } else {
                     var storeNameArr = [];
+                    var brandObjArr = [];
 
                     window.filterParamObj.storeId = window.defaultFilterParam;
 
                     $.each(self.response, function(i, v) {
+                        brandObjArr.push(this['brand_id']);
                         storeNameArr.push(this['name']);
                     });
 
                     self.showSelectionDetails(storeNameArr);
+                    window.brandObj.brandId = brandObjArr.getUnique();
                 }
 
                 console.log(selectedCityArr, selectedStoreArr, selectedBrandArr);

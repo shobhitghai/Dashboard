@@ -217,8 +217,8 @@ dataController.prototype.handleRoutes = function(router, connection) {
     router.get("/getShopperProfile", function(req, res) {
         self._setResponseHeader(res);
 
-        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj);
-        var query = "select ts.s_profile, count(distinct(tv.mac_address)) from customer_tracker.t_visit tv JOIN customer_tracker.t_shopper_profile ts ON (tv.mac_address = ts.mac_address) where visit_date >= date(date_sub(NOW(), interval 30 day)) and " + queryFilterParam + " and walk_in_flag =1 and dwell_time < 60*60 and dwell_time > 0 group by ts.s_profile order by count(distinct(tv.mac_address)) desc;"
+        var queryFilterParam = queryParamHelper.getQueryParam(req.query.filterParamObj,'tsds');
+        var query = "select ts.s_profile, count(distinct(tv.mac_address)) from customer_tracker.t_visit tv LEFT JOIN customer_tracker.t_store_details tsds on (tsds.store_id = tv.store_id) LEFT JOIN t_current_employee_notification tcen on (tcen.store_id = tv.store_id and tcen.mac_address = tv.mac_address) LEFT JOIN customer_tracker.t_shopper_profile ts ON (tv.mac_address = ts.mac_address) where visit_date >= date(date_sub(NOW(), interval 30 day)) and " + queryFilterParam + "  and walk_in_flag =1 and (tcen.is_employee !=1 or tcen.is_employee is null) group by ts.s_profile order by count(distinct(tv.mac_address)) desc;"
 
         connection.query(query, function(err, data) {
             if (err) {

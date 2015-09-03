@@ -131,14 +131,17 @@
 
                 } else {
                     var storeNameArr = [];
+                    var brandObjArr = [];
 
                     window.filterParamObj.storeId = window.defaultFilterParam;
 
                     $.each(self.response, function(i, v) {
+                        brandObjArr.push(this['brand_id']);
                         storeNameArr.push(this['name']);
                     });
 
                     self.showSelectionDetails(storeNameArr);
+                    window.brandObj.brandId = brandObjArr.getUnique();
                 }
 
                 console.log(selectedCityArr, selectedStoreArr, selectedBrandArr);

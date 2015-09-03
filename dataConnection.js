@@ -28,8 +28,12 @@ DataConnectionLayer.prototype.connectDB = function() {
 
     pool.getConnection(function(err, connection) {
         if (err) {
+            console.log("error occured and logged ")
+            console.log(new Date());
             console.log(err);
-            self.stop(err);
+            // self.stop(err);
+            // self.configureExpress(connection);
+            self.connectDB();
         } else {
             self.configureExpress(connection);
         }
