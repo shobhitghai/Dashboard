@@ -295,7 +295,9 @@ dataController.prototype.handleRoutes = function(router, connection) {
 
     /* Get internal benchmark data */
 
-    router.get("/getInternalBenchmarkData", function(req, res) {
+    /*Walk in*/
+
+    router.get("/getBenchmarkWalkinData", function(req, res) {
         self._setResponseHeader(res);
 
         function sendResponse(response) {
@@ -306,9 +308,85 @@ dataController.prototype.handleRoutes = function(router, connection) {
             }
         }
 
-        var repository = new timeTrendRepository(connection, sendResponse, req.query);
+        var repository = new internalBenchmarkRepository(connection, sendResponse, req.query);
 
-        repository.getData();
+        repository.getWalkinData();
+
+    });
+
+    /*Store front conversion data*/
+
+    router.get("/getBenchmarkStoreFrontData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new internalBenchmarkRepository(connection, sendResponse, req.query);
+
+        repository.getStoreFrontData();
+
+    });
+
+    /*Dwell time data*/
+
+    router.get("/getBenchmarkDwellTimeData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new internalBenchmarkRepository(connection, sendResponse, req.query);
+
+        repository.getDwellTimeData();
+
+    });
+
+    /*Engagement level*/
+
+    router.get("/getBenchmarkEngagementData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new internalBenchmarkRepository(connection, sendResponse, req.query);
+
+        repository.getEngagementData();
+
+    });
+
+    /*Repeat customer*/
+
+    router.get("/getBenchmarkRepeatCustomerData", function(req, res) {
+        self._setResponseHeader(res);
+
+        function sendResponse(response) {
+            if (response.isError) {
+                self._sendErrorResponse(res);
+            } else {
+                res.end(JSON.stringify(response));
+            }
+        }
+
+        var repository = new internalBenchmarkRepository(connection, sendResponse, req.query);
+
+        repository.getRepeatCustomerData();
 
     });
 

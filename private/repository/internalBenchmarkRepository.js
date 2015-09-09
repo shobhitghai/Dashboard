@@ -10,11 +10,7 @@ var internalBenchmarkRepository = function(connection, sendResponseCallback, fil
 
 var repo = internalBenchmarkRepository.prototype;
 
-repo.getData = function() {
-    this._getStoreData();
-};
-
-repo._getStoreWalkin = function() {
+repo.getWalkinData = function() {
     var self = this;
 
     var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.filterParamObj, 'tsds');
@@ -28,14 +24,70 @@ repo._getStoreWalkin = function() {
         } else {
             self.responseObject.crossVisit = {};
             self.responseObject.crossVisit.store = data[0]['CrossStoreVisitPercent'] * 100;
-
-            self._getBrandAverageData();
         }
 
+        self.sendResponseCallback(self.responseObject);
     });
 }
 
-repo._getCityWalkin = function() {
+repo.getStoreFrontData = function() {
+    var self = this;
+
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.brandObj, 'tsds');
+    var query = "SELECT csv.crossstorevisit/csv.totalvisit as CrossStoreVisitBrandPercent FROM( SELECT COUNT(tsv.subsequent_to_store_id) as crossstorevisit, COUNT(tsv.mac_address) as totalvisit from t_store_visit tsv left join t_store_details tsds on (tsv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id and tsv.mac_address = tcen.mac_address) where " + queryFilterParam + " AND visit_date > DATE_SUB(NOW(), INTERVAL 3 MONTH) AND (tcen.is_employee !=1 or tcen.is_employee is null) ) csv;";
+
+    this.connection.query(query, function(err, data) {
+
+        if (err) {
+            console.log(err)
+            self.responseObject.isError = true;
+        } else {
+            self.responseObject.crossVisit.brand = data[0]['CrossStoreVisitBrandPercent'] * 100;
+        }
+
+        self.sendResponseCallback(self.responseObject);
+    });
+}
+
+repo.getDwellTimeData = function() {
+    var self = this;
+
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.brandObj, 'tsds');
+    var query = "SELECT csv.crossstorevisit/csv.totalvisit as CrossStoreVisitBrandPercent FROM( SELECT COUNT(tsv.subsequent_to_store_id) as crossstorevisit, COUNT(tsv.mac_address) as totalvisit from t_store_visit tsv left join t_store_details tsds on (tsv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id and tsv.mac_address = tcen.mac_address) where " + queryFilterParam + " AND visit_date > DATE_SUB(NOW(), INTERVAL 3 MONTH) AND (tcen.is_employee !=1 or tcen.is_employee is null) ) csv;";
+
+    this.connection.query(query, function(err, data) {
+
+        if (err) {
+            console.log(err)
+            self.responseObject.isError = true;
+        } else {
+            self.responseObject.crossVisit.brand = data[0]['CrossStoreVisitBrandPercent'] * 100;
+        }
+
+        self.sendResponseCallback(self.responseObject);
+    });
+}
+
+repo.getEngagementData = function() {
+    var self = this;
+
+    var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.brandObj, 'tsds');
+    var query = "SELECT csv.crossstorevisit/csv.totalvisit as CrossStoreVisitBrandPercent FROM( SELECT COUNT(tsv.subsequent_to_store_id) as crossstorevisit, COUNT(tsv.mac_address) as totalvisit from t_store_visit tsv left join t_store_details tsds on (tsv.store_id = tsds.store_id) left join customer_tracker.t_current_employee_notification tcen on (tsv.store_id = tcen.store_id and tsv.mac_address = tcen.mac_address) where " + queryFilterParam + " AND visit_date > DATE_SUB(NOW(), INTERVAL 3 MONTH) AND (tcen.is_employee !=1 or tcen.is_employee is null) ) csv;";
+
+    this.connection.query(query, function(err, data) {
+
+        if (err) {
+            console.log(err)
+            self.responseObject.isError = true;
+        } else {
+            self.responseObject.crossVisit.brand = data[0]['CrossStoreVisitBrandPercent'] * 100;
+        }
+
+        self.sendResponseCallback(self.responseObject);
+    });
+}
+
+repo.getRepeatCustomerData = function() {
     var self = this;
 
     var queryFilterParam = queryParamHelper.getQueryParam(this.filterParam.brandObj, 'tsds');

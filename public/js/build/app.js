@@ -1,4 +1,4 @@
-/*! Fashion_Dashboard 1.0.0 2015-09-03 */
+/*! Fashion_Dashboard 1.0.0 2015-09-09 */
 //####public/js/component/base.js
 // Define Namespace
 (function() {
